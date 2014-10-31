@@ -1,0 +1,55 @@
+
+String[] play = { "Play",
+		  "Spielen",
+                  "开始",
+		  "Joue",
+		  "Juega"};
+
+String[] howtoplay= { "How to Play",
+		  "Anleitung",
+                  "怎么玩
+",
+		  "Comment se joue
+",
+		  "Cómo se juega
+"};
+
+String[] highscore = { "Highscore",
+		  "Highscore",
+                  "高分榜
+",
+		  "Highscore",
+		  "Highscore"};
+
+String[] tutorial= { "Block tiles, by pressing them. But attention: He is fast
+",
+		  "Druecke auf Felder in Doges Weg um ihn einzusperren.
+",
+                  "点击小格子把它们封起来。注意：它很快！
+",
+		  "Bloque les carreaux par les presser. Mais attention: il est rapide
+",
+		  "Bloquea las casillas pulsándolas. Pero cuidado: es muy rápido
+"};
+
+String[] lost_game = { "You lost. Doge escaped after %X moves
+",
+		  "Entwischt! Doge ist nach %X Zuegen entwischt.
+",
+                  "你输咯！X%步之后Doge逃掉了
+",
+		  "T'as perdu! Doge s'est écharpé après %x pas
+",
+		  "Has perdido! Doge huyó después de %x pasos
+"};
+
+String[] win_game = { "You win! You needed %X moves to catch him.
+",
+		  "Gewonnen! Du hast Doge nach %X Zuegen gefangen.
+",
+                  "你赢啦！你用了%x步抓住Doge
+",
+		  "T'as gagné! T'as eu besoin de x% pas pour l'attraper
+",
+		  "Has ganado! Necesitaste x% para atraparlo
+"};

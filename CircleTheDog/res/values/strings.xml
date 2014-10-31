@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Circle the Dog</string>
+    <string name="play">PLAY</string>
+    <string name="howto">HOW TO PLAY</string>
+    <string name="scores">HIGHSCORES</string>
+    <string name="back">MENU</string>
+    <string name="resume">RESUME</string>
+    <string name="play_again">PLAY AGAIN</string>
+    <string name="next">NEXT</string>
+    <string name="defeat">You Lost.</string>
+    <string name="victory">You Win!</string>
+    <string name="defeat_info">The Dog escaped after\n%1$d moves. Try again!</string>
+    <string name="victory_info">You needed %1$d moves\nto catch him.</string>
+    <string name="highscore">Your highscores</string>
+    <string name="tutorial_1">The dog tries to\nescape from the screen...</string>
+    <string name="tutorial_2">Block the tiles in his way...</string>
+    <string name="tutorial_3">...until you catch him ...</string>
+    <string name="tutorial_4">... and win.</string>
+    
+    <string name="doge">Doge</string>
+    <string name="dogecoin_url">http://dogecoin.com/getting-started/</string>
+    <string name="app_url">https://play.google.com/store/apps/details?id=com.danthe.dogeescape</string>
+    <string name="share_app">SHARE APP</string>
+    <string name="share_text">Get the game \'Circle the Dog\'. Its great!</string>
+    <string name="share_via">Share via</string>
+    
+    <string name="rate_top">Do you like the game?</string>
+    <string name="rate_info">Please support our game\nby rating it. It REALLY\nhelps us.</string>
+    <string name="rate_yes">OF COURSE!</string>
+    <string name="rate_later">REMIND ME LATER.</string>
+    <string name="no">NO, NEVER.</string>
+    
+
+</resources>
