@@ -10,10 +10,12 @@ public class Tile extends TiledSprite {
 	private boolean blocked;
 	private DogeActivity parent;
 
-	public Tile(float pX, float pY, ITiledTextureRegion circleTextureReg,
+	
+	
+	public Tile(float pX, float pY, int pWidth, int pHeight, ITiledTextureRegion circleTextureReg,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			boolean blocked, DogeActivity parent) {
-		super(pX, pY, 64, 64, circleTextureReg, pVertexBufferObjectManager);
+		super(pX, pY, pWidth, pHeight, circleTextureReg, pVertexBufferObjectManager);
 
 		this.blocked = blocked;
 		this.parent = parent;
@@ -23,6 +25,12 @@ public class Tile extends TiledSprite {
 		else
 			this.setCurrentTileIndex(0);
 	}
+	
+//	public Tile(float pX, float pY, ITiledTextureRegion circleTextureReg,
+//			VertexBufferObjectManager pVertexBufferObjectManager,
+//			boolean blocked, DogeActivity parent){
+//		this(pX, pY, 64, 64, circleTextureReg, pVertexBufferObjectManager, blocked, parent);
+//	}
 
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,

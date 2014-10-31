@@ -1,7 +1,9 @@
 package com.danthe.dogeescape;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -43,6 +45,7 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 
 public class DogeActivity extends SimpleBaseGameActivity implements
@@ -71,7 +74,7 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 	private boolean lost = false;
 	private boolean won = false;
 	private boolean trapped = false;
-	private Tile[][] tiles = new Tile[9][9];
+	private Tile[][] tiles;
 
 	private ITextureRegion backgroundTextureReg, gameBackgroundTextureReg,
 			textBoxTextureReg, whiteTextBoxTextureReg, endBackgroundTextureReg
@@ -546,39 +549,92 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 		return howTo;
 	}
 
-	private void createGameScene() {
+	private void createGameScene(int level) throws IOException {
 
 		gameScene = new Scene();
+
+		String levelDir = "level" + level + "/";
+
+		BufferedReader bfr = new BufferedReader(new InputStreamReader(
+				getAssets().open(levelDir + "level.txt")));
+		int tileYLength = Integer.parseInt(bfr.readLine());
+		int tileXLength = Integer.parseInt(bfr.readLine());
+		tiles = new Tile[tileYLength][tileXLength];
+		Log.e("", tileYLength + "," + tileXLength);
 
 		Sprite background2Sprite = new Sprite(22, 332, 676, 648,
 				this.gameBackgroundTextureReg, getVertexBufferObjectManager());
 		gameScene.attachChild(background2Sprite);
 
-		double sixth = 1 / 6f;
-		int alternate = -16;
+		// double sixth = 1 / 6f;
+		// int alternate = -16;
+		// for (int i = 0; i < tiles.length; i++) {
+		// for (int j = 0; j < tiles[0].length; j++) {
+		// boolean blocked = Math.random() < sixth ? true : false;
+		// if (!blocked || (i == 4 && j == 4)) {
+		// tiles[i][j] = new Tile((56 + alternate) + 68 * j,
+		// 350 + 68 * i, circleTextureReg,
+		// getVertexBufferObjectManager(), false, this);
+		// gameScene.registerTouchArea(tiles[i][j]);
+		// } else {
+		// tiles[i][j] = new Tile((56 + alternate) + 68 * j,
+		// 350 + 68 * i, circleTextureReg,
+		// getVertexBufferObjectManager(), true, this);
+		// }
+		// gameScene.attachChild(tiles[i][j]);
+		//
+		// }
+		// alternate = -alternate;
+		// }
+
+		int tileWidth = 576 / Math.max(tiles.length, tiles[0].length);
+		int alternate = -tileWidth / 4;
+		int startingPointX = 40 + Math.abs(alternate);
+		int startingPointY = 350;
+		if (tiles.length >= tiles[0].length)
+			startingPointX += (612 - tiles[0].length * tileWidth) / 2;
+		else
+			startingPointY += (612 - tiles.length * tileWidth) / 2;
+
 		for (int i = 0; i < tiles.length; i++) {
-			for (int j = 0; j < tiles[i].length; j++) {
-				boolean blocked = Math.random() < sixth ? true : false;
-				if (!blocked || (i == 4 && j == 4)) {
-					tiles[i][j] = new Tile((56 + alternate) + 68 * j,
-							350 + 68 * i, circleTextureReg,
+			String[] tileProperties = bfr.readLine().replace(" ", "")
+					.split(",");
+			for (int j = 0; j < tiles[0].length; j++) {
+				int property = Integer.parseInt(tileProperties[j]);
+				switch (property) {
+				case 0:
+					tiles[i][j] = new Tile(
+							startingPointX + alternate
+									+ (tileWidth + Math.abs(alternate) / 4) * j,
+							startingPointY
+									+ (tileWidth + Math.abs(alternate) / 4) * i,
+							tileWidth, tileWidth, circleTextureReg,
 							getVertexBufferObjectManager(), false, this);
 					gameScene.registerTouchArea(tiles[i][j]);
-				} else {
-					tiles[i][j] = new Tile((56 + alternate) + 68 * j,
-							350 + 68 * i, circleTextureReg,
+					break;
+				case 1:
+					tiles[i][j] = new Tile(
+							startingPointX + alternate
+									+ (tileWidth + Math.abs(alternate) / 4) * j,
+							startingPointY
+									+ (tileWidth + Math.abs(alternate) / 4) * i,
+							tileWidth, tileWidth, circleTextureReg,
 							getVertexBufferObjectManager(), true, this);
+					break;
+				default:
+
 				}
 				gameScene.attachChild(tiles[i][j]);
-
 			}
 			alternate = -alternate;
 		}
 
-		enemySprite = new AnimatedSprite(tiles[4][4].getX(),
-				tiles[4][4].getY() - 64 - 10, 64, 128, enemyTextureReg,
-				getVertexBufferObjectManager());
-		enemyPosition = new int[] { 4, 4 };
+		enemySprite = new AnimatedSprite(
+				tiles[tiles.length / 2][tiles[0].length / 2].getX(),
+				tiles[tiles.length / 2][tiles[0].length / 2].getY() - 9
+						* tileWidth / 8, tileWidth, 2 * tileWidth,
+				enemyTextureReg, getVertexBufferObjectManager());
+		enemyPosition = new int[] { tiles.length / 2, tiles[0].length / 2 };
 		gameScene.attachChild(enemySprite);
 		enemySprite.setZIndex(background2Sprite.getZIndex() + 1);
 		enemySprite.animate(new long[] { 200, 250 }, 0, 1, true);
@@ -626,8 +682,9 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 			return false;
 
 		int pos = -1;
-		for (int i = 0; i < 81; i++) {
-			if (tiles[i / 9][i % 9] == tile) {
+		int max = tiles.length * tiles[0].length;
+		for (int i = 0; i < max; i++) {
+			if (tiles[i / tiles[0].length][i % tiles[0].length] == tile) {
 				pos = i;
 				break;
 			}
@@ -643,7 +700,9 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 
 	private LinkedList<Integer[]> getNeighbors(int tileRow, int tileCol) {
 		LinkedList<Integer[]> neighbors = new LinkedList<Integer[]>();
-		int add = tileRow % 2 == 1 ? 1 : 0;
+		// Hall of fame: Grade A bullshit
+		// int add = tileRow % 2 == 1 ? 1 : 0
+		int add = tileRow % 2;
 
 		neighbors.add(new Integer[] { tileRow - 1, tileCol - 1 + add });
 		neighbors.add(new Integer[] { tileRow - 1, tileCol + add });
@@ -654,8 +713,8 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 
 		for (Iterator<Integer[]> iter = neighbors.iterator(); iter.hasNext();) {
 			Integer[] i = iter.next();
-			if (i[0] < 0 || i[0] >= 9 || i[1] < 0 || i[1] >= 9
-					|| tiles[i[0]][i[1]].isBlocked())
+			if (i[0] < 0 || i[0] >= tiles.length || i[1] < 0
+					|| i[1] >= tiles[0].length || tiles[i[0]][i[1]].isBlocked())
 				iter.remove();
 		}
 
@@ -664,16 +723,18 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 	}
 
 	private void doDijkstra(int startRow, int startCol) {
-		distance = new int[81];
-		previous = new int[81];
-		distance[startRow * 9 + startCol] = 0;
+		int w = tiles[0].length;
+		int h = tiles.length;
+		distance = new int[h * w];
+		previous = new int[h * w];
+		distance[startRow * w + startCol] = 0;
 		LinkedList<Integer> q = new LinkedList<Integer>();
-		for (int i = 0; i < 81; i++) {
-			if (!(i / 9 == startRow && i % 9 == startCol)) {
+		for (int i = 0; i < distance.length; i++) {
+			if (!(i / w == startRow && i % w == startCol)) {
 				distance[i] = Integer.MAX_VALUE;
 				previous[i] = -1;
 			}
-			if (!tiles[i / 9][i % 9].isBlocked())
+			if (!tiles[i / w][i % w].isBlocked())
 				q.add(i);
 		}
 
@@ -692,12 +753,12 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 
 			if (distance[u] < Integer.MAX_VALUE) {
 
-				LinkedList<Integer[]> neighbors = getNeighbors(u / 9, u % 9);
+				LinkedList<Integer[]> neighbors = getNeighbors(u / w, u % w);
 				for (Integer[] i : neighbors) {
 					int alt = distance[u] + 1;
-					if (alt < distance[i[0] * 9 + i[1]]) {
-						distance[i[0] * 9 + i[1]] = alt;
-						previous[i[0] * 9 + i[1]] = u;
+					if (alt < distance[i[0] * w + i[1]]) {
+						distance[i[0] * w + i[1]] = alt;
+						previous[i[0] * w + i[1]] = u;
 					}
 				}
 			}
@@ -708,42 +769,48 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 
 	private void calculateWay() {
 		doDijkstra(enemyPosition[0], enemyPosition[1]);
+		int w = tiles[0].length;
+		int h = tiles.length;
 
-		int pos = 9;
-		for (int i = 0; i < 81; i++)
-			if ((i / 9 <= 0 || i / 9 >= 8 || i % 9 <= 0 || i % 9 >= 8)
-					&& !tiles[i / 9][i % 9].isBlocked()) {
+		int pos = w-1;
+		for (int i = 0; i < w * h; i++)
+			if ((i / w <= 0 || i / w >= h-1 || i % w <= 0 || i % w >= w-1)
+					&& !tiles[i / w][i % w].isBlocked()) {
 				pos = i;
 				break;
 			}
 
 		int unreachable = 0;
-		for (int i = 1; i < 9; i++) {
+		for (int i = 1; i < h; i++) {
 
-			if (!tiles[i][0].isBlocked() && distance[9 * i] < distance[pos])
-				pos = 9 * i;
-			else if (distance[9 * i] == Integer.MAX_VALUE)
+			if (!tiles[i][0].isBlocked() && distance[w * i] < distance[pos])
+				pos = w * i;
+			else if (distance[w * i] == Integer.MAX_VALUE)
 				unreachable++;
 
-			if (!tiles[8][i].isBlocked() && distance[8 * 9 + i] < distance[pos])
-				pos = 8 * 9 + i;
-			else if (distance[8 * 9 + i] == Integer.MAX_VALUE)
+			if (!tiles[(h - 1) - i][(w - 1)].isBlocked()
+					&& distance[((h - 1) - i) * w + (w - 1)] < distance[pos])
+				pos = ((h - 1) - i) * w + (w - 1);
+			else if (distance[((h - 1) - i) * w + (w - 1)] == Integer.MAX_VALUE)
 				unreachable++;
-
-			if (!tiles[8 - i][8].isBlocked()
-					&& distance[(8 - i) * 9 + 8] < distance[pos])
-				pos = (8 - i) * 9 + 8;
-			else if (distance[(8 - i) * 9 + 8] == Integer.MAX_VALUE)
-				unreachable++;
-
-			if (!tiles[0][8 - i].isBlocked() && distance[8 - i] < distance[pos])
-				pos = 8 - i;
-			else if (distance[8 - i] == Integer.MAX_VALUE)
-				unreachable++;
-
 		}
 
-		if (unreachable >= 32) {
+		for (int i = 1; i < w; i++) {
+
+			if (!tiles[h - 1][i].isBlocked()
+					&& distance[(h - 1) * w + i] < distance[pos])
+				pos = (h - 1) * w + i;
+			else if (distance[(h - 1) * w + i] == Integer.MAX_VALUE)
+				unreachable++;
+
+			if (!tiles[0][(w - 1) - i].isBlocked()
+					&& distance[(w - 1) - i] < distance[pos])
+				pos = (w - 1) - i;
+			else if (distance[(w - 1) - i] == Integer.MAX_VALUE)
+				unreachable++;
+		}
+
+		if (unreachable >= 2 * (h - 1) + 2 * (w - 1)) {
 			trapped = true;
 			return;
 		}
@@ -753,7 +820,7 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 
 		path.clear();
 		int v = pos;
-		while (v != enemyPosition[0] * 9 + enemyPosition[1]) {
+		while (v != enemyPosition[0] * w + enemyPosition[1]) {
 			path.add(0, v);
 			// Debug.e("path size " + path.size());
 			// Debug.e(Arrays.toString(previous) + " \n " + pos);
@@ -800,18 +867,19 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 					nextTile = neighbors.get(rand);
 				} else {
 					int next = path.poll();
-					nextTile[0] = next / 9;
-					nextTile[1] = next % 9;
+					nextTile[0] = next / tiles[0].length;
+					nextTile[1] = next % tiles[0].length;
 				}
 
 				enemySprite.setX(tiles[nextTile[0]][nextTile[1]].getX());
-				enemySprite
-						.setY(tiles[nextTile[0]][nextTile[1]].getY() - 64 - 10);
+				enemySprite.setY(tiles[nextTile[0]][nextTile[1]].getY() - 9
+						* tiles[0][0].getWidth() / 8);
 				enemyPosition[0] = nextTile[0];
 				enemyPosition[1] = nextTile[1];
 
-				if (enemyPosition[0] <= 0 || enemyPosition[0] >= 8
-						|| enemyPosition[1] <= 0 || enemyPosition[1] >= 8) {
+				if (enemyPosition[0] <= 0 || enemyPosition[0] >= tiles.length-1
+						|| enemyPosition[1] <= 0
+						|| enemyPosition[1] >= tiles[0].length-1) {
 					enemySprite.animate(new long[] { 100, 250 }, new int[] { 0,
 							4 }, 3);
 					try {
@@ -906,10 +974,14 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 		Debug.e("" + pMenuItem.getID());
 		switch (pMenuItem.getID()) {
 		case 0:
-			createGameScene();
-			mainScene.clearChildScene();
-			mainScene.setChildScene(gameScene);
-			return true;
+			try {
+				createGameScene(0);
+				mainScene.clearChildScene();
+				mainScene.setChildScene(gameScene);
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		case 1:
 			howToIndex = 0;
 			menuScene.setChildSceneModal(howToMenus[howToIndex]);
