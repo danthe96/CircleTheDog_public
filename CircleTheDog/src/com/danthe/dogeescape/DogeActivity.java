@@ -1,6 +1,7 @@
 package com.danthe.dogeescape;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -210,6 +211,7 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 					.extractFromTexture(gameBackgroundTexture);
 			this.endBackgroundTextureReg = TextureRegionFactory
 					.extractFromTexture(endBackgroundTexture);
+			
 			this.circleTextureReg = BitmapTextureAtlasTextureRegionFactory
 					.createTiledFromAsset(circleBTA, this.getAssets(),
 							"gfx/circles.png", 0, 0, 2, 1);
@@ -602,7 +604,7 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 			for (int j = 0; j < tiles[0].length; j++) {
 				int property = Integer.parseInt(tileProperties[j]);
 				switch (property) {
-				case 0:
+				/*case 0:
 					tiles[i][j] = new Tile(
 							startingPointX + alternate
 									+ (tileWidth + Math.abs(alternate) / 4) * j,
@@ -621,7 +623,7 @@ public class DogeActivity extends SimpleBaseGameActivity implements
 							tileWidth, tileWidth, circleTextureReg,
 							getVertexBufferObjectManager(), true, this);
 					break;
-				default:
+				default:*/
 
 				}
 				gameScene.attachChild(tiles[i][j]);

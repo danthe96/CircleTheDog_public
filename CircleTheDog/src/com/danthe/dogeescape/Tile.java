@@ -8,14 +8,14 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class Tile extends TiledSprite {
 
 	private boolean blocked;
-	private DogeActivity parent;
+	private GameActivity parent;
 
-	
-	
-	public Tile(float pX, float pY, int pWidth, int pHeight, ITiledTextureRegion circleTextureReg,
+	public Tile(float pX, float pY, float pWidth, float pHeight,
+			ITiledTextureRegion circleTextureReg,
 			VertexBufferObjectManager pVertexBufferObjectManager,
-			boolean blocked, DogeActivity parent) {
-		super(pX, pY, pWidth, pHeight, circleTextureReg, pVertexBufferObjectManager);
+			boolean blocked, GameActivity parent) {
+		super(pX, pY, pWidth, pHeight, circleTextureReg,
+				pVertexBufferObjectManager);
 
 		this.blocked = blocked;
 		this.parent = parent;
@@ -25,12 +25,13 @@ public class Tile extends TiledSprite {
 		else
 			this.setCurrentTileIndex(0);
 	}
-	
-//	public Tile(float pX, float pY, ITiledTextureRegion circleTextureReg,
-//			VertexBufferObjectManager pVertexBufferObjectManager,
-//			boolean blocked, DogeActivity parent){
-//		this(pX, pY, 64, 64, circleTextureReg, pVertexBufferObjectManager, blocked, parent);
-//	}
+
+	// public Tile(float pX, float pY, ITiledTextureRegion circleTextureReg,
+	// VertexBufferObjectManager pVertexBufferObjectManager,
+	// boolean blocked, DogeActivity parent){
+	// this(pX, pY, 64, 64, circleTextureReg, pVertexBufferObjectManager,
+	// blocked, parent);
+	// }
 
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -40,6 +41,10 @@ public class Tile extends TiledSprite {
 				&& !blocked) {
 			if (parent.blockTile(this)) {
 				this.blocked = true;
+				this.setPosition(mX - mWidth * .35f, mY - mHeight / 2f);
+				this.setWidth(1.7f * mWidth);
+				this.setHeight(1.5f * mHeight);
+
 				this.setCurrentTileIndex(0);
 			}
 		}
