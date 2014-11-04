@@ -7,52 +7,83 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Tile extends TiledSprite {
 
-	private boolean blocked;
-	private GameActivity parent;
+	public TileType type;
+	public boolean blocked;
+	public int countdown;
 
 	public Tile(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion circleTextureReg,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			boolean blocked, GameActivity parent) {
+			VertexBufferObjectManager pVertexBufferObjectManager, TileType type) {
 		super(pX, pY, pWidth, pHeight, circleTextureReg,
 				pVertexBufferObjectManager);
 
-		this.blocked = blocked;
-		this.parent = parent;
+		this.type = type;
 
-		if (!blocked)
-			this.setCurrentTileIndex(1);
-		else
+		switch (type) {
+		case EMPTY:
 			this.setCurrentTileIndex(0);
+			blocked = false;
+			break;
+		case STAKE:
+			this.setCurrentTileIndex(1);
+			this.setPosition(mX - mWidth * .35f, mY - mHeight / 2f);
+			this.setWidth(1.7f * mWidth);
+			this.setHeight(1.5f * mHeight);
+			blocked = true;
+			break;
+		case ROCK:
+			this.setCurrentTileIndex(2);
+			blocked = true;
+			break;
+		case ICE:
+			this.setCurrentTileIndex(3);
+			blocked = true;
+			countdown = 3;
+			break;
+		case LAVA:
+			this.setCurrentTileIndex(6);
+			blocked = true;
+			break;
+		case SWAMP:
+			this.setCurrentTileIndex(7);
+			blocked = false;
+			break;
+		case TURTLE:
+			this.setCurrentTileIndex(8);
+			blocked = true;
+			break;
+		}
 	}
-
-	// public Tile(float pX, float pY, ITiledTextureRegion circleTextureReg,
-	// VertexBufferObjectManager pVertexBufferObjectManager,
-	// boolean blocked, DogeActivity parent){
-	// this(pX, pY, 64, 64, circleTextureReg, pVertexBufferObjectManager,
-	// blocked, parent);
-	// }
 
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		if (parent.isGameLoaded() && !parent.gameScene.hasChildScene()
-				&& pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP
-				&& !blocked) {
-			if (parent.blockTile(this)) {
-				this.blocked = true;
+		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
+			switch (type) {
+			case EMPTY:
+				type = TileType.STAKE;
+				this.setCurrentTileIndex(1);
 				this.setPosition(mX - mWidth * .35f, mY - mHeight / 2f);
 				this.setWidth(1.7f * mWidth);
 				this.setHeight(1.5f * mHeight);
+				blocked = true;
 
-				this.setCurrentTileIndex(0);
+				GameActivity.playersTurn = false;
+				break;
+			case STAKE:
+			case ROCK:
+			case ICE:
+			case LAVA:
+			case SWAMP:
+			case TURTLE:
+				break;
 			}
-		}
-		return true;
-	}
 
-	public boolean isBlocked() {
-		return blocked;
+			return true;
+		}
+
+		return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX,
+				pTouchAreaLocalY);
 	}
 
 }
