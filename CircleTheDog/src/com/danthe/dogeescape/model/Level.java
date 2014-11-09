@@ -4,36 +4,34 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.danthe.dogeescape.AssetManagerProvider;
+import com.danthe.dogeescape.GameActivity;
 import com.danthe.dogeescape.HumanActivityListener;
-import com.danthe.dogeescape.TileView;
 
 /**
- * Yes, Danthy, games usually include a level class ;-)
  * @author Daniel
- *
+ * @author danthe
+ * 
  */
-public class Level implements Runnable, HumanActivityListener{
+public class Level implements Runnable, HumanActivityListener {
 
 	/**
 	 * ID of the level to be loaded
 	 */
 	private final int levelID;
 	private final String levelDir;
-	
+
 	/**
 	 * needed to load the level specifications
 	 */
 	private final AssetManagerProvider assetManagerProvider;
-	
+
 	/**
 	 * List of all the tiles in the Level
 	 */
@@ -41,25 +39,26 @@ public class Level implements Runnable, HumanActivityListener{
 	/**
 	 * Level Dimensions
 	 */
-	private final int tileYLength, tileXLength;
-
+	public final int tileYLength, tileXLength;
 
 	private int turns = 0;
 	public static boolean playersTurn = false;
 	private boolean lost = false;
 	private boolean won = false;
-	
 
 	private Thread t;
-	
-	private final List<Player> players;
-	
-	
-	public Level (int levelID, AssetManagerProvider assetManagerProvider) throws IOException{
+
+	private GameActivity parent;
+
+	private final List<Enemy> enemies;
+
+	public Level(int levelID, AssetManagerProvider assetManagerProvider,
+			GameActivity parent) throws IOException {
 		this.levelID = levelID;
 		this.assetManagerProvider = assetManagerProvider;
-		levelDir = "level" + levelID + "/";
-		
+		levelDir = "level" + this.levelID + "/";
+		this.parent = parent;
+
 		BufferedReader bfr = new BufferedReader(new InputStreamReader(
 				assetManagerProvider.getAssets().open(levelDir + "level.txt")));
 
@@ -69,20 +68,19 @@ public class Level implements Runnable, HumanActivityListener{
 		tileList = new ArrayList<Tile>(tileXLength * tileYLength);
 		Log.e("", tileYLength + "," + tileXLength);
 
-		ArrayList<TileType> tileTypes = LevelLoader.readLevel(bfr,
-				tileYLength, tileXLength);
+		ArrayList<TileType> tileTypes = LevelLoader.readLevel(bfr, tileYLength,
+				tileXLength);
 
-		int a=0;
-		for (TileType t: tileTypes) {
+		int a = 0;
+		for (TileType t : tileTypes) {
 			a++;
-			tileList.add(new Tile(a%tileXLength, a/tileXLength, t, this));
+			tileList.add(new Tile(a % tileXLength, a / tileXLength, t, this));
 		}
-		
-		
+
 		String[] enemyPos = bfr.readLine().replace(" ", "").split(",");
-		players = new LinkedList<Player>();
+		enemies = new LinkedList<Enemy>();
 		initPlayers(enemyPos);
-		
+
 		if (t != null && !isGameOver())
 			while (t.isAlive()) {
 				t.interrupt();
@@ -92,19 +90,20 @@ public class Level implements Runnable, HumanActivityListener{
 		t.start();
 	}
 
-
 	private void initPlayers(String[] playerPos) {
-		
+
 		int enemyPosition;
-		for (int i=0; i<playerPos.length-1; i+=2) {
+		for (int i = 0; i < playerPos.length - 1; i += 2) {
 			enemyPosition = Integer.parseInt(playerPos[i]) * tileXLength
-					+ Integer.parseInt(playerPos[i+ 1]); 
-			players.add(new Player(enemyPosition, tileXLength, tileYLength, tileList));
+					+ Integer.parseInt(playerPos[i + 1]);
+			enemies.add(new Enemy(enemyPosition, tileXLength, tileYLength,
+					tileList, this));
 		}
-		
+
 	}
+
 	private void updateTiles() {
-		//TODO move this code into tiles
+		// TODO move this code into tiles
 		for (int i = 0; i < tileList.size(); i++) {
 			Tile tile = tileList.get(i);
 
@@ -113,73 +112,66 @@ public class Level implements Runnable, HumanActivityListener{
 				//
 				break;
 			case STAKE:
-				//TODO Danthy erklär mir was das hier tut.
-				//gameScene.unregisterTouchArea(tile);
-//				if (path.contains(Integer.valueOf(i)))
-//					recalculate = true;
+				// TODO Danthy erklär mir was das hier tut.
+				// Das deregistriert den Bereich im Touchlistener, weil wir
+				// Felder mit Hindernis nicht auf Berührung überprüfen müssen
+				// Kann auch weg, wenn es sein muss.
+				// gameScene.unregisterTouchArea(tile);
 				break;
 			case ROCK:
 				//
 				break;
 			case ICE:
-				tile.setCountdown(tile.getCountdown()-1);
+				tile.setCountdown(tile.getCountdown() - 1);
 				if (tile.getCountdown() <= 0) {
 					tile.setTileType(TileType.EMPTY);
 				}
-//					else
-//					tile.setCurrentTileIndex(tile.getCurrentTileIndex() + 1);
 				break;
 			case LAVA:
-//				LinkedList<Integer> neighbors = getNeighbors(i);
-//				int pos = neighbors
-//						.get((int) (Math.random() * neighbors.size()));
-//
-//				TileView nextTile = tileList.get(pos);
-//				nextTile.type = TileType.LAVA;
-//				nextTile.setCurrentTileIndex(6);
-//				nextTile.blocked = true;
+				LinkedList<Integer> neighbors = getNeighbors(i);
+				int pos = neighbors
+						.get((int) (Math.random() * neighbors.size()));
+
+				Tile nextTile = tileList.get(pos);
+				nextTile.setTileType(TileType.LAVA);
 				break;
 			case SWAMP:
 				//
 				break;
 			case TURTLE:
-//				LinkedList<Integer> neighbors2 = getNeighbors(i);
-//				int pos2 = neighbors2.get((int) (Math.random() * neighbors2
-//						.size()));
-//
-//				TileView nextTile2 = tileList.get(pos2);
-//				nextTile2.type = TileType.TURTLE;
-//				nextTile2.setCurrentTileIndex(8);
-//				nextTile2.blocked = true;
-//
-//				tile.type = TileType.EMPTY;
-//				tile.setCurrentTileIndex(0);
-//				tile.blocked = false;
+				LinkedList<Integer> neighbors2 = getNeighbors(i);
+				int pos2 = neighbors2.get((int) (Math.random() * neighbors2
+						.size()));
+
+				Tile nextTile2 = tileList.get(pos2);
+				nextTile2.setTileType(TileType.TURTLE);
+
+				tile.setTileType(TileType.EMPTY);
 				break;
 			}
-			}
+		}
 	}
 
-		
-	
+	public List<Enemy> getEnemyList() {
+		return enemies;
+	}
 
 	public int getTileYLength() {
 		return tileYLength;
 	}
 
-
 	public int getTileXLength() {
 		return tileXLength;
 	}
 
-
 	public ArrayList<Tile> getTileList() {
 		return tileList;
 	}
-	
+
 	public boolean isGameOver() {
 		return won || lost;
 	}
+
 	@Override
 	public void run() {
 
@@ -187,7 +179,6 @@ public class Level implements Runnable, HumanActivityListener{
 		lost = false;
 		won = false;
 		turns = 0;
-
 
 		// Main loop
 		while (!t.isInterrupted() && !(lost || won)) {
@@ -201,58 +192,70 @@ public class Level implements Runnable, HumanActivityListener{
 				}
 			}
 			updateTiles();
-			for (Player p: players) {
-				p.updateWay();
+			for (Enemy e : enemies) {
+				e.recheckPath();
+				e.updateWay();
 			}
 			checkVictory();
-			//TODO move enemy
-			//moveEnemy();
+			for (Enemy e : enemies)
+				e.move();
 		}
 
 	}
+
+	public LinkedList<Integer> getNeighbors(int index) {
+		LinkedList<Integer> neighbors = new LinkedList<Integer>();
+
+		int tileRow = index / tileXLength;
+		int tileCol = index % tileXLength;
+		int add = tileRow % 2;
+
+		if (tileRow > 0 && tileCol + add - 1 >= 0)
+			neighbors.add(index - tileXLength - 1 + add);
+		if (tileRow > 0 && tileCol + add < tileXLength)
+			neighbors.add(index - tileXLength + add);
+		if (tileCol + 1 < tileXLength)
+			neighbors.add(index + 1);
+		if (tileRow + 1 < tileYLength && tileCol + add < tileXLength)
+			neighbors.add(index + tileXLength + add);
+		if (tileRow + 1 < tileYLength && tileCol + add - 1 >= 0)
+			neighbors.add(index + tileXLength - 1 + add);
+		if (tileCol > 0)
+			neighbors.add(index - 1);
+
+		for (Iterator<Integer> iter = neighbors.iterator(); iter.hasNext();) {
+			Integer i = iter.next();
+			if (tileList.get(i).isBlocked())
+				iter.remove();
+		}
+
+		return neighbors;
+
+	}
+
 	private void checkVictory() {
+		won = true;
+		lost = true;
+		for (Enemy p : enemies) {
+			if (!p.hasLost())
+				won = false;
+			if (!p.hasWon())
+				lost = false;
+		}
+
 		if (lost || won) {
 			if (won) {
-//TODO move
-//				enemySprite.animate(new long[] { 100, 250 },
-//						new int[] { 0, 4 }, 3);
-//				try {
-//					Thread.sleep(1050);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				enemySprite.animate(new long[] { 200, 250 }, 0, 1, true);
-//
-//				for (int i = 0; i < 5; i++) {
-//					if (highscores.get(i) == -1 || turns < highscores.get(i)) {
-//						highscores.add(i, turns);
-//						highscores.remove(5);
-//						break;
-//					}
-//				}
-//				SharedPreferences prefs = this.getSharedPreferences(
-//						"dogeScores", Context.MODE_PRIVATE);
-//				Editor edit = prefs.edit();
-//				for (int i = 0; i < 5; i++) {
-//					edit.putInt("key" + i, highscores.get(i));
-//					edit.commit();
-//				}
+				parent.saveHighscores(turns);
 			}
-
 			// TODO:
 			// Call ending activity
-
 			t.interrupt();
 		}
 	}
 
-
 	@Override
 	public void onHumanActivity() {
 		playersTurn = false;
-		
 	}
 
-
 }
-		

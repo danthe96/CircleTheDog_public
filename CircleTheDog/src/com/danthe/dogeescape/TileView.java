@@ -5,13 +5,15 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import com.danthe.dogeescape.model.Level;
 import com.danthe.dogeescape.model.Tile;
 import com.danthe.dogeescape.model.TileType;
 
-public class TileView extends TiledSprite implements ChangeListener{
+public class TileView extends TiledSprite implements ChangeListener {
 
 	public final Tile tile;
-	//TODO remove additional tile Positions
+
+	// TODO remove additional tile Positions
 	public TileView(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion circleTextureReg,
 			VertexBufferObjectManager pVertexBufferObjectManager, Tile tile) {
@@ -19,7 +21,7 @@ public class TileView extends TiledSprite implements ChangeListener{
 				pVertexBufferObjectManager);
 		this.tile = tile;
 		updateGraphics();
-		
+
 		tile.addChangeListener(this);
 	}
 
@@ -38,7 +40,7 @@ public class TileView extends TiledSprite implements ChangeListener{
 			this.setCurrentTileIndex(2);
 			break;
 		case ICE:
-			this.setCurrentTileIndex(3);
+			this.setCurrentTileIndex(6 - tile.getCountdown());
 			break;
 		case LAVA:
 			this.setCurrentTileIndex(6);
@@ -55,10 +57,11 @@ public class TileView extends TiledSprite implements ChangeListener{
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
+		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP
+				&& Level.playersTurn) {
 			switch (tile.getTileType()) {
 			case EMPTY:
-				tile.setTileType(TileType.STAKE);
+				tile.setTileTypeOnHumanOrder(TileType.STAKE);
 				break;
 			case STAKE:
 			case ROCK:
@@ -78,7 +81,7 @@ public class TileView extends TiledSprite implements ChangeListener{
 
 	@Override
 	public void onStateChanged() {
-		//updateGraphics();
+		updateGraphics();
 	}
 
 }

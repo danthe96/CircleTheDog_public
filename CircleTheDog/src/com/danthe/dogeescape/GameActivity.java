@@ -1,12 +1,8 @@
 package com.danthe.dogeescape;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +11,6 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
@@ -28,16 +23,14 @@ import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
 
-import com.danthe.dogeescape.model.Level;
-import com.danthe.dogeescape.model.LevelLoader;
-import com.danthe.dogeescape.model.Tile;
-import com.danthe.dogeescape.model.TileType;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.util.Log;
+
+import com.danthe.dogeescape.model.Enemy;
+import com.danthe.dogeescape.model.Level;
+import com.danthe.dogeescape.model.Tile;
 
 public class GameActivity extends SimpleBaseGameActivity implements
 		AssetManagerProvider {
@@ -45,19 +38,10 @@ public class GameActivity extends SimpleBaseGameActivity implements
 	Scene gameScene;
 	private Level currentLevel;
 
-
 	// TODO Move
 	private LinkedList<Integer> highscores;
 
 	private int graphicalTileWidth;
-
-	/**
-	 * ?
-	 */
-	private int enemyPosition;
-
-	// TODO move in own class
-	private AnimatedSprite enemySprite;
 
 	private ITextureRegion gameBackgroundTextureReg;
 	private ITiledTextureRegion enemyTextureReg, tileTextureReg;
@@ -65,11 +49,11 @@ public class GameActivity extends SimpleBaseGameActivity implements
 	private static int CAMERA_WIDTH = 720;
 	private static int CAMERA_HEIGHT = 1280;
 
-	private List<TileView> tileViews;
-	
-	// TODO remove
-	private static int levelID = 0;
-	
+	private List<TileView> tileViews = new LinkedList<TileView>();
+	private LinkedList<EnemySprite> enemySprites;
+
+	private int levelID = 0;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -160,7 +144,7 @@ public class GameActivity extends SimpleBaseGameActivity implements
 		gameScene.attachChild(background2Sprite);
 
 		try {
-			currentLevel = new Level(0, this);
+			currentLevel = new Level(0, this, this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -186,6 +170,7 @@ public class GameActivity extends SimpleBaseGameActivity implements
 					* (i / currentLevel.getTileXLength()), graphicalTileWidth,
 					graphicalTileWidth, tileTextureReg,
 					getVertexBufferObjectManager(), t);
+			tile.setZIndex(-2 * (i / currentLevel.getTileXLength()));
 			tileViews.add(tile);
 			gameScene.attachChild(tile);
 			gameScene.registerTouchArea(tile);
@@ -196,53 +181,41 @@ public class GameActivity extends SimpleBaseGameActivity implements
 			i++;
 		}
 
-		// enemySprite = new AnimatedSprite(
-		// tileList.get(enemyPosition).getX(), tileList.get(
-		// enemyPosition).getY()
-		// - 9 * graphicalTileWidth / 8, graphicalTileWidth,
-		// 2 * graphicalTileWidth, enemyTextureReg,
-		// getVertexBufferObjectManager());
+		enemySprites = new LinkedList<EnemySprite>();
+		for (Enemy p : currentLevel.getEnemyList()) {
+			enemySprites.add(new EnemySprite(tileViews.get(p.getPosition())
+					.getX(), tileViews.get(p.getPosition()).getY() - 9
+					* graphicalTileWidth / 8, graphicalTileWidth,
+					2 * graphicalTileWidth, enemyTextureReg,
+					getVertexBufferObjectManager(), p, tileViews));
+			gameScene.attachChild(enemySprites.getLast());
+			enemySprites.getLast().setZIndex(
+					tileViews.get(p.getPosition()).getZIndex() - 1);
+			enemySprites.getLast().animate(new long[] { 200, 250 }, 0, 1, true);
+			p.setChangeListener(enemySprites.getLast());
 
-//		gameScene.attachChild(enemySprite);
-//		enemySprite.setZIndex(background2Sprite.getZIndex() + 1);
-//		enemySprite.animate(new long[] { 200, 250 }, 0, 1, true);
+		}
 
 		gameScene.setBackgroundEnabled(true);
-
-
 
 		return gameScene;
 	}
 
+	public void saveHighscores(int turns) {
+		for (int i = 0; i < 5; i++) {
+			if (highscores.get(i) == -1 || turns < highscores.get(i)) {
+				highscores.add(i, turns);
+				highscores.remove(5);
+				break;
+			}
+		}
+		SharedPreferences prefs = this.getSharedPreferences("dogeScores",
+				Context.MODE_PRIVATE);
+		Editor edit = prefs.edit();
+		for (int i = 0; i < 5; i++) {
+			edit.putInt("key" + i, highscores.get(i));
+			edit.commit();
+		}
+	}
 
-
-
-
-
-
-//	private void moveEnemy() {
-//		if (!won) {
-//			int nextTile = path.poll();
-//
-//			enemyPosition = nextTile;
-//			enemySprite.setX(tileList.get(enemyPosition).getX());
-//			enemySprite.setY(tileList.get(enemyPosition).getY() - 9
-//					* graphicalTileWidth / 8);
-//
-//			if (enemyPosition / tileXLength <= 0
-//					|| enemyPosition / tileXLength >= tileYLength - 1
-//					|| enemyPosition % tileXLength <= 0
-//					|| enemyPosition % tileXLength >= tileXLength - 1) {
-//				enemySprite.animate(new long[] { 100, 250 },
-//						new int[] { 0, 4 }, 3);
-//				try {
-//					Thread.sleep(1050);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				enemySprite.animate(new long[] { 200, 250 }, 0, 1, true);
-//				lost = true;
-//			}
-//		}
-//	}
 }
