@@ -170,7 +170,7 @@ public class GameActivity extends SimpleBaseGameActivity implements
 					* (i / currentLevel.getTileXLength()), graphicalTileWidth,
 					graphicalTileWidth, tileTextureReg,
 					getVertexBufferObjectManager(), t);
-			tile.setZIndex(-2 * (i / currentLevel.getTileXLength()));
+			tile.setZIndex(2 * (i / currentLevel.getTileXLength()));
 			tileViews.add(tile);
 			gameScene.attachChild(tile);
 			gameScene.registerTouchArea(tile);
@@ -187,10 +187,10 @@ public class GameActivity extends SimpleBaseGameActivity implements
 					.getX(), tileViews.get(p.getPosition()).getY() - 9
 					* graphicalTileWidth / 8, graphicalTileWidth,
 					2 * graphicalTileWidth, enemyTextureReg,
-					getVertexBufferObjectManager(), p, tileViews));
+					getVertexBufferObjectManager(), p, tileViews, this));
 			gameScene.attachChild(enemySprites.getLast());
 			enemySprites.getLast().setZIndex(
-					tileViews.get(p.getPosition()).getZIndex() - 1);
+					tileViews.get(p.getPosition()).getZIndex() + 1);
 			enemySprites.getLast().animate(new long[] { 200, 250 }, 0, 1, true);
 			p.setChangeListener(enemySprites.getLast());
 
@@ -216,6 +216,10 @@ public class GameActivity extends SimpleBaseGameActivity implements
 			edit.putInt("key" + i, highscores.get(i));
 			edit.commit();
 		}
+	}
+
+	public void resortElements() {
+		gameScene.sortChildren();
 	}
 
 }

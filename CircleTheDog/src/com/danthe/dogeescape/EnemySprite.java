@@ -12,16 +12,18 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener {
 
 	private Enemy enemy;
 	private List<TileView> tileViews;
+	private GameActivity parent;
 
 	public EnemySprite(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager vertexBufferObjectManager, Enemy player,
-			List<TileView> tileViews) {
+			List<TileView> tileViews, GameActivity parent) {
 		super(pX, pY, pWidth, pHeight, pTiledTextureRegion,
 				vertexBufferObjectManager);
 
 		this.enemy = player;
 		this.tileViews = tileViews;
+		this.parent = parent;
 	}
 
 	@Override
@@ -29,7 +31,8 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener {
 		mX = tileViews.get(enemy.getPosition()).getX();
 		mY = tileViews.get(enemy.getPosition()).getY() - 9
 				* tileViews.get(0).getWidth() / 8;
-		this.setZIndex(tileViews.get(enemy.getPosition()).getZIndex() - 1);
+		this.setZIndex(tileViews.get(enemy.getPosition()).getZIndex() + 1);
+		parent.resortElements();
 
 		if (enemy.hasWon()) {
 			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3);

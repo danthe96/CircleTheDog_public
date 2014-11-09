@@ -3,8 +3,6 @@ package com.danthe.dogeescape.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.andengine.util.debug.Debug;
-
 import com.danthe.dogeescape.ChangeListener;
 
 public class Enemy {
@@ -82,6 +80,7 @@ public class Enemy {
 
 		if (unreachable >= 2 * (h - 1) + 2 * (w - 1)) {
 			lost = true;
+			changeListener.onStateChanged();
 			return;
 		}
 
