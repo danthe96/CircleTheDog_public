@@ -28,9 +28,23 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener {
 
 	@Override
 	public void onStateChanged() {
-		mX = tileViews.get(enemy.getPosition()).getX();
-		mY = tileViews.get(enemy.getPosition()).getY() - 9
-				* tileViews.get(0).getWidth() / 8;
+		float xStep = (tileViews.get(enemy.getPosition()).getX() - mX) / 10f;
+		float yStep = (tileViews.get(enemy.getPosition()).getY() - 9
+				* tileViews.get(0).getWidth() / 8 - mY) / 10f;
+
+		for (int i = 0; i < 10; i++) {
+
+			mX += xStep;
+			mY += yStep;
+
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		}
+
 		this.setZIndex(tileViews.get(enemy.getPosition()).getZIndex() + 1);
 		parent.resortElements();
 

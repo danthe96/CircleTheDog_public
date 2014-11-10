@@ -101,7 +101,7 @@ public class GameActivity extends SimpleBaseGameActivity implements
 					this.getTextureManager(), 1280, 512,
 					TextureOptions.BILINEAR);
 			BitmapTextureAtlas circleBTA = new BitmapTextureAtlas(
-					this.getTextureManager(), 256, 128, TextureOptions.BILINEAR);
+					this.getTextureManager(), 512, 128, TextureOptions.BILINEAR);
 
 			// 2 - Load bitmap textures into VRAM
 			gameBackgroundTexture.load();
@@ -116,11 +116,11 @@ public class GameActivity extends SimpleBaseGameActivity implements
 			if (levelAssets.contains("tiles.png"))
 				this.tileTextureReg = BitmapTextureAtlasTextureRegionFactory
 						.createTiledFromAsset(circleBTA, this.getAssets(),
-								"level" + levelID + "/tiles.png", 0, 0, 2, 1);
+								"level" + levelID + "/tiles.png", 0, 0, 4, 1);
 			else
 				this.tileTextureReg = BitmapTextureAtlasTextureRegionFactory
 						.createTiledFromAsset(circleBTA, this.getAssets(),
-								"gfx/tiles.png", 0, 0, 2, 1);
+								"gfx/tiles.png", 0, 0, 4, 1);
 
 			if (levelAssets.contains("enemy2.png"))
 				this.enemyTextureReg = BitmapTextureAtlasTextureRegionFactory

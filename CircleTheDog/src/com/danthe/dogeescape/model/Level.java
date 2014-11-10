@@ -30,7 +30,7 @@ public class Level implements Runnable, HumanActivityListener {
 	/**
 	 * needed to load the level specifications
 	 */
-	private final AssetManagerProvider assetManagerProvider;
+	// private final AssetManagerProvider assetManagerProvider;
 
 	/**
 	 * List of all the tiles in the Level
@@ -55,7 +55,7 @@ public class Level implements Runnable, HumanActivityListener {
 	public Level(int levelID, AssetManagerProvider assetManagerProvider,
 			GameActivity parent) throws IOException {
 		this.levelID = levelID;
-		this.assetManagerProvider = assetManagerProvider;
+		// this.assetManagerProvider = assetManagerProvider;
 		levelDir = "level" + this.levelID + "/";
 		this.parent = parent;
 
@@ -191,7 +191,7 @@ public class Level implements Runnable, HumanActivityListener {
 					e.printStackTrace();
 				}
 			}
-			updateTiles();
+
 			for (Enemy e : enemies) {
 				e.recheckPath();
 				e.updateWay();
@@ -199,6 +199,7 @@ public class Level implements Runnable, HumanActivityListener {
 			checkVictory();
 			for (Enemy e : enemies)
 				e.move();
+			updateTiles();
 		}
 
 	}
