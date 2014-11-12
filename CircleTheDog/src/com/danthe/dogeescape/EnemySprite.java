@@ -28,6 +28,10 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener {
 
 	@Override
 	public void onStateChanged() {
+		
+		this.setZIndex(tileViews.get(enemy.getPosition()).getZIndex() + 1);
+		parent.resortElements();
+		
 		float xStep = (tileViews.get(enemy.getPosition()).getX() - mX) / 10f;
 		float yStep = (tileViews.get(enemy.getPosition()).getY() - 9
 				* tileViews.get(0).getWidth() / 8 - mY) / 10f;
@@ -43,10 +47,7 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener {
 				e.printStackTrace();
 			}
 
-		}
-
-		this.setZIndex(tileViews.get(enemy.getPosition()).getZIndex() + 1);
-		parent.resortElements();
+		}		
 
 		if (enemy.hasWon()) {
 			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3);
