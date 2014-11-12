@@ -11,7 +11,12 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.menu.MenuScene;
+import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
+import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -22,28 +27,34 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
+import org.andengine.util.color.Color;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 import com.danthe.dogeescape.model.Enemy;
 import com.danthe.dogeescape.model.Level;
 import com.danthe.dogeescape.model.Tile;
 
 public class GameActivity extends SimpleBaseGameActivity implements
-		AssetManagerProvider {
+		AssetManagerProvider, IOnMenuItemClickListener {
 
-	Scene gameScene;
+	private Scene gameScene;
+	private MenuScene pauseMenuScene;
 	private Level currentLevel;
+
+	private Camera camera;
 
 	// TODO Move
 	private LinkedList<Integer> highscores;
 
 	private int graphicalTileWidth;
 
-	private ITextureRegion gameBackgroundTextureReg;
+	private ITextureRegion gameBackgroundTextureReg, textBoxTextureReg;
 	private ITiledTextureRegion enemyTextureReg, tileTextureReg;
 
 	private static int CAMERA_WIDTH = 720;
@@ -71,7 +82,7 @@ public class GameActivity extends SimpleBaseGameActivity implements
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		Camera camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+		camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		return new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED,
 				new FillResolutionPolicy(), camera);
 	}
@@ -96,6 +107,13 @@ public class GameActivity extends SimpleBaseGameActivity implements
 										"gfx/game_background.png");
 						}
 					});
+			ITexture textBoxTexture = new BitmapTexture(
+					this.getTextureManager(), new IInputStreamOpener() {
+						@Override
+						public InputStream open() throws IOException {
+							return getAssets().open("gfx/textbox.png");
+						}
+					});
 
 			BitmapTextureAtlas enemyBTA = new BitmapTextureAtlas(
 					this.getTextureManager(), 1280, 512,
@@ -112,6 +130,8 @@ public class GameActivity extends SimpleBaseGameActivity implements
 			// 3 - Set up texture regions
 			this.gameBackgroundTextureReg = TextureRegionFactory
 					.extractFromTexture(gameBackgroundTexture);
+			this.textBoxTextureReg = TextureRegionFactory
+					.extractFromTexture(textBoxTexture);
 
 			if (levelAssets.contains("tiles.png"))
 				this.tileTextureReg = BitmapTextureAtlasTextureRegionFactory
@@ -198,6 +218,19 @@ public class GameActivity extends SimpleBaseGameActivity implements
 
 		gameScene.setBackgroundEnabled(true);
 
+		Font comicSansFont = FontFactory.create(mEngine.getFontManager(),
+				mEngine.getTextureManager(), 512, 512, TextureOptions.BILINEAR,
+				Typeface.createFromAsset(this.getAssets(),
+						"ttf/LDFComicSans.ttf"), 46f, true,
+				Color.WHITE_ARGB_PACKED_INT);
+		this.getFontManager().loadFont(comicSansFont);
+		comicSansFont.getTexture().load();
+
+		this.pauseMenuScene = new PauseMenu(camera, this.getBaseContext(),
+				this.getVertexBufferObjectManager(), textBoxTextureReg,
+				comicSansFont);
+		pauseMenuScene.setOnMenuItemClickListener(this);
+
 		return gameScene;
 	}
 
@@ -222,4 +255,36 @@ public class GameActivity extends SimpleBaseGameActivity implements
 		gameScene.sortChildren();
 	}
 
+	@Override
+	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
+			float pMenuItemLocalX, float pMenuItemLocalY) {
+		switch (pMenuItem.getID()) {
+		case 0:
+			gameScene.clearChildScene();
+			TileView.blockInput = false;
+			return true;
+		case 1:
+			System.exit(0);
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+			if (!gameScene.hasChildScene()) {
+				gameScene.setChildScene(pauseMenuScene);
+				TileView.blockInput = true;
+			} else {
+				gameScene.reset();
+				TileView.blockInput = false;
+			}
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+		return false;
+	}
 }

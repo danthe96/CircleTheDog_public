@@ -12,6 +12,8 @@ import com.danthe.dogeescape.model.TileType;
 public class TileView extends TiledSprite implements ChangeListener {
 
 	public final Tile tile;
+	
+	public static boolean blockInput = false;
 
 	// TODO remove additional tile Positions
 	public TileView(float pX, float pY, float pWidth, float pHeight,
@@ -58,7 +60,7 @@ public class TileView extends TiledSprite implements ChangeListener {
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP
-				&& Level.playersTurn) {
+				&& Level.playersTurn && !blockInput) {
 			switch (tile.getTileType()) {
 			case EMPTY:
 				tile.setTileTypeOnHumanOrder(TileType.STAKE);

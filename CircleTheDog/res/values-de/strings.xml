@@ -4,7 +4,8 @@
     <string name="play">SPIELEN</string>
     <string name="howto">ANLEITUNG</string>
     <string name="scores">HIGHSCORES</string>
-     <string name="back">MENÜ</string>
+    <string name="back">MENÜ</string>
+    <string name="quit">BEENDEN</string>
     <string name="resume">FORTSETZEN</string>
     <string name="play_again">NOCHMAL SPIELEN</string>
     <string name="next">WEITER</string>
@@ -17,15 +18,13 @@
     <string name="tutorial_2">Blockiere die Felder\n auf seinem Weg...</string>
     <string name="tutorial_3">...bis du ihn fängst ...</string>
     <string name="tutorial_4">... und gewinnst.</string>
-    
     <string name="share_app">APP TEILEN</string>
     <string name="share_text">Hol dir das Spiel \"Circle the Dog\". Es ist großartig!</string>
     <string name="share_via">Teilen in</string>
-    
     <string name="rate_top">Gefällt dir das Spiel?</string>
     <string name="rate_info">Bitte unterstütze unser\nSpiel, indem du es\nbewertest. Das hilft uns\nWIRKLICH sehr.</string>
     <string name="rate_yes">NA KLAR!</string>
     <string name="rate_later">SPÄTER VIELLEICHT.</string>
     <string name="no">NEIN, NIEMALS!</string>
-    
+
 </resources>
