@@ -123,6 +123,7 @@ public class GameActivity extends SimpleBaseGameActivity implements
 
 			// 2 - Load bitmap textures into VRAM
 			gameBackgroundTexture.load();
+			textBoxTexture.load();
 
 			circleBTA.load();
 			enemyBTA.load();
