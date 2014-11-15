@@ -19,6 +19,7 @@ public class Enemy {
 	private int tileXLength;
 	private int tileYLength;
 	private final List<Tile> tileList;
+	private LinkedList<Integer> borderTiles;
 	private boolean won = false;
 	private boolean lost = false;
 
@@ -31,54 +32,44 @@ public class Enemy {
 		this.tileXLength = tileXLength;
 		this.tileYLength = tileYLength;
 		this.level = level;
+
+		borderTiles = new LinkedList<Integer>();
+		for (int i = 0; i < tileXLength; i++) {
+			borderTiles.add(i);
+			borderTiles.add((tileYLength - 1) * (tileXLength) + i);
+		}
+		for (int i = 1; i < (tileXLength - 1); i++) {
+			borderTiles.add(i * tileXLength);
+			borderTiles.add(i * tileXLength + (tileXLength - 1));
+		}
+
 	}
 
 	private void calculateWay() {
 		doDijkstra(position, tileList);
-		int w = tileXLength;
-		int h = tileYLength;
+		LinkedList<Integer> lucrativeFields = new LinkedList<Integer>();
 
-		int pos = w - 1;
-		for (int i = 0; i < w * h; i++) {
-			if ((i / w <= 0 || i / w >= h - 1 || i % w <= 0 || i % w >= w - 1)
-					&& !tileList.get(i).isBlocked()) {
-				pos = i;
+		for (int i : borderTiles) {
+			if (!tileList.get(i).isBlocked()) {
+				lucrativeFields.add(i);
 				break;
 			}
 		}
 
 		int unreachable = 0;
-		for (int i = 1; i < h; i++) {
 
-			if (!tileList.get(w * i).isBlocked()
-					&& distance[w * i] < distance[pos])
-				pos = w * i;
-			else if (distance[w * i] == Integer.MAX_VALUE)
+		for (int i : borderTiles) {
+			if (distance[i] == Integer.MAX_VALUE)
 				unreachable++;
-
-			if (!tileList.get(((h - 1) - i) * w + (w - 1)).isBlocked()
-					&& distance[((h - 1) - i) * w + (w - 1)] < distance[pos])
-				pos = ((h - 1) - i) * w + (w - 1);
-			else if (distance[((h - 1) - i) * w + (w - 1)] == Integer.MAX_VALUE)
-				unreachable++;
+			else if (!tileList.get(i).isBlocked()
+					&& distance[i] <= distance[lucrativeFields.get(0)]) {
+				if (distance[i] <= distance[lucrativeFields.get(0)])
+					lucrativeFields.clear();
+				lucrativeFields.add(i);
+			}
 		}
 
-		for (int i = 1; i < w; i++) {
-
-			if (!tileList.get((h - 1) * w + i).isBlocked()
-					&& distance[(h - 1) * w + i] < distance[pos])
-				pos = (h - 1) * w + i;
-			else if (distance[(h - 1) * w + i] == Integer.MAX_VALUE)
-				unreachable++;
-
-			if (!tileList.get((w - 1) - i).isBlocked()
-					&& distance[(w - 1) - i] < distance[pos])
-				pos = (w - 1) - i;
-			else if (distance[(w - 1) - i] == Integer.MAX_VALUE)
-				unreachable++;
-		}
-
-		if (unreachable >= 2 * (h - 1) + 2 * (w - 1)) {
+		if (unreachable >= borderTiles.size() - 1) {
 			lost = true;
 			changeListener.onStateChanged();
 			return;
@@ -88,7 +79,8 @@ public class Enemy {
 		// Debug.e(Arrays.toString(distance));
 
 		path.clear();
-		int v = pos;
+		int v = lucrativeFields.get((int) (Math.random() * lucrativeFields
+				.size()));
 		while (v != position) {
 			path.add(0, v);
 			// Debug.e("path size " + path.size());
