@@ -11,6 +11,7 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
@@ -54,7 +55,7 @@ public class GameActivity extends SimpleBaseGameActivity implements
 
 	private int graphicalTileWidth;
 
-	private ITextureRegion gameBackgroundTextureReg, textBoxTextureReg;
+	private ITextureRegion gameBackgroundTextureReg, textBoxTextureReg, appBackgroundTextureReg;
 	private ITiledTextureRegion enemyTextureReg, tileTextureReg;
 
 	private static int CAMERA_WIDTH = 720;
@@ -114,6 +115,13 @@ public class GameActivity extends SimpleBaseGameActivity implements
 							return getAssets().open("gfx/textbox.png");
 						}
 					});
+			ITexture appBackgroundTexture = new BitmapTexture(
+					this.getTextureManager(), new IInputStreamOpener() {
+						@Override
+						public InputStream open() throws IOException {
+							return getAssets().open("gfx/background2.png");
+						}
+					});
 
 			BitmapTextureAtlas enemyBTA = new BitmapTextureAtlas(
 					this.getTextureManager(), 1280, 512,
@@ -124,6 +132,7 @@ public class GameActivity extends SimpleBaseGameActivity implements
 			// 2 - Load bitmap textures into VRAM
 			gameBackgroundTexture.load();
 			textBoxTexture.load();
+			appBackgroundTexture.load();
 
 			circleBTA.load();
 			enemyBTA.load();
@@ -133,7 +142,8 @@ public class GameActivity extends SimpleBaseGameActivity implements
 					.extractFromTexture(gameBackgroundTexture);
 			this.textBoxTextureReg = TextureRegionFactory
 					.extractFromTexture(textBoxTexture);
-
+			this.appBackgroundTextureReg = TextureRegionFactory.extractFromTexture(appBackgroundTexture);
+			
 			if (levelAssets.contains("tiles.png"))
 				this.tileTextureReg = BitmapTextureAtlasTextureRegionFactory
 						.createTiledFromAsset(circleBTA, this.getAssets(),
@@ -160,6 +170,9 @@ public class GameActivity extends SimpleBaseGameActivity implements
 	protected Scene onCreateScene() {
 		gameScene = new Scene();
 
+		Sprite background = new Sprite(0,0, CAMERA_WIDTH, CAMERA_HEIGHT, appBackgroundTextureReg,getVertexBufferObjectManager());
+		gameScene.setBackground(new SpriteBackground(0,0,0,background));
+		
 		Sprite background2Sprite = new Sprite(22, 332, 676, 648,
 				this.gameBackgroundTextureReg, getVertexBufferObjectManager());
 		gameScene.attachChild(background2Sprite);
