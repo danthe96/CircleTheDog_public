@@ -11,8 +11,8 @@ import java.util.List;
 import android.util.Log;
 
 import com.danthe.dogeescape.AssetManagerProvider;
-import com.danthe.dogeescape.GameActivity;
 import com.danthe.dogeescape.HumanActivityListener;
+import com.danthe.dogeescape.view.GameActivity;
 
 /**
  * @author Daniel
@@ -48,16 +48,15 @@ public class Level implements Runnable, HumanActivityListener {
 
 	private Thread t;
 
-	private GameActivity parent;
+	//private GameActivity parent;
 
 	private final List<Enemy> enemies;
 
-	public Level(int levelID, AssetManagerProvider assetManagerProvider,
-			GameActivity parent) throws IOException {
+	public Level(int levelID, AssetManagerProvider assetManagerProvider) throws IOException {
 		this.levelID = levelID;
 		// this.assetManagerProvider = assetManagerProvider;
 		levelDir = "level" + this.levelID + "/";
-		this.parent = parent;
+		//this.parent = parent;
 
 		BufferedReader bfr = new BufferedReader(new InputStreamReader(
 				assetManagerProvider.getAssets().open(levelDir + "level.txt")));
@@ -246,7 +245,7 @@ public class Level implements Runnable, HumanActivityListener {
 
 		if (lost || won) {
 			if (won) {
-				parent.saveHighscores(turns);
+		//		parent.saveHighscores(turns);
 			}
 			// TODO:
 			// Call ending activity
