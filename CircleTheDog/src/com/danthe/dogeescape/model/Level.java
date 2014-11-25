@@ -8,11 +8,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.danthe.dogeescape.AssetManagerProvider;
 import com.danthe.dogeescape.HumanActivityListener;
-import com.danthe.dogeescape.view.GameActivity;
 
 /**
  * @author Daniel
@@ -41,6 +43,9 @@ public class Level implements Runnable, HumanActivityListener {
 	 */
 	public final int tileYLength, tileXLength;
 
+	private LinkedList<Integer> highscores;
+	private Context context;
+	
 	private int turns = 0;
 	public static boolean playersTurn = false;
 	private boolean lost = false;
@@ -52,8 +57,11 @@ public class Level implements Runnable, HumanActivityListener {
 
 	private final List<Enemy> enemies;
 
-	public Level(int levelID, AssetManagerProvider assetManagerProvider) throws IOException {
+	public Level(int levelID, AssetManagerProvider assetManagerProvider, Context context) throws IOException {
 		this.levelID = levelID;
+		this.context = context;
+		
+		initHighscores();
 		// this.assetManagerProvider = assetManagerProvider;
 		levelDir = "level" + this.levelID + "/";
 		//this.parent = parent;
@@ -245,7 +253,7 @@ public class Level implements Runnable, HumanActivityListener {
 
 		if (lost || won) {
 			if (won) {
-		//		parent.saveHighscores(turns);
+				saveHighscores(turns);
 			}
 			// TODO:
 			// Call ending activity
@@ -256,6 +264,31 @@ public class Level implements Runnable, HumanActivityListener {
 	@Override
 	public void onHumanActivity() {
 		playersTurn = false;
+	}
+	
+	private void initHighscores() {
+		highscores = new LinkedList<Integer>();
+		SharedPreferences prefs = context.getSharedPreferences("dogeScores",
+				Context.MODE_PRIVATE);
+		for (int i = 0; i < 5; i++)
+			highscores.add(prefs.getInt("key" + i, -1));
+	}	
+	
+	private void saveHighscores(int turns) {
+		for (int i = 0; i < 5; i++) {
+			if (highscores.get(i) == -1 || turns < highscores.get(i)) {
+				highscores.add(i, turns);
+				highscores.remove(5);
+				break;
+			}
+		}
+		SharedPreferences prefs = context.getSharedPreferences("dogeScores",
+				Context.MODE_PRIVATE);
+		Editor edit = prefs.edit();
+		for (int i = 0; i < 5; i++) {
+			edit.putInt("key" + i, highscores.get(i));
+			edit.commit();
+		}
 	}
 
 }

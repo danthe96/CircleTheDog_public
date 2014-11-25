@@ -3,18 +3,16 @@ package com.danthe.dogeescape.view.scenes;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.util.GLState;
-import org.andengine.ui.activity.BaseGameActivity;
+import org.andengine.entity.scene.menu.MenuScene;
+import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
+import org.andengine.entity.scene.menu.item.IMenuItem;
 
 import android.util.Log;
+import android.view.KeyEvent;
 
+import com.danthe.dogeescape.KeyListener;
 import com.danthe.dogeescape.view.GameActivity;
+import com.danthe.dogeescape.view.TileView;
 
 /**
  * Class organizing the different Scenes. Ive decided to not do the game scenes
@@ -22,12 +20,13 @@ import com.danthe.dogeescape.view.GameActivity;
  * scenes now. see:
  * http://stuartmct.co.uk/2012/07/16/andengine-scenes-and-scene-management/
  * 
- * Add different Scenes by creating different a new Sceneclass and changing the methods here.
+ * Add different Scenes by creating different a new Sceneclass and changing the
+ * methods here.
  * 
  * @author Daniel
  * 
  */
-public class SceneManager {
+public class SceneManager implements IOnMenuItemClickListener, KeyListener {
 	private static final String TAG = "SCENE_MANAGER";
 
 	private SceneType currentScene;
@@ -36,11 +35,12 @@ public class SceneManager {
 	private Camera camera;
 
 	private Scene mainGameScene;
+	private MenuScene pauseScene;
 
 	private Scene splashScene;
 
 	public enum SceneType {
-		MAINGAME, SPLASHSCENE
+		MAINGAME, SPLASHSCENE, PAUSEMENUSCENE
 	}
 
 	public SceneManager(GameActivity activity, Engine engine, Camera camera) {
@@ -75,28 +75,37 @@ public class SceneManager {
 				throw new UnsupportedOperationException(
 						"Cant load resources for maingame without specified levelID!");
 			GameScene.loadResources(activity, levelID);
+			PauseMenu.loadPauseSceneResources(activity);
 			break;
 		case SPLASHSCENE:
 			SplashScene.loadSplashSceneResources(activity);
+		default:
 		}
 
 	}
 
-	public void createScene(SceneType scene) {
+	public Scene createScene(SceneType scene) {
 		switch (scene) {
 		case MAINGAME:
 			mainGameScene = GameScene.createScene(activity,
-					activity.getVertexBufferObjectManager());
-			break;
+					activity.getVertexBufferObjectManager(),
+					activity.getApplicationContext());
+			return mainGameScene;
 		case SPLASHSCENE:
-			createSplashScene();
+			splashScene = SplashScene.createScene(camera, activity);
+			return splashScene;
+		case PAUSEMENUSCENE:
+			pauseScene = PauseMenu.createScene(camera,
+					activity.getApplicationContext(),
+					activity.getVertexBufferObjectManager());
+			return pauseScene;
 		}
+		return null;
 	}
 
 	// Method allows you to get the currently active scene
 	public SceneType getCurrentSceneType() {
 		return currentScene;
-
 	}
 
 	// Method allows you to set the currently active scene
@@ -109,16 +118,43 @@ public class SceneManager {
 			break;
 		case SPLASHSCENE:
 			engine.setScene(splashScene);
+		default:
 		}
 
 	}
 
-	public Scene createSplashScene() {
-		// Create the Splash Scene and set background colour to red and add the
-		// splash logo.
-		splashScene = new SplashScene(camera, activity);
+	@Override
+	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
+			float pMenuItemLocalX, float pMenuItemLocalY) {
+		switch (pMenuItem.getID()) {
+		case 0:
+			mainGameScene.clearChildScene();
+			TileView.blockInput = false;
+			return true;
+		case 1:
+			System.exit(0);
+			return true;
+		}
 
-		return splashScene;
+		return false;
+	}
+
+	@Override
+	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+			if (!mainGameScene.hasChildScene()) {
+				createScene(SceneType.PAUSEMENUSCENE);
+				mainGameScene.setChildScene(pauseScene);
+				pauseScene.setOnMenuItemClickListener(this);
+				TileView.blockInput = true;
+			} else {
+				mainGameScene.reset();
+				TileView.blockInput = false;
+			}
+			return true;
+		}
+		return false;
 	}
 
 }
