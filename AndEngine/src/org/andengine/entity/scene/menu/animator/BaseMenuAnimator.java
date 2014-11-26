@@ -30,7 +30,7 @@ public abstract class BaseMenuAnimator implements IMenuAnimator {
 	// ===========================================================
 
 	protected final float mMenuItemSpacing;
-	protected final HorizontalAlign mHorizontalAlign;
+	public final HorizontalAlign mHorizontalAlign;
 	protected final IEaseFunction mEaseFunction;
 
 	// ===========================================================

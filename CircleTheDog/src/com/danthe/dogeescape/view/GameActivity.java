@@ -23,7 +23,7 @@ import com.danthe.dogeescape.view.scenes.SceneManager.SceneType;
 public class GameActivity extends BaseGameActivity implements
 		AssetManagerProvider {
 	private static final String TAG = "GAME_ACTIVITY";
-	private static final SceneType DEFAULT_SCENE = SceneType.MAINGAME;
+	private static final SceneType DEFAULT_SCENE = SceneType.LEVEL_SELECT_SCENE;
 
 	private SceneManager sceneManager;
 	private LinkedList<KeyListener> keyListeners = new LinkedList<KeyListener>();
@@ -78,6 +78,7 @@ public class GameActivity extends BaseGameActivity implements
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
+						sceneManager.loadTextureManagerResources();
 						sceneManager.loadResources(DEFAULT_SCENE, 0);
 						sceneManager.createScene(DEFAULT_SCENE);
 						sceneManager.setCurrentScene(DEFAULT_SCENE);

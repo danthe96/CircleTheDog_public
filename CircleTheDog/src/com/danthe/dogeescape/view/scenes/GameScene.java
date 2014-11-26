@@ -30,6 +30,7 @@ import com.danthe.dogeescape.model.Level;
 import com.danthe.dogeescape.model.Tile;
 import com.danthe.dogeescape.view.EnemySprite;
 import com.danthe.dogeescape.view.GameActivity;
+import com.danthe.dogeescape.view.TextureManager;
 import com.danthe.dogeescape.view.TileView;
 
 /**
@@ -42,8 +43,7 @@ public class GameScene extends Scene {
 	private static final String TAG = "GAME_SCENE";
 	private static GameScene instance = null;
 
-	private static ITextureRegion gameBackgroundTextureReg,
-			appBackgroundTextureReg;
+	private static ITextureRegion gameBackgroundTextureReg;
 	private static ITiledTextureRegion enemyTextureReg, tileTextureReg;
 
 	private Level currentLevel;
@@ -56,20 +56,20 @@ public class GameScene extends Scene {
 	// ich nehme mal an das soll ein Singleton werden, da hab ich das jetzt
 	// fertiggemacht
 	static GameScene createScene(AssetManagerProvider assetManagerProvider,
-			VertexBufferObjectManager vertexBufferObjectManager, Context context) {
+			VertexBufferObjectManager vertexBufferObjectManager, Context context, int levelID) {
 		if (instance == null)
 			instance = new GameScene(assetManagerProvider,
-					vertexBufferObjectManager, context);
+					vertexBufferObjectManager, context, levelID);
 
 		return instance;
 	}
 
 	private GameScene(AssetManagerProvider assetManagerProvider,
-			VertexBufferObjectManager vertexBufferObjectManager, Context context) {
+			VertexBufferObjectManager vertexBufferObjectManager, Context context, int levelID) {
 
 		Log.d(TAG, "CREATE SCENE");
 		Sprite background = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
-				GameActivity.CAMERA_HEIGHT, appBackgroundTextureReg,
+				GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
 				vertexBufferObjectManager);
 		setBackground(new SpriteBackground(0, 0, 0, background));
 
@@ -78,7 +78,7 @@ public class GameScene extends Scene {
 		attachChild(background2Sprite);
 
 		try {
-			currentLevel = new Level(0, assetManagerProvider, context);
+			currentLevel = new Level(levelID, assetManagerProvider, context);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -153,14 +153,6 @@ public class GameScene extends Scene {
 										"gfx/game_background.png");
 						}
 					});
-			ITexture appBackgroundTexture = new BitmapTexture(
-					activity.getTextureManager(), new IInputStreamOpener() {
-						@Override
-						public InputStream open() throws IOException {
-							return activity.getAssets().open(
-									"gfx/background2.png");
-						}
-					});
 
 			BitmapTextureAtlas enemyBTA = new BitmapTextureAtlas(
 					activity.getTextureManager(), 1280, 512,
@@ -171,7 +163,6 @@ public class GameScene extends Scene {
 
 			// 2 - Load bitmap textures into VRAM
 			gameBackgroundTexture.load();
-			appBackgroundTexture.load();
 
 			circleBTA.load();
 			enemyBTA.load();
@@ -179,8 +170,6 @@ public class GameScene extends Scene {
 			// 3 - Set up texture regions
 			gameBackgroundTextureReg = TextureRegionFactory
 					.extractFromTexture(gameBackgroundTexture);
-			appBackgroundTextureReg = TextureRegionFactory
-					.extractFromTexture(appBackgroundTexture);
 
 			if (levelAssets.contains("tiles.png"))
 				tileTextureReg = BitmapTextureAtlasTextureRegionFactory

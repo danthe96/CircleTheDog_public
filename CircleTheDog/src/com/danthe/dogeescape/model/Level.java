@@ -23,6 +23,9 @@ import com.danthe.dogeescape.HumanActivityListener;
  */
 public class Level implements Runnable, HumanActivityListener {
 
+	public enum Status {
+		SOLVED, PLAYABLE, LOCKED
+	}
 	/**
 	 * ID of the level to be loaded
 	 */
