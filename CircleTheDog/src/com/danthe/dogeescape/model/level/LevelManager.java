@@ -10,7 +10,7 @@ import com.danthe.dogeescape.model.level.Level.Status;
 public class LevelManager {
 
 	private static LevelManager levelManager;
-	public static final int numLevels = 20;
+	public static final int numLevels = 12;
 	private static final Status DEFAULT_STATUS = Status.LOCKED;
 	private Activity activity;
 
