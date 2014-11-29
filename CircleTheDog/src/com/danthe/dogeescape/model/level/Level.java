@@ -43,14 +43,14 @@ public class Level implements Runnable, HumanActivityListener {
 	/**
 	 * List of all the tiles in the Level
 	 */
-	private final ArrayList<Tile> tileList;
+	private ArrayList<Tile> tileList;
 	/**
 	 * Level Dimensions
 	 */
 	public final int tileYLength, tileXLength;
 
 	public static int turns = 0;
-	public static boolean playersTurn = false;
+	public boolean playersTurn = false;
 	public static boolean lost = false;
 	public static boolean won = false;
 
@@ -58,7 +58,7 @@ public class Level implements Runnable, HumanActivityListener {
 
 	private SceneSetter sceneSetter;
 
-	private final List<Enemy> enemies;
+	private List<Enemy> enemies;
 
 	public Level(int levelID, AssetManagerProvider assetManagerProvider,
 			SceneSetter sceneSetter) throws IOException {
@@ -87,9 +87,15 @@ public class Level implements Runnable, HumanActivityListener {
 			tileList.add(new Tile(a % tileXLength, a / tileXLength, t, this));
 		}
 
-		String[] enemyPos = bfr.readLine().replace(" ", "").split(",");
 		enemies = new LinkedList<Enemy>();
-		initPlayers(enemyPos);
+		String str;
+		while ((str = bfr.readLine()) != null) {
+			String[] pos = str.split(",");
+			int enemyPosition = Integer.parseInt(pos[0]) * tileXLength
+					+ Integer.parseInt(pos[1]);
+			enemies.add(new Enemy(enemyPosition, tileXLength, tileYLength,
+					tileList, this));
+		}
 
 		if (t != null && !isGameOver())
 			while (t.isAlive()) {
@@ -98,18 +104,6 @@ public class Level implements Runnable, HumanActivityListener {
 
 		t = new Thread(this);
 		t.start();
-	}
-
-	private void initPlayers(String[] playerPos) {
-
-		int enemyPosition;
-		for (int i = 0; i < playerPos.length - 1; i += 2) {
-			enemyPosition = Integer.parseInt(playerPos[i]) * tileXLength
-					+ Integer.parseInt(playerPos[i + 1]);
-			enemies.add(new Enemy(enemyPosition, tileXLength, tileYLength,
-					tileList, this));
-		}
-
 	}
 
 	private void updateTiles() {
@@ -269,6 +263,14 @@ public class Level implements Runnable, HumanActivityListener {
 	@Override
 	public void onHumanActivity() {
 		playersTurn = false;
+	}
+
+	public boolean enemyOnTile(Tile tile) {
+		for (Enemy e : enemies) {
+			if (e.getPosition() == tileList.indexOf(tile))
+				return true;
+		}
+		return false;
 	}
 
 }

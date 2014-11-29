@@ -12,6 +12,8 @@ import com.danthe.dogeescape.model.level.Level;
 
 public class TileView extends TiledSprite implements ChangeListener {
 
+	private Level level;
+
 	public final Tile tile;
 	private float defaultX, defaultY, defaultWidth, defaultHeight;
 
@@ -20,13 +22,15 @@ public class TileView extends TiledSprite implements ChangeListener {
 	// TODO remove additional tile Positions
 	public TileView(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion circleTextureReg,
-			VertexBufferObjectManager pVertexBufferObjectManager, Tile tile) {
+			VertexBufferObjectManager pVertexBufferObjectManager, Level level,
+			Tile tile) {
 		super(pX, pY, pWidth, pHeight, circleTextureReg,
 				pVertexBufferObjectManager);
 		this.defaultX = pX;
 		this.defaultY = pY;
 		this.defaultWidth = pWidth;
 		this.defaultHeight = pHeight;
+		this.level = level;
 		this.tile = tile;
 		updateGraphics();
 
@@ -45,27 +49,31 @@ public class TileView extends TiledSprite implements ChangeListener {
 			break;
 		case STAKE:
 			this.setCurrentTileIndex(1);
-			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
+			this.setPosition(defaultX - defaultWidth * .35f, defaultY
+					- defaultHeight / 2f);
 			this.setWidth(1.7f * defaultWidth);
 			this.setHeight(1.5f * defaultHeight);
 			break;
 		case ROCK:
 			this.setCurrentTileIndex(2);
-			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
-			this.setWidth(1.58f * defaultWidth);
+			this.setPosition(defaultX - defaultWidth * .27f, defaultY
+					- defaultHeight / 2f);
+			this.setWidth(1.54f * defaultWidth);
 			this.setHeight(1.75f * defaultHeight);
 			break;
 		case BUSH:
 			this.setCurrentTileIndex(3);
-			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f*1.09f);
-			this.setWidth(1.65f * defaultWidth);
+			this.setPosition(defaultX - defaultWidth * .3f, defaultY
+					- defaultHeight / 2f * 1.09f);
+			this.setWidth(1.6f * defaultWidth);
 			this.setHeight(1.75f * defaultHeight);
 			break;
 		case ICE:
 			this.setCurrentTileIndex(7 - tile.getCountdown());
-			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
-			this.setWidth(1.7f * defaultWidth);
-			this.setHeight(1.5f * defaultHeight);
+			this.setPosition(defaultX - defaultWidth * .2f, defaultY
+					- defaultHeight / 2f);
+			this.setWidth(1.4f * defaultWidth);
+			this.setHeight(1.4f * defaultHeight);
 			break;
 		case LAVA:
 			this.setCurrentTileIndex(7);
@@ -83,7 +91,7 @@ public class TileView extends TiledSprite implements ChangeListener {
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP
-				&& Level.playersTurn && !blockInput) {
+				&& level.playersTurn && !level.enemyOnTile(tile) && !blockInput) {
 			switch (tile.getTileType()) {
 			case EMPTY:
 				tile.setTileTypeOnHumanOrder(TileType.STAKE);

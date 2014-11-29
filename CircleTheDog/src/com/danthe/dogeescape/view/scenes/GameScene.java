@@ -116,9 +116,10 @@ public class GameScene extends Scene {
 					+ (graphicalTileWidth + Math.abs(alternate) / 4)
 					* (i / currentLevel.getTileXLength()), graphicalTileWidth,
 					graphicalTileWidth, tileTextureReg,
-					vertexBufferObjectManager, t);
+					vertexBufferObjectManager, currentLevel, t);
 			if (t.getTileType() == TileType.EMPTY
-					|| t.getTileType() == TileType.STAKE)
+					|| t.getTileType() == TileType.STAKE
+					|| t.getTileType() == TileType.ICE)
 				tile.setZIndex(2 * i);
 			else
 				tile.setZIndex(2 * i + 3);
