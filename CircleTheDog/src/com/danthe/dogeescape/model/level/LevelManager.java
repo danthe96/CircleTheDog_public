@@ -82,7 +82,7 @@ public class LevelManager {
 	public void setLevelSolved(int LevelID) {
 		setStatus(LevelID, Status.SOLVED);
 		// open up the next level
-		if (LevelID < numLevels - 1)
+		if (LevelID < numLevels - 1 && getStatus(LevelID + 1) == Status.LOCKED)
 			setStatus(LevelID + 1, Status.PLAYABLE);
 	}
 

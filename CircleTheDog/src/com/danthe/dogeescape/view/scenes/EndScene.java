@@ -84,7 +84,7 @@ public class EndScene extends Scene {
 			doge_victory.setY(centeredY);
 			victory_info.setY(centeredY + doge_victory.getHeight() + 20);
 
-		} else {
+		} else if(Level.lost){
 
 			Text doge_defeat = new Text(0, 0, TextureManager.defaultFont,
 					context.getText(R.string.defeat), vbo);
