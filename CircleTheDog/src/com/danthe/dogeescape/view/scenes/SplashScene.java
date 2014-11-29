@@ -53,7 +53,7 @@ public class SplashScene extends Scene {
 				pGLState.enableDither();
 			}
 		};
-		splash.setScale(1f);
+		splash.setScale(1.1f);
 		splash.setPosition((camera.getWidth() - splash.getWidth()) * 0.5f,
 				(camera.getHeight() - splash.getHeight()) * 0.5f);
 		attachChild(splash);
