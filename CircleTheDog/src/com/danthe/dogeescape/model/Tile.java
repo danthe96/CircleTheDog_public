@@ -3,10 +3,14 @@ package com.danthe.dogeescape.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.danthe.dogeescape.ChangeListener;
-import com.danthe.dogeescape.HumanActivityListener;
+import com.danthe.dogeescape.interfaces.ChangeListener;
+import com.danthe.dogeescape.interfaces.HumanActivityListener;
 
 public class Tile {
+
+	public enum TileType {
+		EMPTY, STAKE, ROCK, BUSH, ICE, LAVA, SWAMP, TURTLE
+	}
 
 	final int x;
 	final int y;

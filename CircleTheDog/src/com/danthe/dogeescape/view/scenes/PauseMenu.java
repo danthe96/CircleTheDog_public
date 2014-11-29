@@ -13,8 +13,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.danthe.dogeescape.R;
+import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.view.AnimatedSpriteMenuItem;
-import com.danthe.dogeescape.view.TextureManager;
 
 public class PauseMenu extends MenuScene {
 	private static final String TAG = "PAUSE_MENU";

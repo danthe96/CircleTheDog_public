@@ -24,13 +24,14 @@ import org.andengine.util.adt.io.in.IInputStreamOpener;
 import android.content.Context;
 import android.util.Log;
 
-import com.danthe.dogeescape.AssetManagerProvider;
+import com.danthe.dogeescape.GameActivity;
+import com.danthe.dogeescape.TextureManager;
+import com.danthe.dogeescape.interfaces.AssetManagerProvider;
+import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.model.Enemy;
-import com.danthe.dogeescape.model.Level;
 import com.danthe.dogeescape.model.Tile;
+import com.danthe.dogeescape.model.level.Level;
 import com.danthe.dogeescape.view.EnemySprite;
-import com.danthe.dogeescape.view.GameActivity;
-import com.danthe.dogeescape.view.TextureManager;
 import com.danthe.dogeescape.view.TileView;
 
 /**
@@ -56,14 +57,14 @@ public class GameScene extends Scene {
 
 	// ich nehme mal an das soll ein Singleton werden, da hab ich das jetzt
 	// fertiggemacht
-	static GameScene createScene(AssetManagerProvider assetManagerProvider,
+	public static GameScene createScene(AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
 			Context context, int levelID, SceneSetter sceneSetter) {
 		return (instance = new GameScene(assetManagerProvider,
 				vertexBufferObjectManager, context, levelID, sceneSetter));
 	}
 
-	static GameScene getInstance() {
+	public static GameScene getInstance() {
 		return instance;
 	}
 
@@ -145,7 +146,7 @@ public class GameScene extends Scene {
 	}
 
 	// currently not in use, modular loading seems to be too slow.
-	static void loadResources(final BaseGameActivity activity, final int levelID) {
+	public static void loadResources(final BaseGameActivity activity, final int levelID) {
 		try {
 			final List<String> levelAssets = Arrays.asList(activity
 					.getResources().getAssets().list("level" + levelID + ""));

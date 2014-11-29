@@ -5,10 +5,10 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.danthe.dogeescape.ChangeListener;
-import com.danthe.dogeescape.model.Level;
+import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.model.Tile;
-import com.danthe.dogeescape.model.TileType;
+import com.danthe.dogeescape.model.Tile.TileType;
+import com.danthe.dogeescape.model.level.Level;
 
 public class TileView extends TiledSprite implements ChangeListener {
 

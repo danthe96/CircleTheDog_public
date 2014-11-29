@@ -3,7 +3,8 @@ package com.danthe.dogeescape.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.danthe.dogeescape.ChangeListener;
+import com.danthe.dogeescape.interfaces.ChangeListener;
+import com.danthe.dogeescape.model.level.Level;
 
 public class Enemy {
 

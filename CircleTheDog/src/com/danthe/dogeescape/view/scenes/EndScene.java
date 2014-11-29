@@ -11,12 +11,13 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import android.util.Log;
 
+import com.danthe.dogeescape.GameActivity;
 import com.danthe.dogeescape.R;
-import com.danthe.dogeescape.model.Level;
-import com.danthe.dogeescape.model.LevelManager;
-import com.danthe.dogeescape.view.GameActivity;
-import com.danthe.dogeescape.view.TextureManager;
-import com.danthe.dogeescape.view.scenes.SceneManager.SceneType;
+import com.danthe.dogeescape.SceneManager.SceneType;
+import com.danthe.dogeescape.TextureManager;
+import com.danthe.dogeescape.interfaces.SceneSetter;
+import com.danthe.dogeescape.model.level.Level;
+import com.danthe.dogeescape.model.level.LevelManager;
 
 public class EndScene extends Scene {
 	private static final String TAG = "END_SCENE";

@@ -7,7 +7,7 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.danthe.dogeescape.ChangeListener;
+import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.model.Enemy;
 
 public class EnemySprite extends AnimatedSprite implements ChangeListener {

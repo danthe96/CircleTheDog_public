@@ -14,10 +14,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.util.Log;
 
-import com.danthe.dogeescape.model.Level.Status;
-import com.danthe.dogeescape.model.LevelManager;
-import com.danthe.dogeescape.view.GameActivity;
-import com.danthe.dogeescape.view.TextureManager;
+import com.danthe.dogeescape.GameActivity;
+import com.danthe.dogeescape.TextureManager;
+import com.danthe.dogeescape.interfaces.SceneSetter;
+import com.danthe.dogeescape.model.level.LevelManager;
+import com.danthe.dogeescape.model.level.Level.Status;
 
 public class LevelSelectScene extends Scene implements IOnMenuItemClickListener {
 	private static final String TAG = "LEVEL_SELECT_SCENE";
