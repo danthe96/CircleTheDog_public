@@ -1,33 +1,24 @@
 package com.danthe.dogeescape.view.scenes;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.animator.DirectMenuAnimator;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.texture.ITexture;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.bitmap.BitmapTexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
-import org.andengine.util.adt.io.in.IInputStreamOpener;
-import org.andengine.util.color.Color;
 
 import android.content.Context;
-import android.graphics.Typeface;
+import android.util.Log;
 
 import com.danthe.dogeescape.R;
 import com.danthe.dogeescape.view.AnimatedSpriteMenuItem;
+import com.danthe.dogeescape.view.TextureManager;
 
 public class PauseMenu extends MenuScene {
-
+	private static final String TAG = "PAUSE_MENU";
 	private static PauseMenu instance = null;
 
 	private static ITextureRegion textBoxTextureReg;
@@ -35,30 +26,8 @@ public class PauseMenu extends MenuScene {
 
 	public static void loadPauseSceneResources(final BaseGameActivity activity) {
 
-		ITexture textBoxTexture;
-		try {
-			textBoxTexture = new BitmapTexture(activity.getTextureManager(),
-					new IInputStreamOpener() {
-						@Override
-						public InputStream open() throws IOException {
-							return activity.getAssets().open("gfx/textbox.png");
-						}
-					});
-			textBoxTexture.load();
-			textBoxTextureReg = TextureRegionFactory
-					.extractFromTexture(textBoxTexture);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		comicSansFont = FontFactory.create(activity.getFontManager(), activity
-				.getTextureManager(), 512, 512, TextureOptions.BILINEAR,
-				Typeface.createFromAsset(activity.getAssets(),
-						"ttf/LDFComicSans.ttf"), 46f, true,
-				Color.WHITE_ARGB_PACKED_INT);
-		activity.getFontManager().loadFont(comicSansFont);
-		comicSansFont.getTexture().load();
+		textBoxTextureReg = TextureManager.textBoxTextureReg;
+		comicSansFont = TextureManager.comicSansFont;
 
 	}
 
@@ -70,10 +39,10 @@ public class PauseMenu extends MenuScene {
 		return instance;
 	}
 
-	public PauseMenu(Camera camera, Context context,
+	private PauseMenu(Camera camera, Context context,
 			VertexBufferObjectManager vbo) {
-
 		super(camera);
+		Log.d(TAG, "CREATE SCENE");
 
 		TextMenuItem continueText = new TextMenuItem(0, comicSansFont,
 				context.getText(R.string.resume), vbo);

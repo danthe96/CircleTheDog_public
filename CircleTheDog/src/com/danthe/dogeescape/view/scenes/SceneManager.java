@@ -1,5 +1,7 @@
 package com.danthe.dogeescape.view.scenes;
 
+import java.util.LinkedList;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -11,7 +13,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import com.danthe.dogeescape.KeyListener;
-import com.danthe.dogeescape.model.LevelManager;
 import com.danthe.dogeescape.view.GameActivity;
 import com.danthe.dogeescape.view.TextureManager;
 import com.danthe.dogeescape.view.TileView;
@@ -28,9 +29,11 @@ import com.danthe.dogeescape.view.TileView;
  * @author Daniel
  * 
  */
-public class SceneManager implements IOnMenuItemClickListener, KeyListener , LevelSceneSetter{
+public class SceneManager implements IOnMenuItemClickListener, KeyListener,
+		LevelSceneSetter {
 	private static final String TAG = "SCENE_MANAGER";
 
+	private LinkedList<KeyListener> keyListeners = new LinkedList<KeyListener>();
 	private SceneType currentScene;
 	private GameActivity activity;
 	private Engine engine;
@@ -41,8 +44,8 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener , Lev
 	private Scene levelSelectScene;
 
 	private Scene splashScene;
-	
-	private int currentLevelID=0;
+
+	private int currentLevelID = 0;
 
 	public enum SceneType {
 		MAINGAME, SPLASHSCENE, PAUSEMENUSCENE, LEVEL_SELECT_SCENE
@@ -52,7 +55,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener , Lev
 		this.activity = activity;
 		this.engine = engine;
 		this.camera = camera;
-		
+
 		TextureManager.init(activity);
 	}
 
@@ -70,7 +73,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener , Lev
 	public void loadTextureManagerResources() {
 		TextureManager.load();
 	}
-	
+
 	/**
 	 * Method to load the game resources. Needs to be called before creating the
 	 * scene.
@@ -111,7 +114,8 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener , Lev
 					activity.getVertexBufferObjectManager());
 			return pauseScene;
 		case LEVEL_SELECT_SCENE:
-			levelSelectScene = LevelSelectScene.createScene(activity.getVertexBufferObjectManager(), camera, this);
+			levelSelectScene = LevelSelectScene.createScene(
+					activity.getVertexBufferObjectManager(), camera, this);
 		}
 		return null;
 	}
@@ -138,7 +142,9 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener , Lev
 
 	}
 
-	@Override //Danthy wieso hast du diese Design-Entscheidung getroffen? Wieso soll der SceneManager Menüeingaben verwalten?
+	@Override
+	// Danthy wieso hast du diese Design-Entscheidung getroffen? Wieso soll der
+	// SceneManager Menüeingaben verwalten?
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
 		switch (pMenuItem.getID()) {
@@ -175,9 +181,10 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener , Lev
 	@Override
 	public void setLevelScene(int LevelID) {
 		currentLevelID = LevelID;
+		loadResources(SceneType.MAINGAME, currentLevelID);
 		createScene(SceneType.MAINGAME);
 		setCurrentScene(SceneType.MAINGAME);
-		
+
 	}
 
 }

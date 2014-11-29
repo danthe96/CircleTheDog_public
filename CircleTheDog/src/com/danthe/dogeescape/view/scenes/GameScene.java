@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
+import org.andengine.entity.scene.menu.MenuScene;
+import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
+import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
@@ -23,8 +26,10 @@ import org.andengine.util.adt.io.in.IInputStreamOpener;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.danthe.dogeescape.AssetManagerProvider;
+import com.danthe.dogeescape.KeyListener;
 import com.danthe.dogeescape.model.Enemy;
 import com.danthe.dogeescape.model.Level;
 import com.danthe.dogeescape.model.Tile;
@@ -39,11 +44,11 @@ import com.danthe.dogeescape.view.TileView;
  * @author Daniel
  * 
  */
-public class GameScene extends Scene {
+public class GameScene extends Scene implements IOnMenuItemClickListener, KeyListener{
 	private static final String TAG = "GAME_SCENE";
 	private static GameScene instance = null;
 
-	private static ITextureRegion gameBackgroundTextureReg;
+	private static ITextureRegion gameFieldTextureReg;
 	private static ITiledTextureRegion enemyTextureReg, tileTextureReg;
 
 	private Level currentLevel;
@@ -56,7 +61,8 @@ public class GameScene extends Scene {
 	// ich nehme mal an das soll ein Singleton werden, da hab ich das jetzt
 	// fertiggemacht
 	static GameScene createScene(AssetManagerProvider assetManagerProvider,
-			VertexBufferObjectManager vertexBufferObjectManager, Context context, int levelID) {
+			VertexBufferObjectManager vertexBufferObjectManager,
+			Context context, int levelID) {
 		if (instance == null)
 			instance = new GameScene(assetManagerProvider,
 					vertexBufferObjectManager, context, levelID);
@@ -64,8 +70,10 @@ public class GameScene extends Scene {
 		return instance;
 	}
 
+	
 	private GameScene(AssetManagerProvider assetManagerProvider,
-			VertexBufferObjectManager vertexBufferObjectManager, Context context, int levelID) {
+			VertexBufferObjectManager vertexBufferObjectManager,
+			Context context, int levelID) {
 
 		Log.d(TAG, "CREATE SCENE");
 		Sprite background = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
@@ -73,9 +81,9 @@ public class GameScene extends Scene {
 				vertexBufferObjectManager);
 		setBackground(new SpriteBackground(0, 0, 0, background));
 
-		Sprite background2Sprite = new Sprite(22, 332, 676, 648,
-				gameBackgroundTextureReg, vertexBufferObjectManager);
-		attachChild(background2Sprite);
+		Sprite backgroundSprite = new Sprite(22, 332, 676, 648,
+				gameFieldTextureReg, vertexBufferObjectManager);
+		attachChild(backgroundSprite);
 
 		try {
 			currentLevel = new Level(levelID, assetManagerProvider, context);
@@ -140,57 +148,64 @@ public class GameScene extends Scene {
 					.getResources().getAssets().list("level" + levelID + ""));
 
 			// 1 - Set up bitmap textures
-			ITexture gameBackgroundTexture = new BitmapTexture(
-					activity.getTextureManager(), new IInputStreamOpener() {
-						@Override
-						public InputStream open() throws IOException {
-							if (levelAssets.contains("game_background.png"))
+			if (levelAssets.contains("game_background.png")) {
+				ITexture gameFieldTexture = new BitmapTexture(
+						activity.getTextureManager(), new IInputStreamOpener() {
+							@Override
+							public InputStream open() throws IOException {
+
 								return activity.getAssets().open(
 										"level" + levelID
 												+ "/game_background.png");
-							else
-								return activity.getAssets().open(
-										"gfx/game_background.png");
-						}
-					});
+							}
+						});
+				gameFieldTexture.load();
+				gameFieldTextureReg = TextureRegionFactory
+						.extractFromTexture(gameFieldTexture);
+			} else
+				gameFieldTextureReg = TextureManager.gameFieldTextureReg; 
 
-			BitmapTextureAtlas enemyBTA = new BitmapTextureAtlas(
-					activity.getTextureManager(), 1280, 512,
-					TextureOptions.BILINEAR);
-			BitmapTextureAtlas circleBTA = new BitmapTextureAtlas(
-					activity.getTextureManager(), 512, 128,
-					TextureOptions.BILINEAR);
-
-			// 2 - Load bitmap textures into VRAM
-			gameBackgroundTexture.load();
-
-			circleBTA.load();
-			enemyBTA.load();
-
-			// 3 - Set up texture regions
-			gameBackgroundTextureReg = TextureRegionFactory
-					.extractFromTexture(gameBackgroundTexture);
-
-			if (levelAssets.contains("tiles.png"))
+			if (levelAssets.contains("tiles.png")) {
+				BitmapTextureAtlas circleBTA = new BitmapTextureAtlas(
+						activity.getTextureManager(), 512, 128,
+						TextureOptions.BILINEAR);
+				circleBTA.load();
 				tileTextureReg = BitmapTextureAtlasTextureRegionFactory
 						.createTiledFromAsset(circleBTA, activity.getAssets(),
 								"level" + levelID + "/tiles.png", 0, 0, 4, 1);
-			else
-				tileTextureReg = BitmapTextureAtlasTextureRegionFactory
-						.createTiledFromAsset(circleBTA, activity.getAssets(),
-								"tiles.png", 0, 0, 4, 1);
+			} else
+				tileTextureReg = TextureManager.tileTextureReg;
 
-			if (levelAssets.contains("enemy2.png"))
+			if (levelAssets.contains("enemy2.png")) {
+				BitmapTextureAtlas enemyBTA = new BitmapTextureAtlas(
+						activity.getTextureManager(), 1280, 512,
+						TextureOptions.BILINEAR);
+				enemyBTA.load();
 				enemyTextureReg = BitmapTextureAtlasTextureRegionFactory
 						.createTiledFromAsset(enemyBTA, activity.getAssets(),
 								"level" + levelID + "/enemy2.png", 0, 0, 5, 1);
-			else
-				enemyTextureReg = BitmapTextureAtlasTextureRegionFactory
-						.createTiledFromAsset(enemyBTA, activity.getAssets(),
-								"enemy2.png", 0, 0, 5, 1);
+			} else
+				enemyTextureReg = TextureManager.enemyTextureReg;
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
+			float pMenuItemLocalX, float pMenuItemLocalY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+		
+		
+		return false;
 	}
 
 }
