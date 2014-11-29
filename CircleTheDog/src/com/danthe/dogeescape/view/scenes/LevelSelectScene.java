@@ -61,7 +61,14 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
-		levelSceneSetter.setLevelScene(pMenuItem.getID());
+		int levelID = pMenuItem.getID();
+		if (LevelManager.getInstance().isOpenToPlay(levelID)) {
+			levelSceneSetter.setLevelScene(pMenuItem.getID());
+		}
+		else {
+			//TODO Play some sound here.
+			
+		}
 		return true;
 	}
 
