@@ -13,6 +13,7 @@ import com.danthe.dogeescape.model.level.Level;
 public class TileView extends TiledSprite implements ChangeListener {
 
 	public final Tile tile;
+	private float defaultX, defaultY, defaultWidth, defaultHeight;
 
 	public static boolean blockInput = false;
 
@@ -22,6 +23,10 @@ public class TileView extends TiledSprite implements ChangeListener {
 			VertexBufferObjectManager pVertexBufferObjectManager, Tile tile) {
 		super(pX, pY, pWidth, pHeight, circleTextureReg,
 				pVertexBufferObjectManager);
+		this.defaultX = pX;
+		this.defaultY = pY;
+		this.defaultWidth = pWidth;
+		this.defaultHeight = pHeight;
 		this.tile = tile;
 		updateGraphics();
 
@@ -34,21 +39,33 @@ public class TileView extends TiledSprite implements ChangeListener {
 		switch (tile.getTileType()) {
 		case EMPTY:
 			this.setCurrentTileIndex(0);
+			this.setPosition(defaultX, defaultY);
+			this.setWidth(defaultWidth);
+			this.setHeight(defaultHeight);
 			break;
 		case STAKE:
 			this.setCurrentTileIndex(1);
-			this.setPosition(mX - mWidth * .35f, mY - mHeight / 2f);
-			this.setWidth(1.7f * mWidth);
-			this.setHeight(1.5f * mHeight);
+			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
+			this.setWidth(1.7f * defaultWidth);
+			this.setHeight(1.5f * defaultHeight);
 			break;
 		case ROCK:
 			this.setCurrentTileIndex(2);
+			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
+			this.setWidth(1.7f * defaultWidth);
+			this.setHeight(1.5f * defaultHeight);
 			break;
 		case BUSH:
 			this.setCurrentTileIndex(3);
+			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
+			this.setWidth(1.7f * defaultWidth);
+			this.setHeight(1.5f * defaultHeight);
 			break;
 		case ICE:
 			this.setCurrentTileIndex(7 - tile.getCountdown());
+			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
+			this.setWidth(1.7f * defaultWidth);
+			this.setHeight(1.5f * defaultHeight);
 			break;
 		case LAVA:
 			this.setCurrentTileIndex(7);
@@ -91,6 +108,10 @@ public class TileView extends TiledSprite implements ChangeListener {
 	@Override
 	public void onStateChanged() {
 		updateGraphics();
+	}
+	
+	public float getDefaultWidth() {
+		return defaultWidth;
 	}
 
 }

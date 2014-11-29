@@ -36,7 +36,7 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener {
 		
 		float xStep = (tileViews.get(enemy.getPosition()).getX() - mX) / 10f;
 		float yStep = (tileViews.get(enemy.getPosition()).getY() - 9
-				* tileViews.get(0).getWidth() / 8 - mY) / 10f;
+				* tileViews.get(0).getDefaultWidth() / 8 - mY) / 10f;
 
 		for (int i = 0; i < 10; i++) {
 

@@ -101,7 +101,7 @@ public class Level implements Runnable, HumanActivityListener {
 	}
 
 	private void initPlayers(String[] playerPos) {
-		
+
 		int enemyPosition;
 		for (int i = 0; i < playerPos.length - 1; i += 2) {
 			enemyPosition = Integer.parseInt(playerPos[i]) * tileXLength
