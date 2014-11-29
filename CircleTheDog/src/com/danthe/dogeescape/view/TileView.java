@@ -39,7 +39,7 @@ public class TileView extends TiledSprite implements ChangeListener {
 		switch (tile.getTileType()) {
 		case EMPTY:
 			this.setCurrentTileIndex(0);
-			this.setPosition(defaultX, defaultY);
+			this.setPosition((float) (defaultX*(1+(Math.random()-0.5f)/100f)), (float) (defaultY*(1+(Math.random()-0.5f)/100f)));
 			this.setWidth(defaultWidth);
 			this.setHeight(defaultHeight);
 			break;
