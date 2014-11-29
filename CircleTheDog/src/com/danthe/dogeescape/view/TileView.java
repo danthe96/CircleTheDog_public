@@ -52,14 +52,14 @@ public class TileView extends TiledSprite implements ChangeListener {
 		case ROCK:
 			this.setCurrentTileIndex(2);
 			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
-			this.setWidth(1.7f * defaultWidth);
-			this.setHeight(1.5f * defaultHeight);
+			this.setWidth(1.58f * defaultWidth);
+			this.setHeight(1.75f * defaultHeight);
 			break;
 		case BUSH:
 			this.setCurrentTileIndex(3);
-			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f);
-			this.setWidth(1.7f * defaultWidth);
-			this.setHeight(1.5f * defaultHeight);
+			this.setPosition(defaultX - defaultWidth * .35f, defaultY - defaultHeight / 2f*1.09f);
+			this.setWidth(1.65f * defaultWidth);
+			this.setHeight(1.75f * defaultHeight);
 			break;
 		case ICE:
 			this.setCurrentTileIndex(7 - tile.getCountdown());
