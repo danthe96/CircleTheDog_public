@@ -43,8 +43,9 @@ public class GameScene extends Scene {
 	private static final String TAG = "GAME_SCENE";
 	private static GameScene instance = null;
 
-	private static ITextureRegion gameFieldTextureReg;
-	private static ITiledTextureRegion enemyTextureReg, tileTextureReg;
+	private static ITextureRegion gameFieldTextureReg = TextureManager.gameFieldTextureReg;
+	private static ITiledTextureRegion enemyTextureReg = TextureManager.enemyTextureReg,
+			tileTextureReg = TextureManager.tileTextureReg;
 
 	private Level currentLevel;
 
@@ -57,19 +58,20 @@ public class GameScene extends Scene {
 	// fertiggemacht
 	static GameScene createScene(AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
-			Context context, int levelID) {
-		if (instance == null)
-			instance = new GameScene(assetManagerProvider,
-					vertexBufferObjectManager, context, levelID);
+			Context context, int levelID, SceneSetter sceneSetter) {
+		return (instance = new GameScene(assetManagerProvider,
+				vertexBufferObjectManager, context, levelID, sceneSetter));
+	}
 
+	static GameScene getInstance() {
 		return instance;
 	}
 
 	private GameScene(AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
-			Context context, int levelID) {
-
+			Context context, int levelID, SceneSetter sceneSetter) {
 		Log.d(TAG, "CREATE SCENE");
+
 		Sprite background = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
 				GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
 				vertexBufferObjectManager);
@@ -80,7 +82,8 @@ public class GameScene extends Scene {
 		attachChild(backgroundSprite);
 
 		try {
-			currentLevel = new Level(levelID, assetManagerProvider, context);
+			currentLevel = new Level(levelID, assetManagerProvider, context,
+					sceneSetter);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -101,7 +104,7 @@ public class GameScene extends Scene {
 
 		// leave room between tiles
 		graphicalTileWidth = 15 * graphicalTileWidth / 16;
-		
+
 		int i = 0;
 		for (Tile t : currentLevel.getTileList()) {
 			TileView tile = new TileView(startingPointX + alternate
@@ -141,6 +144,7 @@ public class GameScene extends Scene {
 
 	}
 
+	// currently not in use, modular loading seems to be too slow.
 	static void loadResources(final BaseGameActivity activity, final int levelID) {
 		try {
 			final List<String> levelAssets = Arrays.asList(activity
@@ -161,8 +165,7 @@ public class GameScene extends Scene {
 				gameFieldTexture.load();
 				gameFieldTextureReg = TextureRegionFactory
 						.extractFromTexture(gameFieldTexture);
-			} else
-				gameFieldTextureReg = TextureManager.gameFieldTextureReg;
+			}
 
 			if (levelAssets.contains("tiles.png")) {
 				BitmapTextureAtlas circleBTA = new BitmapTextureAtlas(
@@ -172,8 +175,7 @@ public class GameScene extends Scene {
 				tileTextureReg = BitmapTextureAtlasTextureRegionFactory
 						.createTiledFromAsset(circleBTA, activity.getAssets(),
 								"level" + levelID + "/tiles.png", 0, 0, 4, 1);
-			} else
-				tileTextureReg = TextureManager.tileTextureReg;
+			}
 
 			if (levelAssets.contains("enemy2.png")) {
 				BitmapTextureAtlas enemyBTA = new BitmapTextureAtlas(
@@ -183,8 +185,7 @@ public class GameScene extends Scene {
 				enemyTextureReg = BitmapTextureAtlasTextureRegionFactory
 						.createTiledFromAsset(enemyBTA, activity.getAssets(),
 								"level" + levelID + "/enemy2.png", 0, 0, 5, 1);
-			} else
-				enemyTextureReg = TextureManager.enemyTextureReg;
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();

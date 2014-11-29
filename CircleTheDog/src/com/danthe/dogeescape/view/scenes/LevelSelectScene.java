@@ -24,7 +24,7 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	private MenuScene menuChildScene;
 
-	private LevelSceneSetter levelSceneSetter;
+	private SceneSetter levelSceneSetter;
 	private static final int MenuItemPixel = 256;
 	private static final int ElementsPerRow = 4;
 
@@ -44,7 +44,7 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	private LevelSelectScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
-			LevelSceneSetter levelSceneSetter) {
+			SceneSetter levelSceneSetter) {
 		this.levelSceneSetter = levelSceneSetter;
 		createBackground(vertexBufferObjectManager);
 		createMenuChildScene(vertexBufferObjectManager, camera);
@@ -52,7 +52,7 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	public static LevelSelectScene createScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
-			LevelSceneSetter levelSceneSetter) {
+			SceneSetter levelSceneSetter) {
 		LevelSelectScene result = new LevelSelectScene(
 				vertexBufferObjectManager, camera, levelSceneSetter);
 		return result;

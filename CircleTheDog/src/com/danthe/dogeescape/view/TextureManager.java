@@ -49,7 +49,7 @@ public class TextureManager {
 	// PauseMenu
 	private static Texture textBoxTexture;
 	public static TextureRegion textBoxTextureReg;
-	public static Font comicSansFont;
+	public static Font defaultFont, defaultBigFont, comicSansFont;
 
 	// EndScene
 	private static BitmapTextureAtlas endButtonsBTA;
@@ -149,6 +149,18 @@ public class TextureManager {
 				Color.WHITE_ARGB_PACKED_INT);
 		activity.getFontManager().loadFont(comicSansFont);
 
+		defaultFont = FontFactory.create(activity.getFontManager(),
+				activity.getTextureManager(), 512, 512,
+				TextureOptions.BILINEAR, Typeface.DEFAULT_BOLD, 42f, true,
+				Color.WHITE_ARGB_PACKED_INT);
+		activity.getFontManager().loadFont(defaultFont);
+		
+		defaultBigFont = FontFactory.create(activity.getFontManager(),
+				activity.getTextureManager(), 512, 512,
+				TextureOptions.BILINEAR, Typeface.DEFAULT_BOLD, 64f, true,
+				Color.WHITE_ARGB_PACKED_INT);
+		activity.getFontManager().loadFont(defaultBigFont);
+
 	}
 
 	private static void loadMenuTextures() {
@@ -159,6 +171,8 @@ public class TextureManager {
 				.extractFromTexture(textBoxTexture);
 
 		comicSansFont.getTexture().load();
+		defaultFont.getTexture().load();
+		defaultBigFont.getTexture().load();
 	}
 
 	private static void initGameTexture(final BaseGameActivity activity) {
@@ -223,14 +237,11 @@ public class TextureManager {
 				256, 768, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		backToMenuTextureReg = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelSelectBTA, activity,
-						"menu.png", 0, 0);
+				.createFromAsset(endButtonsBTA, activity, "menu.png", 0, 0);
 		nextTextureReg = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelSelectBTA, activity,
-						"next.png", 0, 256);
+				.createFromAsset(endButtonsBTA, activity, "next.png", 0, 256);
 		retryTextureReg = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelSelectBTA, activity,
-						"retry.png", 0, 512);
+				.createFromAsset(endButtonsBTA, activity, "retry.png", 0, 512);
 
 	}
 

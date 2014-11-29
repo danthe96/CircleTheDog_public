@@ -28,7 +28,7 @@ import com.danthe.dogeescape.view.TileView;
  * 
  */
 public class SceneManager implements IOnMenuItemClickListener, KeyListener,
-		LevelSceneSetter {
+		SceneSetter {
 	private static final String TAG = "SCENE_MANAGER";
 
 	private SceneType currentScene;
@@ -87,7 +87,6 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 				throw new UnsupportedOperationException(
 						"Cant load resources for maingame without specified levelID!");
 			GameScene.loadResources(activity, levelID);
-			PauseMenu.loadPauseSceneResources(activity);
 			break;
 		case SPLASHSCENE:
 			SplashScene.loadSplashSceneResources(activity);
@@ -101,7 +100,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 		case MAINGAME:
 			mainGameScene = GameScene.createScene(activity,
 					activity.getVertexBufferObjectManager(),
-					activity.getApplicationContext(), currentLevelID);
+					activity.getApplicationContext(), currentLevelID, this);
 			return mainGameScene;
 		case SPLASHSCENE:
 			splashScene = SplashScene.createScene(camera, activity);
@@ -116,7 +115,9 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 					activity.getVertexBufferObjectManager(), camera, this);
 			return levelSelectScene;
 		case ENDSCENE:
-			endScene = EndScene.createScene();
+			endScene = EndScene.createScene(activity.getApplicationContext(),
+					activity.getVertexBufferObjectManager(), this,
+					currentLevelID);
 			return endScene;
 		}
 		return null;
@@ -125,23 +126,6 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	// Method allows you to get the currently active scene
 	public SceneType getCurrentSceneType() {
 		return currentScene;
-	}
-
-	// Method allows you to set the currently active scene
-	public void setCurrentScene(SceneType scene) {
-		currentScene = scene;
-		Log.d(TAG, "Scene Attached: " + scene.toString());
-		switch (scene) {
-		case MAINGAME:
-			engine.setScene(mainGameScene);
-			break;
-		case SPLASHSCENE:
-			engine.setScene(splashScene);
-		case LEVELSELECTSCENE:
-			engine.setScene(levelSelectScene);
-		default:
-		}
-
 	}
 
 	@Override
@@ -155,7 +139,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 			TileView.blockInput = false;
 			return true;
 		case 1:
-			System.exit(0);
+			setScene(SceneType.LEVELSELECTSCENE);
 			return true;
 		}
 
@@ -165,7 +149,8 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	@Override
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
-				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+				&& event.getAction() == KeyEvent.ACTION_DOWN
+				&& currentScene == SceneType.MAINGAME) {
 			if (!mainGameScene.hasChildScene()) {
 				createScene(SceneType.PAUSEMENUSCENE);
 				mainGameScene.setChildScene(pauseScene);
@@ -183,10 +168,34 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	@Override
 	public void setLevelScene(int LevelID) {
 		currentLevelID = LevelID;
-		loadResources(SceneType.MAINGAME, currentLevelID);
-		createScene(SceneType.MAINGAME);
-		setCurrentScene(SceneType.MAINGAME);
+		// loadResources(SceneType.MAINGAME, currentLevelID);
+		setScene(SceneType.MAINGAME);
+	}
 
+	@Override
+	public void setScene(SceneType scene) {
+		createScene(scene);
+
+		Log.d(TAG, "Scene Attached: " + scene.toString());
+		switch (scene) {
+		case MAINGAME:
+			createScene(SceneType.PAUSEMENUSCENE);
+			engine.setScene(mainGameScene);
+			break;
+		case SPLASHSCENE:
+			engine.setScene(splashScene);
+			break;
+		case LEVELSELECTSCENE:
+			engine.setScene(levelSelectScene);
+			break;
+		case ENDSCENE:
+			if (currentScene == SceneType.MAINGAME)
+				mainGameScene.setChildScene(endScene);
+			break;
+		default:
+		}
+
+		currentScene = scene;
 	}
 
 }

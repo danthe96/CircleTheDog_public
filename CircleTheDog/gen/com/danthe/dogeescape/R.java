@@ -27,34 +27,35 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
-        public static final int app_url=0x7f040014;
+        public static final int app_url=0x7f040015;
         public static final int back=0x7f040004;
-        public static final int defeat=0x7f040009;
-        public static final int defeat_info=0x7f04000b;
-        public static final int doge=0x7f040012;
-        public static final int dogecoin_url=0x7f040013;
-        public static final int highscore=0x7f04000d;
+        public static final int defeat=0x7f04000a;
+        public static final int defeat_info=0x7f04000c;
+        public static final int doge=0x7f040013;
+        public static final int dogecoin_url=0x7f040014;
+        public static final int highscore=0x7f04000e;
         public static final int howto=0x7f040002;
+        public static final int level=0x7f040009;
         public static final int next=0x7f040008;
-        public static final int no=0x7f04001c;
+        public static final int no=0x7f04001d;
         public static final int play=0x7f040001;
         public static final int play_again=0x7f040007;
         public static final int quit=0x7f040005;
-        public static final int rate_info=0x7f040019;
-        public static final int rate_later=0x7f04001b;
-        public static final int rate_top=0x7f040018;
-        public static final int rate_yes=0x7f04001a;
+        public static final int rate_info=0x7f04001a;
+        public static final int rate_later=0x7f04001c;
+        public static final int rate_top=0x7f040019;
+        public static final int rate_yes=0x7f04001b;
         public static final int resume=0x7f040006;
         public static final int scores=0x7f040003;
-        public static final int share_app=0x7f040015;
-        public static final int share_text=0x7f040016;
-        public static final int share_via=0x7f040017;
-        public static final int tutorial_1=0x7f04000e;
-        public static final int tutorial_2=0x7f04000f;
-        public static final int tutorial_3=0x7f040010;
-        public static final int tutorial_4=0x7f040011;
-        public static final int victory=0x7f04000a;
-        public static final int victory_info=0x7f04000c;
+        public static final int share_app=0x7f040016;
+        public static final int share_text=0x7f040017;
+        public static final int share_via=0x7f040018;
+        public static final int tutorial_1=0x7f04000f;
+        public static final int tutorial_2=0x7f040010;
+        public static final int tutorial_3=0x7f040011;
+        public static final int tutorial_4=0x7f040012;
+        public static final int victory=0x7f04000b;
+        public static final int victory_info=0x7f04000d;
     }
     public static final class style {
         /** 

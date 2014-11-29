@@ -81,7 +81,7 @@ public class GameActivity extends BaseGameActivity implements
 						sceneManager.loadTextureManagerResources();
 						sceneManager.loadResources(DEFAULT_SCENE, 0);
 						sceneManager.createScene(DEFAULT_SCENE);
-						sceneManager.setCurrentScene(DEFAULT_SCENE);
+						sceneManager.setScene(DEFAULT_SCENE);
 					}
 				}));
 

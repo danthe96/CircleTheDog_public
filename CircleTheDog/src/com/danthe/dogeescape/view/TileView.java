@@ -24,6 +24,8 @@ public class TileView extends TiledSprite implements ChangeListener {
 				pVertexBufferObjectManager);
 		this.tile = tile;
 		updateGraphics();
+		
+		blockInput = false;
 
 		tile.addChangeListener(this);
 	}

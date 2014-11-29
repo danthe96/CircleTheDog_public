@@ -5,7 +5,7 @@ import com.danthe.dogeescape.model.Level.Status;
 public class LevelManager {
 
 	private static LevelManager levelManager = new LevelManager();
-	private static final int numLevels = 20;
+	public static final int numLevels = 20;
 	
 	
 	public static LevelManager getInstance() {

@@ -10,6 +10,7 @@
     <string name="resume">RESUME</string>
     <string name="play_again">PLAY AGAIN</string>
     <string name="next">NEXT</string>
+    <string name="level">Level %1$d</string>
     <string name="defeat">You Lost.</string>
     <string name="victory">You Win!</string>
     <string name="defeat_info">The Dog escaped after\n%1$d moves. Try again!</string>

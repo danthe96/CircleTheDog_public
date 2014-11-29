@@ -15,6 +15,8 @@ import android.util.Log;
 
 import com.danthe.dogeescape.AssetManagerProvider;
 import com.danthe.dogeescape.HumanActivityListener;
+import com.danthe.dogeescape.view.scenes.SceneSetter;
+import com.danthe.dogeescape.view.scenes.SceneManager.SceneType;
 
 /**
  * @author Daniel
@@ -50,21 +52,22 @@ public class Level implements Runnable, HumanActivityListener {
 	private LinkedList<Integer> highscores;
 	private Context context;
 
-	private int turns = 0;
+	public static int turns = 0;
 	public static boolean playersTurn = false;
-	private boolean lost = false;
-	private boolean won = false;
+	public static boolean lost = false;
+	public static boolean won = false;
 
 	private Thread t;
 
-	// private GameActivity parent;
+	private SceneSetter sceneSetter;
 
 	private final List<Enemy> enemies;
 
 	public Level(int levelID, AssetManagerProvider assetManagerProvider,
-			Context context) throws IOException {
+			Context context, SceneSetter sceneSetter) throws IOException {
 		this.levelID = levelID;
 		this.context = context;
+		this.sceneSetter = sceneSetter;
 
 		initHighscores();
 		// this.assetManagerProvider = assetManagerProvider;
@@ -213,6 +216,7 @@ public class Level implements Runnable, HumanActivityListener {
 			checkVictory();
 			for (Enemy e : enemies)
 				e.move();
+			checkVictory();
 			updateTiles();
 		}
 
@@ -262,8 +266,7 @@ public class Level implements Runnable, HumanActivityListener {
 			if (won) {
 				saveHighscores(turns);
 			}
-			// TODO:
-			// Call ending activity
+			sceneSetter.setScene(SceneType.ENDSCENE);
 			t.interrupt();
 		}
 	}

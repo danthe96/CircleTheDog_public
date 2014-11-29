@@ -8,7 +8,6 @@ import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.ui.activity.BaseGameActivity;
 
 import android.content.Context;
 import android.util.Log;
@@ -21,15 +20,8 @@ public class PauseMenu extends MenuScene {
 	private static final String TAG = "PAUSE_MENU";
 	private static PauseMenu instance = null;
 
-	private static ITextureRegion textBoxTextureReg;
-	private static Font comicSansFont;
-
-	public static void loadPauseSceneResources(final BaseGameActivity activity) {
-
-		textBoxTextureReg = TextureManager.textBoxTextureReg;
-		comicSansFont = TextureManager.comicSansFont;
-
-	}
+	private static ITextureRegion textBoxTextureReg = TextureManager.textBoxTextureReg;
+	private static Font comicSansFont = TextureManager.comicSansFont;
 
 	public static PauseMenu createScene(Camera camera, Context context,
 			VertexBufferObjectManager vbo) {
@@ -51,7 +43,7 @@ public class PauseMenu extends MenuScene {
 		this.addMenuItem(continueItem);
 
 		TextMenuItem backText = new TextMenuItem(1, comicSansFont,
-				context.getText(R.string.quit), vbo);
+				context.getText(R.string.back), vbo);
 		final IMenuItem backItem = new AnimatedSpriteMenuItem(1, 550, 220,
 				textBoxTextureReg, vbo, true, false, backText);
 		this.addMenuItem(backItem);
