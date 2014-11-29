@@ -24,7 +24,7 @@ public class TileView extends TiledSprite implements ChangeListener {
 				pVertexBufferObjectManager);
 		this.tile = tile;
 		updateGraphics();
-		
+
 		blockInput = false;
 
 		tile.addChangeListener(this);
@@ -46,17 +46,18 @@ public class TileView extends TiledSprite implements ChangeListener {
 			break;
 		case BUSH:
 			this.setCurrentTileIndex(3);
+			break;
 		case ICE:
 			this.setCurrentTileIndex(7 - tile.getCountdown());
 			break;
 		case LAVA:
-			this.setCurrentTileIndex(8);
+			this.setCurrentTileIndex(7);
 			break;
 		case SWAMP:
-			this.setCurrentTileIndex(9);
+			this.setCurrentTileIndex(8);
 			break;
 		case TURTLE:
-			this.setCurrentTileIndex(10);
+			this.setCurrentTileIndex(9);
 			break;
 		}
 	}

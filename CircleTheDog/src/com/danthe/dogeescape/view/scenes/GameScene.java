@@ -61,8 +61,9 @@ public class GameScene extends Scene {
 			AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
 			Context context, int levelID, SceneSetter sceneSetter) {
-		return (instance = new GameScene(assetManagerProvider,
-				vertexBufferObjectManager, context, levelID, sceneSetter));
+		instance = new GameScene(assetManagerProvider,
+				vertexBufferObjectManager, context, levelID, sceneSetter);
+		return instance;
 	}
 
 	public static GameScene getInstance() {

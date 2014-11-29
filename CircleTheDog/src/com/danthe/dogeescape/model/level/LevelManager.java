@@ -25,6 +25,10 @@ public class LevelManager {
 
 	private LevelManager(Activity activity) {
 		this.activity = activity;
+
+		if (getStatus(0) == Status.LOCKED) {
+			setStatus(0, Status.PLAYABLE);
+		}
 	}
 
 	public static LevelManager getInstance() {
@@ -44,9 +48,6 @@ public class LevelManager {
 	 * @return
 	 */
 	public Status getStatus(int LevelID) {
-		if (LevelID == 0)
-			return Status.PLAYABLE;
-
 		SharedPreferences sharedPref = activity
 				.getPreferences(Context.MODE_PRIVATE);
 		Status defaultValue = DEFAULT_STATUS;

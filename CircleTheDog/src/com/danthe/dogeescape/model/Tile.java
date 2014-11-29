@@ -37,7 +37,6 @@ public class Tile {
 		changeListeners = new LinkedList<ChangeListener>();
 
 		setTileType(tileType);
-
 	}
 
 	public void setTileTypeOnHumanOrder(TileType tileType) {
@@ -46,7 +45,7 @@ public class Tile {
 	}
 
 	public void setTileType(TileType tileType) {
-		this.tileType = tileType;
+
 		switch (tileType) {
 		case EMPTY:
 			blocked = false;
@@ -74,6 +73,7 @@ public class Tile {
 			blocked = true;
 			break;
 		}
+		this.tileType = tileType;
 		alertListeners();
 	}
 

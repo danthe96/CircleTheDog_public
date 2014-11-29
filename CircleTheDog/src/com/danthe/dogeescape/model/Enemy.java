@@ -17,8 +17,6 @@ public class Enemy {
 
 	private int position;
 
-	private int tileXLength;
-	private int tileYLength;
 	private final List<Tile> tileList;
 	private LinkedList<Integer> borderTiles;
 	private boolean won = false;
@@ -30,8 +28,6 @@ public class Enemy {
 			List<Tile> tileList, Level level) {
 		this.position = position;
 		this.tileList = tileList;
-		this.tileXLength = tileXLength;
-		this.tileYLength = tileYLength;
 		this.level = level;
 
 		borderTiles = new LinkedList<Integer>();
@@ -39,7 +35,7 @@ public class Enemy {
 			borderTiles.add(i);
 			borderTiles.add((tileYLength - 1) * (tileXLength) + i);
 		}
-		for (int i = 1; i < (tileXLength - 1); i++) {
+		for (int i = 1; i < (tileYLength - 1); i++) {
 			borderTiles.add(i * tileXLength);
 			borderTiles.add(i * tileXLength + (tileXLength - 1));
 		}
@@ -142,10 +138,7 @@ public class Enemy {
 	public void move() {
 		if (!(won || lost)) {
 			this.position = path.poll();
-			if (position / tileXLength <= 0
-					|| position / tileXLength >= tileYLength - 1
-					|| position % tileXLength <= 0
-					|| position % tileXLength >= tileXLength - 1)
+			if (borderTiles.contains(position))
 				won = true;
 			changeListener.onStateChanged();
 		}
