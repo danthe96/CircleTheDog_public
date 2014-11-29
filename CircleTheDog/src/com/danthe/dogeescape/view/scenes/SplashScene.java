@@ -28,9 +28,9 @@ public class SplashScene extends Scene {
 	public static void loadSplashSceneResources(BaseGameActivity activity) {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		splashTextureAtlas = new BitmapTextureAtlas(
-				activity.getTextureManager(), 256, 256, TextureOptions.DEFAULT);
+				activity.getTextureManager(), 512, 512, TextureOptions.DEFAULT);
 		splashTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(splashTextureAtlas, activity, "splash.png", 0,
+				.createFromAsset(splashTextureAtlas, activity, "zores.png", 0,
 						0);
 		splashTextureAtlas.load();
 	}
@@ -53,7 +53,7 @@ public class SplashScene extends Scene {
 				pGLState.enableDither();
 			}
 		};
-		splash.setScale(1.5f);
+		splash.setScale(1f);
 		splash.setPosition((camera.getWidth() - splash.getWidth()) * 0.5f,
 				(camera.getHeight() - splash.getHeight()) * 0.5f);
 		attachChild(splash);

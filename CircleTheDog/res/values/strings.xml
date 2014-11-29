@@ -32,6 +32,7 @@
     <string name="rate_yes">OF COURSE!</string>
     <string name="rate_later">REMIND ME LATER.</string>
     <string name="no">NO, NEVER.</string>
+    <string name="shared_pref_level_status_string">level_status_</string>
     
 
 </resources>

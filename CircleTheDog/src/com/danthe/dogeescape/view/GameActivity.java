@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 
 import com.danthe.dogeescape.AssetManagerProvider;
 import com.danthe.dogeescape.KeyListener;
+import com.danthe.dogeescape.model.LevelManager;
 import com.danthe.dogeescape.view.scenes.SceneManager;
 import com.danthe.dogeescape.view.scenes.SceneManager.SceneType;
 
@@ -58,6 +59,8 @@ public class GameActivity extends BaseGameActivity implements
 		keyListeners.add(sceneManager);
 		sceneManager.loadResources(SceneType.SPLASHSCENE);
 
+		LevelManager.init(this);
+		
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 

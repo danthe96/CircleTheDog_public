@@ -49,6 +49,7 @@ public final class R {
         public static final int share_app=0x7f040015;
         public static final int share_text=0x7f040016;
         public static final int share_via=0x7f040017;
+        public static final int shared_pref_level_status_string=0x7f04001d;
         public static final int tutorial_1=0x7f04000e;
         public static final int tutorial_2=0x7f04000f;
         public static final int tutorial_3=0x7f040010;
