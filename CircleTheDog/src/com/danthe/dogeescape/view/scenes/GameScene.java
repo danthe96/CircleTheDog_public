@@ -30,6 +30,7 @@ import com.danthe.dogeescape.interfaces.AssetManagerProvider;
 import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.model.Enemy;
 import com.danthe.dogeescape.model.Tile;
+import com.danthe.dogeescape.model.Tile.TileType;
 import com.danthe.dogeescape.model.level.Level;
 import com.danthe.dogeescape.view.EnemySprite;
 import com.danthe.dogeescape.view.TileView;
@@ -116,7 +117,11 @@ public class GameScene extends Scene {
 					* (i / currentLevel.getTileXLength()), graphicalTileWidth,
 					graphicalTileWidth, tileTextureReg,
 					vertexBufferObjectManager, t);
-			tile.setZIndex(2 * (i / currentLevel.getTileXLength()));
+			if (t.getTileType() == TileType.EMPTY
+					|| t.getTileType() == TileType.STAKE)
+				tile.setZIndex(2 * i);
+			else
+				tile.setZIndex(2 * i + 3);
 			tileViews.add(tile);
 			this.attachChild(tile);
 			this.registerTouchArea(tile);
@@ -135,12 +140,14 @@ public class GameScene extends Scene {
 					2 * graphicalTileWidth, enemyTextureReg,
 					vertexBufferObjectManager, p, tileViews, this));
 			this.attachChild(enemySprites.getLast());
-			enemySprites.getLast().setZIndex(
-					tileViews.get(p.getPosition()).getZIndex() + 1);
+			enemySprites.getLast().setZIndex(2 * p.getPosition() + 4);
+
 			enemySprites.getLast().animate(new long[] { 200, 250 }, 0, 1, true);
 			p.setChangeListener(enemySprites.getLast());
 
 		}
+
+		this.sortChildren();
 
 		this.setBackgroundEnabled(true);
 
@@ -194,4 +201,9 @@ public class GameScene extends Scene {
 			e.printStackTrace();
 		}
 	}
+
+	public int getGraphicalTileWidth() {
+		return graphicalTileWidth;
+	}
+
 }

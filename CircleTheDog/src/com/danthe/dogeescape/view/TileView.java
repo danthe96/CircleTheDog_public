@@ -109,9 +109,5 @@ public class TileView extends TiledSprite implements ChangeListener {
 	public void onStateChanged() {
 		updateGraphics();
 	}
-	
-	public float getDefaultWidth() {
-		return defaultWidth;
-	}
 
 }
