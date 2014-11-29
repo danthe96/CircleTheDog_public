@@ -55,8 +55,8 @@ public class EndScene extends Scene {
 		attachChild(backgroundSprite);
 
 		Text levelName = new Text(0, backgroundSprite.getY() + 55,
-				TextureManager.defaultBigFont, context.getString(R.string.level,
-						levelID+1), vbo);
+				TextureManager.defaultBigFont, context.getString(
+						R.string.level, levelID + 1), vbo);
 		levelName.setColor(Color.BLACK);
 		levelName
 				.setX((backgroundSprite.getWidth() - levelName.getWidth()) / 2);
@@ -143,7 +143,7 @@ public class EndScene extends Scene {
 		attachChild(retrySprite);
 		this.registerTouchArea(retrySprite);
 
-		if (levelID < LevelManager.numLevels - 1) {
+		if (LevelManager.getInstance().isOpenToPlay(levelID + 1)) {
 			Sprite nextSprite = new Sprite(backgroundSprite.getX()
 					+ backgroundSprite.getWidth() / 2 + 64 + 32,
 					backgroundSprite.getY() + 640, 128, 128, nextTextureReg,

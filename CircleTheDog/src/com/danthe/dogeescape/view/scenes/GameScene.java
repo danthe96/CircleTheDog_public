@@ -57,7 +57,8 @@ public class GameScene extends Scene {
 
 	// ich nehme mal an das soll ein Singleton werden, da hab ich das jetzt
 	// fertiggemacht
-	public static GameScene createScene(AssetManagerProvider assetManagerProvider,
+	public static GameScene createScene(
+			AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
 			Context context, int levelID, SceneSetter sceneSetter) {
 		return (instance = new GameScene(assetManagerProvider,
@@ -83,8 +84,7 @@ public class GameScene extends Scene {
 		attachChild(backgroundSprite);
 
 		try {
-			currentLevel = new Level(levelID, assetManagerProvider, context,
-					sceneSetter);
+			currentLevel = new Level(levelID, assetManagerProvider, sceneSetter);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -146,7 +146,8 @@ public class GameScene extends Scene {
 	}
 
 	// currently not in use, modular loading seems to be too slow.
-	public static void loadResources(final BaseGameActivity activity, final int levelID) {
+	public static void loadResources(final BaseGameActivity activity,
+			final int levelID) {
 		try {
 			final List<String> levelAssets = Arrays.asList(activity
 					.getResources().getAssets().list("level" + levelID + ""));
