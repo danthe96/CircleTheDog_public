@@ -1,7 +1,5 @@
 package com.danthe.dogeescape.view.scenes;
 
-import java.util.LinkedList;
-
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -33,7 +31,6 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 		LevelSceneSetter {
 	private static final String TAG = "SCENE_MANAGER";
 
-	private LinkedList<KeyListener> keyListeners = new LinkedList<KeyListener>();
 	private SceneType currentScene;
 	private GameActivity activity;
 	private Engine engine;
@@ -41,6 +38,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 
 	private Scene mainGameScene;
 	private MenuScene pauseScene;
+	private Scene endScene;
 	private Scene levelSelectScene;
 
 	private Scene splashScene;
@@ -48,7 +46,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	private int currentLevelID = 0;
 
 	public enum SceneType {
-		MAINGAME, SPLASHSCENE, PAUSEMENUSCENE, LEVEL_SELECT_SCENE
+		MAINGAME, SPLASHSCENE, PAUSEMENUSCENE, LEVELSELECTSCENE, ENDSCENE
 	}
 
 	public SceneManager(GameActivity activity, Engine engine, Camera camera) {
@@ -113,9 +111,13 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 					activity.getApplicationContext(),
 					activity.getVertexBufferObjectManager());
 			return pauseScene;
-		case LEVEL_SELECT_SCENE:
+		case LEVELSELECTSCENE:
 			levelSelectScene = LevelSelectScene.createScene(
 					activity.getVertexBufferObjectManager(), camera, this);
+			return levelSelectScene;
+		case ENDSCENE:
+			endScene = EndScene.createScene();
+			return endScene;
 		}
 		return null;
 	}
@@ -135,7 +137,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 			break;
 		case SPLASHSCENE:
 			engine.setScene(splashScene);
-		case LEVEL_SELECT_SCENE:
+		case LEVELSELECTSCENE:
 			engine.setScene(levelSelectScene);
 		default:
 		}

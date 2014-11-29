@@ -13,7 +13,7 @@ import com.danthe.dogeescape.model.TileType;
 public class TileView extends TiledSprite implements ChangeListener {
 
 	public final Tile tile;
-	
+
 	public static boolean blockInput = false;
 
 	// TODO remove additional tile Positions
@@ -42,17 +42,19 @@ public class TileView extends TiledSprite implements ChangeListener {
 		case ROCK:
 			this.setCurrentTileIndex(2);
 			break;
+		case BUSH:
+			this.setCurrentTileIndex(3);
 		case ICE:
-			this.setCurrentTileIndex(6 - tile.getCountdown());
+			this.setCurrentTileIndex(7 - tile.getCountdown());
 			break;
 		case LAVA:
-			this.setCurrentTileIndex(6);
+			this.setCurrentTileIndex(8);
 			break;
 		case SWAMP:
-			this.setCurrentTileIndex(7);
+			this.setCurrentTileIndex(9);
 			break;
 		case TURTLE:
-			this.setCurrentTileIndex(8);
+			this.setCurrentTileIndex(10);
 			break;
 		}
 	}
@@ -68,6 +70,7 @@ public class TileView extends TiledSprite implements ChangeListener {
 				break;
 			case STAKE:
 			case ROCK:
+			case BUSH:
 			case ICE:
 			case LAVA:
 			case SWAMP:

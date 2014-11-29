@@ -4,6 +4,7 @@ public enum TileType{
 	EMPTY,
 	STAKE,
 	ROCK,
+	BUSH,
 	ICE,
 	LAVA,
 	SWAMP,

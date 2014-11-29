@@ -53,6 +53,9 @@ public class Tile {
 		case ROCK:
 			blocked = true;
 			break;
+		case BUSH:
+			blocked = true;
+			break;
 		case ICE:
 			blocked = true;
 			countdown = 3;

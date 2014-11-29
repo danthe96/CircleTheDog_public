@@ -1,12 +1,12 @@
 package com.danthe.dogeescape.view.scenes;
 
-import org.andengine.entity.scene.menu.MenuScene;
+import org.andengine.entity.scene.Scene;
 
-public class EndScene extends MenuScene{
-	private static final String TAG = "GAME_SCENE";
+public class EndScene extends Scene{
+	private static final String TAG = "END_SCENE";
 	private static EndScene instance = null;
 	
-	public static EndScene EndScene(){
+	public static EndScene createScene(){
 		if(instance == null)
 			instance = new EndScene();
 		
@@ -14,6 +14,8 @@ public class EndScene extends MenuScene{
 	}
 	
 	private EndScene(){
+		
+		
 		
 	}
 

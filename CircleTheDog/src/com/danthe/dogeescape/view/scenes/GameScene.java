@@ -8,9 +8,6 @@ import java.util.List;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
-import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
@@ -26,10 +23,8 @@ import org.andengine.util.adt.io.in.IInputStreamOpener;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.KeyEvent;
 
 import com.danthe.dogeescape.AssetManagerProvider;
-import com.danthe.dogeescape.KeyListener;
 import com.danthe.dogeescape.model.Enemy;
 import com.danthe.dogeescape.model.Level;
 import com.danthe.dogeescape.model.Tile;
@@ -44,7 +39,7 @@ import com.danthe.dogeescape.view.TileView;
  * @author Daniel
  * 
  */
-public class GameScene extends Scene implements IOnMenuItemClickListener, KeyListener{
+public class GameScene extends Scene {
 	private static final String TAG = "GAME_SCENE";
 	private static GameScene instance = null;
 
@@ -70,7 +65,6 @@ public class GameScene extends Scene implements IOnMenuItemClickListener, KeyLis
 		return instance;
 	}
 
-	
 	private GameScene(AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
 			Context context, int levelID) {
@@ -91,18 +85,23 @@ public class GameScene extends Scene implements IOnMenuItemClickListener, KeyLis
 			e.printStackTrace();
 		}
 
-		graphicalTileWidth = 576 / Math.max(currentLevel.getTileYLength(),
-				currentLevel.getTileXLength());
+		final int BORDER = 44;
+		graphicalTileWidth = (int) (backgroundSprite.getWidth() - 2 * BORDER)
+				/ Math.max(currentLevel.getTileYLength(),
+						currentLevel.getTileXLength());
 		int alternate = -graphicalTileWidth / 4;
-		int startingPointX = 40 + Math.abs(alternate);
-		int startingPointY = 350;
+		int startingPointX = (int) backgroundSprite.getX() + BORDER;
+		int startingPointY = (int) backgroundSprite.getY() + BORDER;
 		if (currentLevel.getTileYLength() >= currentLevel.getTileXLength())
-			startingPointX += (612 - currentLevel.getTileXLength()
-					* graphicalTileWidth) / 2;
+			startingPointX += ((backgroundSprite.getWidth() - 2 * BORDER) - currentLevel
+					.getTileXLength() * graphicalTileWidth) / 2;
 		else
-			startingPointY += (612 - currentLevel.getTileYLength()
-					* graphicalTileWidth) / 2;
+			startingPointY += ((backgroundSprite.getHeight() - 2 * BORDER) - currentLevel
+					.getTileYLength() * graphicalTileWidth) / 2;
 
+		// leave room between tiles
+		graphicalTileWidth = 15 * graphicalTileWidth / 16;
+		
 		int i = 0;
 		for (Tile t : currentLevel.getTileList()) {
 			TileView tile = new TileView(startingPointX + alternate
@@ -163,7 +162,7 @@ public class GameScene extends Scene implements IOnMenuItemClickListener, KeyLis
 				gameFieldTextureReg = TextureRegionFactory
 						.extractFromTexture(gameFieldTexture);
 			} else
-				gameFieldTextureReg = TextureManager.gameFieldTextureReg; 
+				gameFieldTextureReg = TextureManager.gameFieldTextureReg;
 
 			if (levelAssets.contains("tiles.png")) {
 				BitmapTextureAtlas circleBTA = new BitmapTextureAtlas(
@@ -191,21 +190,4 @@ public class GameScene extends Scene implements IOnMenuItemClickListener, KeyLis
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
-			float pMenuItemLocalX, float pMenuItemLocalY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		
-		
-		
-		return false;
-	}
-
 }

@@ -26,6 +26,7 @@ public class Level implements Runnable, HumanActivityListener {
 	public enum Status {
 		SOLVED, PLAYABLE, LOCKED
 	}
+
 	/**
 	 * ID of the level to be loaded
 	 */
@@ -48,7 +49,7 @@ public class Level implements Runnable, HumanActivityListener {
 
 	private LinkedList<Integer> highscores;
 	private Context context;
-	
+
 	private int turns = 0;
 	public static boolean playersTurn = false;
 	private boolean lost = false;
@@ -56,18 +57,19 @@ public class Level implements Runnable, HumanActivityListener {
 
 	private Thread t;
 
-	//private GameActivity parent;
+	// private GameActivity parent;
 
 	private final List<Enemy> enemies;
 
-	public Level(int levelID, AssetManagerProvider assetManagerProvider, Context context) throws IOException {
+	public Level(int levelID, AssetManagerProvider assetManagerProvider,
+			Context context) throws IOException {
 		this.levelID = levelID;
 		this.context = context;
-		
+
 		initHighscores();
 		// this.assetManagerProvider = assetManagerProvider;
 		levelDir = "level" + this.levelID + "/";
-		//this.parent = parent;
+		// this.parent = parent;
 
 		BufferedReader bfr = new BufferedReader(new InputStreamReader(
 				assetManagerProvider.getAssets().open(levelDir + "level.txt")));
@@ -130,6 +132,8 @@ public class Level implements Runnable, HumanActivityListener {
 				break;
 			case ROCK:
 				//
+				break;
+			case BUSH:
 				break;
 			case ICE:
 				tile.setCountdown(tile.getCountdown() - 1);
@@ -268,15 +272,15 @@ public class Level implements Runnable, HumanActivityListener {
 	public void onHumanActivity() {
 		playersTurn = false;
 	}
-	
+
 	private void initHighscores() {
 		highscores = new LinkedList<Integer>();
 		SharedPreferences prefs = context.getSharedPreferences("dogeScores",
 				Context.MODE_PRIVATE);
 		for (int i = 0; i < 5; i++)
 			highscores.add(prefs.getInt("key" + i, -1));
-	}	
-	
+	}
+
 	private void saveHighscores(int turns) {
 		for (int i = 0; i < 5; i++) {
 			if (highscores.get(i) == -1 || turns < highscores.get(i)) {

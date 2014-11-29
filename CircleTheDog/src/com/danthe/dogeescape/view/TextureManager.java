@@ -5,15 +5,14 @@ import java.io.InputStream;
 
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.Texture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.bitmap.BitmapTexture;
-import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.color.Color;
@@ -34,23 +33,29 @@ public class TextureManager {
 
 	// Main
 	public static TextureRegion appBackground;
-	private static ITexture appBackgroundTexture;
+	private static Texture appBackgroundTexture;
 
 	// LevelSelectScene
-	public static BitmapTextureAtlas levelSelectBitmapTextureAtlas;
+	private static BitmapTextureAtlas levelSelectBTA;
 	public static TextureRegion levelSelectOpen, levelSelectSolved,
 			levelSelectLocked;
 
 	// GameScene
-	private static ITexture gameFieldTexture;
-	public static ITextureRegion gameFieldTextureReg;
-	private static BitmapTextureAtlas circleBTA, enemyBTA;
-	public static ITiledTextureRegion enemyTextureReg, tileTextureReg;
+	private static Texture gameFieldTexture;
+	public static TextureRegion gameFieldTextureReg;
+	private static BitmapTextureAtlas tilesBTA, enemyBTA;
+	public static TiledTextureRegion enemyTextureReg, tileTextureReg;
 
 	// PauseMenu
-	private static ITexture textBoxTexture;
-	public static ITextureRegion textBoxTextureReg;
+	private static Texture textBoxTexture;
+	public static TextureRegion textBoxTextureReg;
 	public static Font comicSansFont;
+
+	// EndScene
+	private static BitmapTextureAtlas endButtonsBTA;
+	private static Texture endScreenTexture;
+	public static TextureRegion endScreenTextureReg, backToMenuTextureReg,
+			retryTextureReg, nextTextureReg;
 
 	public static void init(BaseGameActivity activity) {
 		Log.d(TAG, "INIT");
@@ -59,6 +64,7 @@ public class TextureManager {
 		initMainTextures(activity);
 		initMenuTextures(activity);
 		initGameTexture(activity);
+		initEndTextures(activity);
 	}
 
 	public static void load() {
@@ -67,29 +73,29 @@ public class TextureManager {
 		loadMainTextures();
 		loadMenuTextures();
 		loadGameTextures();
+		loadEndTextures();
 	}
 
 	private static void initLevelSelectResources(BaseGameActivity activity) {
 		Log.d(TAG, "INIT levelSelect");
-		levelSelectBitmapTextureAtlas = new BitmapTextureAtlas(
-				activity.getTextureManager(), 256, 768,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		levelSelectBTA = new BitmapTextureAtlas(activity.getTextureManager(),
+				256, 768, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		levelSelectOpen = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelSelectBitmapTextureAtlas, activity,
+				.createFromAsset(levelSelectBTA, activity,
 						"levelSelectOpen.png", 0, 0);
 		levelSelectSolved = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelSelectBitmapTextureAtlas, activity,
+				.createFromAsset(levelSelectBTA, activity,
 						"levelSelectSolved.png", 0, 256);
 		levelSelectLocked = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelSelectBitmapTextureAtlas, activity,
+				.createFromAsset(levelSelectBTA, activity,
 						"levelSelectLocked.png", 0, 512);
 	}
 
 	private static void loadLevelSelectResources() {
 		Log.d(TAG, "LOAD levelSelect");
 
-		levelSelectBitmapTextureAtlas.load();
+		levelSelectBTA.load();
 	}
 
 	private static void initMainTextures(final BaseGameActivity activity) {
@@ -172,11 +178,11 @@ public class TextureManager {
 			e.printStackTrace();
 		}
 
-		circleBTA = new BitmapTextureAtlas(activity.getTextureManager(), 512,
+		tilesBTA = new BitmapTextureAtlas(activity.getTextureManager(), 896,
 				128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		tileTextureReg = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(circleBTA, activity.getAssets(),
-						"tiles.png", 0, 0, 4, 1);
+				.createTiledFromAsset(tilesBTA, activity.getAssets(),
+						"tiles.png", 0, 0, 7, 1);
 
 		enemyBTA = new BitmapTextureAtlas(activity.getTextureManager(), 1280,
 				512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -193,8 +199,49 @@ public class TextureManager {
 		gameFieldTextureReg = TextureRegionFactory
 				.extractFromTexture(gameFieldTexture);
 
-		circleBTA.load();
+		tilesBTA.load();
 		enemyBTA.load();
+	}
+
+	private static void initEndTextures(final BaseGameActivity activity) {
+		Log.d(TAG, "INIT end textures");
+
+		try {
+			endScreenTexture = new BitmapTexture(activity.getTextureManager(),
+					new IInputStreamOpener() {
+						@Override
+						public InputStream open() throws IOException {
+							return activity.getAssets().open(
+									"gfx/end_screen.png");
+						}
+					});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		endButtonsBTA = new BitmapTextureAtlas(activity.getTextureManager(),
+				256, 768, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		backToMenuTextureReg = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(levelSelectBTA, activity,
+						"menu.png", 0, 0);
+		nextTextureReg = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(levelSelectBTA, activity,
+						"next.png", 0, 256);
+		retryTextureReg = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(levelSelectBTA, activity,
+						"retry.png", 0, 512);
+
+	}
+
+	private static void loadEndTextures() {
+		Log.d(TAG, "LOAD end textures");
+
+		endButtonsBTA.load();
+
+		endScreenTexture.load();
+		endScreenTextureReg = TextureRegionFactory
+				.extractFromTexture(endScreenTexture);
 	}
 
 }
