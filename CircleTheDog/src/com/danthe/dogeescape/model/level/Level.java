@@ -54,11 +54,11 @@ public class Level implements Runnable, HumanActivityListener {
 	public static boolean lost = false;
 	public static boolean won = false;
 
-	private Thread t;
+	private static Thread t;
 
 	private SceneSetter sceneSetter;
 
-	private List<Enemy> enemies;
+	private final List<Enemy> enemies;
 
 	public Level(int levelID, AssetManagerProvider assetManagerProvider,
 			SceneSetter sceneSetter) throws IOException {
@@ -97,10 +97,11 @@ public class Level implements Runnable, HumanActivityListener {
 					tileList, this));
 		}
 
-		if (t != null && !isGameOver())
+		if (t != null && !isGameOver()) {
 			while (t.isAlive()) {
 				t.interrupt();
 			}
+		}
 
 		t = new Thread(this);
 		t.start();
@@ -184,35 +185,34 @@ public class Level implements Runnable, HumanActivityListener {
 		// initialization
 		lost = false;
 		won = false;
-		turns = 0;
+		turns = 1;
+		playersTurn = true;
 
 		// Main loop
-		while (!t.isInterrupted() && !(lost || won)) {
-			turns++;
-			playersTurn = true;
+		main: while (!t.isInterrupted() && !(lost || won)) {
 			while (playersTurn) {
 				try {
 					Thread.sleep(20);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					continue main;
 				}
 			}
 
 			for (Enemy e : enemies) {
 				e.recheckPath();
 				e.updateWay();
-			}
-			checkVictory();
-			for (Enemy e : enemies) {
+				checkVictory();
 				e.move();
 				try {
 					Thread.sleep(50);
 				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+					continue main;
 				}
 			}
 			checkVictory();
 			updateTiles();
+			turns++;
+			playersTurn = true;
 		}
 
 	}
