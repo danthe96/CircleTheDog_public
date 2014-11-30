@@ -16,24 +16,24 @@ public class LevelManager {
 	private Activity activity;
 
 	/**
-	 * Each story is 16 levels long and should introduce something new. Like story one introduces the basic game. Story 2 introduces multiple dogs. Story 3 maybe ice.
+	 * Each story is 16 levels long and should introduce something new. Like
+	 * story one introduces the basic game. Story 2 introduces multiple dogs.
+	 * Story 3 maybe ice.
+	 * 
 	 * @author Daniel
-	 *
+	 * 
 	 */
-	public enum Story{
-		THE_GARDEN,
-		MULTIPLYING_PROBLEMS;
-		String[] storylines = {
-				"The Garden",
-				"Multiplying Problems"
-		};
-		
+	public enum Story {
+		THE_GARDEN, MULTIPLYING_PROBLEMS;
+		String[] storylines = { "The Garden", "Multiplying Problems" };
+
 		public int[] getLevelIDs() {
-			int lowestLevelID = ordinal()*numLevelsPerStory;
-			int[] result = new int[Math.min(numLevels - lowestLevelID, numLevelsPerStory)];
-			
-			for (int i=0; i<result.length; i++) {
-				result[i] = i+lowestLevelID;
+			int lowestLevelID = ordinal() * numLevelsPerStory;
+			int[] result = new int[Math.min(numLevels - lowestLevelID,
+					numLevelsPerStory)];
+
+			for (int i = 0; i < result.length; i++) {
+				result[i] = i + lowestLevelID;
 			}
 			return result;
 		}
@@ -42,8 +42,7 @@ public class LevelManager {
 			return storylines[ordinal()];
 		}
 	}
-	
-	
+
 	/**
 	 * Must be called when the app starts
 	 * 
@@ -56,8 +55,10 @@ public class LevelManager {
 	private LevelManager(Activity activity) {
 		this.activity = activity;
 
-		if (getStatus(0) == Status.LOCKED) {
-			setStatus(0, Status.PLAYABLE);
+		for (Story s : Story.values()) {
+			if (getStatus(s.ordinal() * numLevelsPerStory) == Status.LOCKED) {
+				setStatus(s.ordinal() * numLevelsPerStory, Status.PLAYABLE);
+			}
 		}
 	}
 
@@ -84,9 +85,7 @@ public class LevelManager {
 		Status result = Status.values()[sharedPref.getInt(
 				activity.getString(R.string.shared_pref_level_status_string)
 						+ LevelID, defaultValue.ordinal())];
-		
-		//The first level of a story must always be open:
-		if (LevelID % numLevelsPerStory == 0 && result == Status.LOCKED) return Status.PLAYABLE;
+
 		return result;
 	}
 
@@ -112,8 +111,14 @@ public class LevelManager {
 	 * 
 	 * @param LevelID
 	 */
-	public void setLevelSolved(int LevelID) {
-		setStatus(LevelID, Status.SOLVED);
+	public void setLevelSolved(int LevelID, int turns) {
+		if (turns <= 5)
+			setStatus(LevelID, Status.SOLVED3STAR);
+		else if (turns <= 10)
+			setStatus(LevelID, Status.SOLVED2STAR);
+		else
+			setStatus(LevelID, Status.SOLVED3STAR);
+
 		// open up the next level
 		if (LevelID < numLevels - 1 && getStatus(LevelID + 1) == Status.LOCKED)
 			setStatus(LevelID + 1, Status.PLAYABLE);
@@ -121,6 +126,6 @@ public class LevelManager {
 
 	public boolean isOpenToPlay(int LevelID) {
 		Status status = getStatus(LevelID);
-		return (status == Status.PLAYABLE) || (status == Status.SOLVED);
+		return (status != Status.LOCKED);
 	}
 }

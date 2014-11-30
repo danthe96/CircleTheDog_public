@@ -37,8 +37,8 @@ public class TextureManager {
 
 	// LevelSelectScene
 	private static BitmapTextureAtlas levelSelectBTA;
-	public static TextureRegion levelSelectOpen, levelSelectSolved,
-			levelSelectLocked;
+	public static TextureRegion levelSelectLocked, levelSelectOpen,
+			levelSelectSolved1, levelSelectSolved2, levelSelectSolved3;
 
 	// GameScene
 	private static Texture gameFieldTexture;
@@ -79,17 +79,23 @@ public class TextureManager {
 	private static void initLevelSelectResources(BaseGameActivity activity) {
 		Log.d(TAG, "INIT levelSelect");
 		levelSelectBTA = new BitmapTextureAtlas(activity.getTextureManager(),
-				256, 768, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+				256, 1280, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		levelSelectOpen = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelSelectBTA, activity,
-						"levelSelectOpen.png", 0, 0);
-		levelSelectSolved = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelSelectBTA, activity,
-						"levelSelectSolved.png", 0, 256);
 		levelSelectLocked = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(levelSelectBTA, activity,
-						"levelSelectLocked.png", 0, 512);
+						"levelSelectLocked.png", 0, 0);
+		levelSelectOpen = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(levelSelectBTA, activity,
+						"levelSelectOpen.png", 0, 256);
+		levelSelectSolved1 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(levelSelectBTA, activity,
+						"levelSelectSolved1.png", 0, 512);
+		levelSelectSolved2 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(levelSelectBTA, activity,
+						"levelSelectSolved2.png", 0, 768);
+		levelSelectSolved3 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(levelSelectBTA, activity,
+						"levelSelectSolved3.png", 0, 1024);
 	}
 
 	private static void loadLevelSelectResources() {
@@ -154,7 +160,7 @@ public class TextureManager {
 				TextureOptions.BILINEAR, Typeface.DEFAULT_BOLD, 42f, true,
 				Color.WHITE_ARGB_PACKED_INT);
 		activity.getFontManager().loadFont(defaultFont);
-		
+
 		defaultBigFont = FontFactory.create(activity.getFontManager(),
 				activity.getTextureManager(), 512, 512,
 				TextureOptions.BILINEAR, Typeface.DEFAULT_BOLD, 64f, true,

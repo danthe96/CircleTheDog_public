@@ -26,7 +26,7 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	private MenuScene menuChildScene;
 	private final Story story;
-	
+
 	private SceneSetter levelSceneSetter;
 	private static final int MenuItemPixel = 256;
 	private static final int ElementsPerRow = 4;
@@ -68,10 +68,9 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 		int levelID = pMenuItem.getID();
 		if (LevelManager.getInstance().isOpenToPlay(levelID)) {
 			levelSceneSetter.setLevelScene(pMenuItem.getID());
-		}
-		else {
-			//TODO Play some sound here.
-			
+		} else {
+			// TODO Play some sound here.
+
 		}
 		return true;
 	}
@@ -114,7 +113,7 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 		float startposY = 0;
 
 		IMenuItem menuItem;
-		for (int levelID: story.getLevelIDs()) { 
+		for (int levelID : story.getLevelIDs()) {
 			x++;
 			if (x == ElementsPerRow) {
 				x = 0;
@@ -158,12 +157,16 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 	private ITextureRegion getMenuTexture(int levelID) {
 		Status status = LevelManager.getInstance().getStatus(levelID);
 		switch (status) {
-		case SOLVED:
-			return TextureManager.levelSelectSolved;
 		case LOCKED:
 			return TextureManager.levelSelectLocked;
 		case PLAYABLE:
 			return TextureManager.levelSelectOpen;
+		case SOLVED1STAR:
+			return TextureManager.levelSelectSolved1;
+		case SOLVED2STAR:
+			return TextureManager.levelSelectSolved2;
+		case SOLVED3STAR:
+			return TextureManager.levelSelectSolved3;
 		}
 		return null;
 	}

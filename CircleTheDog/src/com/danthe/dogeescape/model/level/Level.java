@@ -26,7 +26,7 @@ import com.danthe.dogeescape.model.Tile.TileType;
 public class Level implements Runnable, HumanActivityListener {
 
 	public enum Status {
-		SOLVED, PLAYABLE, LOCKED
+		LOCKED, PLAYABLE, SOLVED1STAR, SOLVED2STAR, SOLVED3STAR
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class Level implements Runnable, HumanActivityListener {
 
 		if (lost || won) {
 			if (won) {
-				LevelManager.getInstance().setLevelSolved(levelID);
+				LevelManager.getInstance().setLevelSolved(levelID, turns);
 			}
 			sceneSetter.setScene(SceneType.ENDSCENE);
 			t.interrupt();
