@@ -7,9 +7,7 @@ import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.animator.DirectMenuAnimator;
 import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
-import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -18,11 +16,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import android.util.Log;
 
 import com.danthe.dogeescape.GameActivity;
-import com.danthe.dogeescape.R;
 import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.model.level.LevelManager;
-import com.danthe.dogeescape.model.level.Level.Status;
 import com.danthe.dogeescape.model.level.LevelManager.Story;
 import com.danthe.dogeescape.view.AnimatedSpriteMenuItem;
 
@@ -35,7 +31,6 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 
 	private static ITextureRegion textBoxTextureReg = TextureManager.textBoxTextureReg;
 	private static Font comicSansFont = TextureManager.comicSansFont;
-
 
 	private StorySelectScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
@@ -75,34 +70,35 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 		menuChildScene = new MenuScene(camera);
 		menuChildScene.setPosition(0, 0);// GameActivity.CAMERA_HEIGHT*MenuTopOffset);
 
-		//generateGrid(vbom);
+		// generateGrid(vbom);
 
 		menuChildScene.setBackgroundEnabled(false);
 
 		menuChildScene.setOnMenuItemClickListener(this);
 		Log.d(TAG, "CREATE SCENE");
 
-		for (Story story: LevelManager.Story.values()) {
+		for (Story story : LevelManager.Story.values()) {
 			TextMenuItem storyText = new TextMenuItem(1, comicSansFont,
 					story.getOutputString(), vbo);
-			final IMenuItem backItem = new AnimatedSpriteMenuItem(story.ordinal(), 550, 220,
-					textBoxTextureReg, vbo, true, false, storyText);
+			final IMenuItem backItem = new AnimatedSpriteMenuItem(
+					story.ordinal(), 550, 220, textBoxTextureReg, vbo, true,
+					false, storyText);
 			menuChildScene.addMenuItem(backItem);
 		}
-//		final IMenuItem continueItem = new AnimatedSpriteMenuItem(0, 550, 220,
-//				textBoxTextureReg, vbo, true, false, continueText);
-//		menuChildScene.addMenuItem(continueItem);
-//
-//		TextMenuItem backText = new TextMenuItem(1, comicSansFont,
-//				"test", vbo);
-//		final IMenuItem backItem = new AnimatedSpriteMenuItem(1, 550, 220,
-//				textBoxTextureReg, vbo, true, false, backText);
+		// final IMenuItem continueItem = new AnimatedSpriteMenuItem(0, 550,
+		// 220,
+		// textBoxTextureReg, vbo, true, false, continueText);
+		// menuChildScene.addMenuItem(continueItem);
+		//
+		// TextMenuItem backText = new TextMenuItem(1, comicSansFont,
+		// "test", vbo);
+		// final IMenuItem backItem = new AnimatedSpriteMenuItem(1, 550, 220,
+		// textBoxTextureReg, vbo, true, false, backText);
 
 		menuChildScene.setMenuAnimator(new DirectMenuAnimator());
 		menuChildScene.buildAnimations();
 		menuChildScene.setBackgroundEnabled(false);
 		setChildScene(menuChildScene);
 	}
-
 
 }

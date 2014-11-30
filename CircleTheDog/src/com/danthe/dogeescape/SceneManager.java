@@ -123,7 +123,8 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 			return pauseScene;
 		case LEVELSELECTSCENE:
 			levelSelectScene = LevelSelectScene.createScene(
-					activity.getVertexBufferObjectManager(), camera, this, currentStory);
+					activity.getVertexBufferObjectManager(), camera, this,
+					currentStory);
 			return levelSelectScene;
 		case ENDSCENE:
 			endScene = EndScene.createScene(activity.getApplicationContext(),
@@ -131,10 +132,12 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 					currentLevelID);
 			return endScene;
 		case STORYSELECTSCENE:
-			storySelectScene = StorySelectScene.createScene(activity.getVertexBufferObjectManager(), camera, this);
+			storySelectScene = StorySelectScene.createScene(
+					activity.getVertexBufferObjectManager(), camera, this);
 			return storySelectScene;
 		default:
-			throw new RuntimeException("Tried to create unknown scene: "+scene);
+			throw new RuntimeException("Tried to create unknown scene: "
+					+ scene);
 		}
 	}
 
@@ -165,15 +168,19 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN
-				&& currentScene == SceneType.MAINGAME) {
-			if (!mainGameScene.hasChildScene()) {
-				createScene(SceneType.PAUSEMENUSCENE);
-				mainGameScene.setChildScene(pauseScene);
-				pauseScene.setOnMenuItemClickListener(this);
-				TileView.blockInput = true;
+				&& currentScene != SceneType.STORYSELECTSCENE) {
+			if (currentScene == SceneType.MAINGAME) {
+				if (!mainGameScene.hasChildScene()) {
+					createScene(SceneType.PAUSEMENUSCENE);
+					mainGameScene.setChildScene(pauseScene);
+					pauseScene.setOnMenuItemClickListener(this);
+					TileView.blockInput = true;
+				} else {
+					mainGameScene.reset();
+					TileView.blockInput = false;
+				}
 			} else {
-				mainGameScene.reset();
-				TileView.blockInput = false;
+				this.setScene(SceneType.STORYSELECTSCENE);
 			}
 			return true;
 		}
@@ -191,9 +198,9 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	public void setLevelSelectScene(Story selectedStory) {
 		currentStory = selectedStory;
 		setScene(SceneType.LEVELSELECTSCENE);
-		
+
 	}
-	
+
 	@Override
 	public void setScene(SceneType scene) {
 		createScene(scene);
@@ -218,11 +225,10 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 			engine.setScene(storySelectScene);
 			break;
 		default:
-			throw new RuntimeException("Tried to set unknown scene "+scene);
+			throw new RuntimeException("Tried to set unknown scene " + scene);
 		}
 
 		currentScene = scene;
 	}
-
 
 }

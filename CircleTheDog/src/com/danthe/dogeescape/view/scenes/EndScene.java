@@ -84,7 +84,7 @@ public class EndScene extends Scene {
 			doge_victory.setY(centeredY);
 			victory_info.setY(centeredY + doge_victory.getHeight() + 20);
 
-		} else if(Level.lost){
+		} else if (Level.lost) {
 
 			Text doge_defeat = new Text(0, 0, TextureManager.defaultFont,
 					context.getText(R.string.defeat), vbo);
@@ -143,7 +143,8 @@ public class EndScene extends Scene {
 		attachChild(retrySprite);
 		this.registerTouchArea(retrySprite);
 
-		if (LevelManager.getInstance().isOpenToPlay(levelID + 1)) {
+		if (LevelManager.getInstance().isOpenToPlay(levelID + 1)
+				&& levelID + 1 < LevelManager.numLevelsPerStory) {
 			Sprite nextSprite = new Sprite(backgroundSprite.getX()
 					+ backgroundSprite.getWidth() / 2 + 64 + 32,
 					backgroundSprite.getY() + 640, 128, 128, nextTextureReg,

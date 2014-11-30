@@ -203,8 +203,14 @@ public class Level implements Runnable, HumanActivityListener {
 				e.updateWay();
 			}
 			checkVictory();
-			for (Enemy e : enemies)
+			for (Enemy e : enemies) {
 				e.move();
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
 			checkVictory();
 			updateTiles();
 		}
@@ -243,12 +249,12 @@ public class Level implements Runnable, HumanActivityListener {
 
 	private void checkVictory() {
 		won = true;
-		lost = true;
+		lost = false;
 		for (Enemy p : enemies) {
 			if (!p.hasLost())
 				won = false;
-			if (!p.hasWon())
-				lost = false;
+			if (p.hasWon())
+				lost = true;
 		}
 
 		if (lost || won) {
