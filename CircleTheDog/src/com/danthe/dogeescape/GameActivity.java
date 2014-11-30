@@ -23,7 +23,7 @@ import com.danthe.dogeescape.model.level.LevelManager;
 public class GameActivity extends BaseGameActivity implements
 		AssetManagerProvider {
 	private static final String TAG = "GAME_ACTIVITY";
-	private static final SceneType DEFAULT_SCENE = SceneType.LEVELSELECTSCENE;
+	private static final SceneType DEFAULT_SCENE = SceneType.STORYSELECTSCENE;
 
 	private SceneManager sceneManager;
 	private LinkedList<KeyListener> keyListeners = new LinkedList<KeyListener>();

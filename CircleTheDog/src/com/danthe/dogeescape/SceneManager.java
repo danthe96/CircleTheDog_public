@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 
 import com.danthe.dogeescape.interfaces.KeyListener;
 import com.danthe.dogeescape.interfaces.SceneSetter;
+import com.danthe.dogeescape.model.level.LevelManager.Story;
 import com.danthe.dogeescape.GameActivity;
 import com.danthe.dogeescape.view.TileView;
 import com.danthe.dogeescape.view.scenes.EndScene;
@@ -19,6 +20,7 @@ import com.danthe.dogeescape.view.scenes.GameScene;
 import com.danthe.dogeescape.view.scenes.LevelSelectScene;
 import com.danthe.dogeescape.view.scenes.PauseMenu;
 import com.danthe.dogeescape.view.scenes.SplashScene;
+import com.danthe.dogeescape.view.scenes.StorySelectScene;
 
 /**
  * Class organizing the different Scenes. Ive decided to not do the game scenes
@@ -36,6 +38,8 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 		SceneSetter {
 	private static final String TAG = "SCENE_MANAGER";
 
+	private static final Story DEFAULT_STORY = Story.THE_GARDEN;
+
 	private SceneType currentScene;
 	private GameActivity activity;
 	private Engine engine;
@@ -45,13 +49,15 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	private MenuScene pauseScene;
 	private Scene endScene;
 	private Scene levelSelectScene;
+	private Scene storySelectScene;
 
 	private Scene splashScene;
 
 	private int currentLevelID = 0;
+	private Story currentStory = DEFAULT_STORY;
 
 	public enum SceneType {
-		MAINGAME, SPLASHSCENE, PAUSEMENUSCENE, LEVELSELECTSCENE, ENDSCENE
+		MAINGAME, SPLASHSCENE, PAUSEMENUSCENE, LEVELSELECTSCENE, ENDSCENE, STORYSELECTSCENE
 	}
 
 	public SceneManager(GameActivity activity, Engine engine, Camera camera) {
@@ -117,15 +123,19 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 			return pauseScene;
 		case LEVELSELECTSCENE:
 			levelSelectScene = LevelSelectScene.createScene(
-					activity.getVertexBufferObjectManager(), camera, this);
+					activity.getVertexBufferObjectManager(), camera, this, currentStory);
 			return levelSelectScene;
 		case ENDSCENE:
 			endScene = EndScene.createScene(activity.getApplicationContext(),
 					activity.getVertexBufferObjectManager(), this,
 					currentLevelID);
 			return endScene;
+		case STORYSELECTSCENE:
+			storySelectScene = StorySelectScene.createScene(activity.getVertexBufferObjectManager(), camera, this);
+			return storySelectScene;
+		default:
+			throw new RuntimeException("Tried to create unknown scene: "+scene);
 		}
-		return null;
 	}
 
 	// Method allows you to get the currently active scene
@@ -178,6 +188,13 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	}
 
 	@Override
+	public void setLevelSelectScene(Story selectedStory) {
+		currentStory = selectedStory;
+		setScene(SceneType.LEVELSELECTSCENE);
+		
+	}
+	
+	@Override
 	public void setScene(SceneType scene) {
 		createScene(scene);
 
@@ -197,10 +214,15 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 			if (currentScene == SceneType.MAINGAME)
 				mainGameScene.setChildScene(endScene);
 			break;
+		case STORYSELECTSCENE:
+			engine.setScene(storySelectScene);
+			break;
 		default:
+			throw new RuntimeException("Tried to set unknown scene "+scene);
 		}
 
 		currentScene = scene;
 	}
+
 
 }

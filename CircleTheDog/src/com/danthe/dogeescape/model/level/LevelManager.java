@@ -10,10 +10,40 @@ import com.danthe.dogeescape.model.level.Level.Status;
 public class LevelManager {
 
 	private static LevelManager levelManager;
-	public static final int numLevels = 12;
+	public static final int numLevels = 22;
+	public static final int numLevelsPerStory = 16;
 	private static final Status DEFAULT_STATUS = Status.LOCKED;
 	private Activity activity;
 
+	/**
+	 * Each story is 16 levels long and should introduce something new. Like story one introduces the basic game. Story 2 introduces multiple dogs. Story 3 maybe ice.
+	 * @author Daniel
+	 *
+	 */
+	public enum Story{
+		THE_GARDEN,
+		MULTIPLYING_PROBLEMS;
+		String[] storylines = {
+				"The Garden",
+				"Multiplying Problems"
+		};
+		
+		public int[] getLevelIDs() {
+			int lowestLevelID = ordinal()*numLevelsPerStory;
+			int[] result = new int[Math.min(numLevels - lowestLevelID, numLevelsPerStory)];
+			
+			for (int i=0; i<result.length; i++) {
+				result[i] = i+lowestLevelID;
+			}
+			return result;
+		}
+
+		public CharSequence getOutputString() {
+			return storylines[ordinal()];
+		}
+	}
+	
+	
 	/**
 	 * Must be called when the app starts
 	 * 
@@ -42,7 +72,7 @@ public class LevelManager {
 	}
 
 	/**
-	 * TODO change this block into something meaningful
+	 * 
 	 * 
 	 * @param LevelID
 	 * @return
@@ -54,6 +84,9 @@ public class LevelManager {
 		Status result = Status.values()[sharedPref.getInt(
 				activity.getString(R.string.shared_pref_level_status_string)
 						+ LevelID, defaultValue.ordinal())];
+		
+		//The first level of a story must always be open:
+		if (LevelID % numLevelsPerStory == 0 && result == Status.LOCKED) return Status.PLAYABLE;
 		return result;
 	}
 

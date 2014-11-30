@@ -19,12 +19,14 @@ import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.model.level.LevelManager;
 import com.danthe.dogeescape.model.level.Level.Status;
+import com.danthe.dogeescape.model.level.LevelManager.Story;
 
 public class LevelSelectScene extends Scene implements IOnMenuItemClickListener {
 	private static final String TAG = "LEVEL_SELECT_SCENE";
 
 	private MenuScene menuChildScene;
-
+	private final Story story;
+	
 	private SceneSetter levelSceneSetter;
 	private static final int MenuItemPixel = 256;
 	private static final int ElementsPerRow = 4;
@@ -45,17 +47,18 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	private LevelSelectScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
-			SceneSetter levelSceneSetter) {
+			SceneSetter levelSceneSetter, Story story) {
 		this.levelSceneSetter = levelSceneSetter;
+		this.story = story;
 		createBackground(vertexBufferObjectManager);
 		createMenuChildScene(vertexBufferObjectManager, camera);
 	}
 
 	public static LevelSelectScene createScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
-			SceneSetter levelSceneSetter) {
+			SceneSetter levelSceneSetter, Story story) {
 		LevelSelectScene result = new LevelSelectScene(
-				vertexBufferObjectManager, camera, levelSceneSetter);
+				vertexBufferObjectManager, camera, levelSceneSetter, story);
 		return result;
 
 	}
@@ -111,8 +114,7 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 		float startposY = 0;
 
 		IMenuItem menuItem;
-		for (int levelID = 0; levelID < LevelManager.getInstance()
-				.getNumLevels(); levelID++) {
+		for (int levelID: story.getLevelIDs()) { 
 			x++;
 			if (x == ElementsPerRow) {
 				x = 0;
