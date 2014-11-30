@@ -117,7 +117,7 @@ public class LevelManager {
 		else if (turns <= 10)
 			setStatus(LevelID, Status.SOLVED2STAR);
 		else
-			setStatus(LevelID, Status.SOLVED3STAR);
+			setStatus(LevelID, Status.SOLVED1STAR);
 
 		// open up the next level
 		if (LevelID < numLevels - 1 && getStatus(LevelID + 1) == Status.LOCKED)
