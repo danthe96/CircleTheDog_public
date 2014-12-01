@@ -88,7 +88,7 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 			TextMenuItem storyText = new TextMenuItem(1, comicSansFont,
 					story.getOutputString(), vbo);
 			final IMenuItem backItem = new AnimatedSpriteMenuItem(
-					story.ordinal(), 550, 220, textBoxTextureReg, vbo, true,
+					story.ordinal(), 550, 220, TextureManager.storyTextures[story.ordinal()], vbo, true,
 					false, storyText);
 			menuChildScene.addMenuItem(backItem);
 		}

@@ -17,6 +17,8 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.color.Color;
 
+import com.danthe.dogeescape.model.level.LevelManager;
+
 import android.graphics.Typeface;
 import android.util.Log;
 
@@ -57,6 +59,11 @@ public class TextureManager {
 	public static TextureRegion endScreenTextureReg, backToMenuTextureReg,
 			retryTextureReg, nextTextureReg;
 
+	//StorySelectScene
+	public static BitmapTextureAtlas storyBTA;
+	public static String[] storyTextureName = { "the_garden.png", "multiplying_problems.png"};
+	public static TextureRegion[] storyTextures = new TextureRegion[LevelManager.Story.values().length];
+	
 	public static void init(BaseGameActivity activity) {
 		Log.d(TAG, "INIT");
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -65,7 +72,9 @@ public class TextureManager {
 		initMenuTextures(activity);
 		initGameTexture(activity);
 		initEndTextures(activity);
+		initStoryTextures(activity);
 	}
+
 
 	public static void load() {
 		Log.d(TAG, "LOAD");
@@ -74,7 +83,14 @@ public class TextureManager {
 		loadMenuTextures();
 		loadGameTextures();
 		loadEndTextures();
+		loadStoryTextures();
 	}
+
+	private static void loadStoryTextures() {
+		storyBTA.load();
+		
+	}
+
 
 	private static void initLevelSelectResources(BaseGameActivity activity) {
 		Log.d(TAG, "INIT levelSelect");
@@ -181,6 +197,19 @@ public class TextureManager {
 		defaultBigFont.getTexture().load();
 	}
 
+	private static void initStoryTextures(BaseGameActivity activity) {
+		Log.d(TAG, "INIT story textures");
+		storyBTA = new BitmapTextureAtlas(activity.getTextureManager(), 535,
+				185*storyTextures.length, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		//Log.d(TAG, ""+185*storyTextures.length);
+		for (int i=0; i<storyTextures.length; i++) {
+			storyTextures[i] = BitmapTextureAtlasTextureRegionFactory
+					.createFromAsset(storyBTA, activity, storyTextureName[i], 0, 185*i);
+			//Log.d(TAG, ""+185*i);
+		}
+		
+	}
+	
 	private static void initGameTexture(final BaseGameActivity activity) {
 		Log.d(TAG, "INIT game textures");
 
