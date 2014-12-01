@@ -9,9 +9,12 @@ import org.andengine.entity.scene.menu.animator.DirectMenuAnimator;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.HorizontalAlign;
 
 import android.util.Log;
 
@@ -32,6 +35,10 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 	private static ITextureRegion textBoxTextureReg = TextureManager.textBoxTextureReg;
 	private static Font comicSansFont = TextureManager.comicSansFont;
 
+	private static final float HINT_X = 0.5f;
+	private static final float HINT_Y = 0.9f;
+	
+	
 	private StorySelectScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
 			SceneSetter levelSceneSetter) {
@@ -85,20 +92,18 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 					false, storyText);
 			menuChildScene.addMenuItem(backItem);
 		}
-		// final IMenuItem continueItem = new AnimatedSpriteMenuItem(0, 550,
-		// 220,
-		// textBoxTextureReg, vbo, true, false, continueText);
-		// menuChildScene.addMenuItem(continueItem);
-		//
-		// TextMenuItem backText = new TextMenuItem(1, comicSansFont,
-		// "test", vbo);
-		// final IMenuItem backItem = new AnimatedSpriteMenuItem(1, 550, 220,
-		// textBoxTextureReg, vbo, true, false, backText);
+		
+		
 
 		menuChildScene.setMenuAnimator(new DirectMenuAnimator());
 		menuChildScene.buildAnimations();
 		menuChildScene.setBackgroundEnabled(false);
 		setChildScene(menuChildScene);
+		
+		
+		Text hint = new Text(0,0, comicSansFont, "Select a story to start!",new TextOptions(HorizontalAlign.CENTER), vbo);
+		hint.setPosition(HINT_X*GameActivity.CAMERA_WIDTH-HINT_X*hint.getWidth(), HINT_Y*GameActivity.CAMERA_HEIGHT);
+		attachChild(hint);
 	}
 
 }

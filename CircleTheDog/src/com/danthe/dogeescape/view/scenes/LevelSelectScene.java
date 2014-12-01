@@ -15,6 +15,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import android.util.Log;
 
 import com.danthe.dogeescape.GameActivity;
+import com.danthe.dogeescape.SceneManager.SceneType;
 import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.model.level.LevelManager;
@@ -32,9 +33,10 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 	private static final int ElementsPerRow = 4;
 
 	private static final float MenuTopOffset = 0.3f;
-	private static final float MenuSideOffset = 0.1f;
+	private static final float MenuSideOffset = 0.125f;
 
 	private static final float DistanceBetweenElements = 0.03f;
+	private static final int STORY_SELECT_ID = -666;
 
 	private static float ButtonSize() {
 		return (1f - 2 * MenuSideOffset - (ElementsPerRow - 1)
@@ -65,6 +67,12 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
+		if (pMenuItem.getID() == STORY_SELECT_ID) {
+			levelSceneSetter.setScene(SceneType.STORYSELECTSCENE);
+			return true;
+		}
+		
+		
 		int levelID = pMenuItem.getID();
 		if (LevelManager.getInstance().isOpenToPlay(levelID)) {
 			levelSceneSetter.setLevelScene(pMenuItem.getID());
@@ -128,6 +136,16 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 			menuChildScene.addMenuItem(menuItem);
 		}
+
+		//Add back to Story Button
+		menuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(STORY_SELECT_ID,
+				TextureManager.backToMenuTextureReg, vbom), ExpandedButtonSize,
+				ButtonSize());
+
+		moveToTopCenter(menuItem);
+		move(menuItem, 0, y+2);
+
+		menuChildScene.addMenuItem(menuItem);
 	}
 
 	/**
