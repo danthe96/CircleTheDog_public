@@ -37,6 +37,9 @@ public class Renderer extends JFrame implements ActionListener,
 	private static String lineSep;
 	BufferedImage tiles;
 	BufferedImage enemy;
+	
+	//Difficulty
+	float diff = 1.5f;
 
 	public Renderer() {
 		setSize(1500, 1000);
@@ -82,9 +85,33 @@ public class Renderer extends JFrame implements ActionListener,
 
 		} else
 			textArea.setText(getRandomLevel());
-
+			//turn90Degrees();
 		render();
 
+	}
+
+	private void turn90Degrees() {
+		String lineSep = textArea.getText().charAt(19)+"";
+		System.out.println(lineSep);
+		String text = textArea.getText();
+		String[] lines = text.split(lineSep);
+		String[][] grid = new String[lines.length][];
+		
+		for (int i=0; i<lines.length; i++) {
+			grid[i] = lines[i].split(",");
+		}
+		text="";
+		for (int i=0; i< grid[0].length; i++) {
+			for (int j=0; j< grid.length; j++) {
+				text+=grid[j][i];
+				if (j+1 == grid.length) text+=lineSep;
+				else text+=",";
+			}
+		}
+		
+		textArea.setText(text);
+		
+		
 	}
 
 	private void render() {
@@ -101,8 +128,8 @@ public class Renderer extends JFrame implements ActionListener,
 			String[] sizes = topline.split(",");
 
 			//get Level Dimensions
-			int width = Integer.parseInt(sizes[0]);
-			int height = Integer.parseInt(sizes[1]);
+			int height = Integer.parseInt(sizes[0]);
+			int width = Integer.parseInt(sizes[1]);
 
 			//draw the plots
 			String[] lines = level.split(lineSep+"|;");
@@ -179,12 +206,11 @@ public class Renderer extends JFrame implements ActionListener,
 
 		// Adjust this parameter to make levels more/less difficult by spawning
 		// more or less blocks
-		float diff = 1f;
 
-		int num_x = 10;
-		int num_y = 9;
+		int num_x = 9;
+		int num_y = 10;
 
-		String result = num_x + "," + num_y + lineSep;
+		String result = num_y + "," + num_x + lineSep;
 		Type type;
 		for (int y = 0; y < num_y; y++)
 			for (int x = 0; x < num_x; x++) {
