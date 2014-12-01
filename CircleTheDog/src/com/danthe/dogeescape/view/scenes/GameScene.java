@@ -6,8 +6,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
+import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
@@ -43,6 +45,7 @@ import com.danthe.dogeescape.view.TileView;
  */
 public class GameScene extends Scene {
 	private static final String TAG = "GAME_SCENE";
+	private static final float MENU_POSITION_Y = 0.82f;
 	private static GameScene instance = null;
 
 	private static ITextureRegion gameFieldTextureReg = TextureManager.gameFieldTextureReg;
@@ -61,9 +64,9 @@ public class GameScene extends Scene {
 	public static GameScene createScene(
 			AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
-			Context context, int levelID, SceneSetter sceneSetter) {
+			Context context, int levelID, SceneSetter sceneSetter, Camera camera) {
 		instance = new GameScene(assetManagerProvider,
-				vertexBufferObjectManager, context, levelID, sceneSetter);
+				vertexBufferObjectManager, context, levelID, sceneSetter, camera);
 		return instance;
 	}
 
@@ -73,7 +76,7 @@ public class GameScene extends Scene {
 
 	private GameScene(AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
-			Context context, int levelID, SceneSetter sceneSetter) {
+			Context context, int levelID, SceneSetter sceneSetter, Camera cam) {
 		Log.d(TAG, "CREATE SCENE");
 
 		Sprite background = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
@@ -149,9 +152,19 @@ public class GameScene extends Scene {
 		}
 
 		this.sortChildren();
-
+		
+		//initMenuButtons
+		initMenuButtons(vertexBufferObjectManager, cam);
+		
 		this.setBackgroundEnabled(true);
 
+	}
+
+	private void initMenuButtons(VertexBufferObjectManager vertexBufferObjectManager, Camera cam) {
+		MenuScene buttons = new GameSceneMenuButtons(vertexBufferObjectManager, cam);
+		buttons.setPosition(0, GameActivity.CAMERA_HEIGHT*MENU_POSITION_Y);
+		attachChild(buttons);
+		
 	}
 
 	// currently not in use, modular loading seems to be too slow.

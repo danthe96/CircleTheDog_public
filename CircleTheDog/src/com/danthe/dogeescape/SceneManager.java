@@ -111,7 +111,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 		case MAINGAME:
 			mainGameScene = GameScene.createScene(activity,
 					activity.getVertexBufferObjectManager(),
-					activity.getApplicationContext(), currentLevelID, this);
+					activity.getApplicationContext(), currentLevelID, this, camera);
 			return mainGameScene;
 		case SPLASHSCENE:
 			splashScene = SplashScene.createScene(camera, activity);

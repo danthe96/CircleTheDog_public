@@ -108,7 +108,7 @@ public class EndScene extends Scene {
 		}
 
 		Sprite backToMenuSprite = new Sprite(backgroundSprite.getX()
-				+ backgroundSprite.getWidth() / 2 - 64 - 128 - 32,
+				+ backgroundSprite.getWidth() / 2 - 64 - 128 - 32, //Danthy! wer soll denn sowas verstehen?!
 				backgroundSprite.getY() + 640, 128, 128, backToMenuTextureReg,
 				vbo) {
 
