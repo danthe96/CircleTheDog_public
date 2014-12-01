@@ -10,6 +10,14 @@ package com.danthe.dogeescape;
 public final class R {
     public static final class attr {
     }
+    public static final class bool {
+        /** Enable automatic activity tracking
+         */
+        public static final int ga_autoActivityTracking=0x7f040000;
+        /** Enable automatic exception tracking
+         */
+        public static final int ga_reportUncaughtExceptions=0x7f040001;
+    }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
 
@@ -18,45 +26,48 @@ public final class R {
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f030000;
-        public static final int activity_vertical_margin=0x7f030001;
+        public static final int activity_horizontal_margin=0x7f050000;
+        public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
         public static final int rect_ic_launcher2=0x7f020001;
     }
     public static final class string {
-        public static final int app_name=0x7f040000;
-        public static final int app_url=0x7f040015;
-        public static final int back=0x7f040004;
-        public static final int defeat=0x7f04000a;
-        public static final int defeat_info=0x7f04000c;
-        public static final int doge=0x7f040013;
-        public static final int dogecoin_url=0x7f040014;
-        public static final int highscore=0x7f04000e;
-        public static final int howto=0x7f040002;
-        public static final int level=0x7f040009;
-        public static final int next=0x7f040008;
-        public static final int no=0x7f04001d;
-        public static final int play=0x7f040001;
-        public static final int play_again=0x7f040007;
-        public static final int quit=0x7f040005;
-        public static final int rate_info=0x7f04001a;
-        public static final int rate_later=0x7f04001c;
-        public static final int rate_top=0x7f040019;
-        public static final int rate_yes=0x7f04001b;
-        public static final int resume=0x7f040006;
-        public static final int scores=0x7f040003;
-        public static final int share_app=0x7f040016;
-        public static final int share_text=0x7f040017;
-        public static final int share_via=0x7f040018;
-        public static final int shared_pref_level_status_string=0x7f04001e;
-        public static final int tutorial_1=0x7f04000f;
-        public static final int tutorial_2=0x7f040010;
-        public static final int tutorial_3=0x7f040011;
-        public static final int tutorial_4=0x7f040012;
-        public static final int victory=0x7f04000b;
-        public static final int victory_info=0x7f04000d;
+        public static final int app_name=0x7f030001;
+        public static final int app_url=0x7f030016;
+        public static final int back=0x7f030005;
+        public static final int defeat=0x7f03000b;
+        public static final int defeat_info=0x7f03000d;
+        public static final int doge=0x7f030014;
+        public static final int dogecoin_url=0x7f030015;
+        /** Replace placeholder ID with your tracking ID
+         */
+        public static final int ga_trackingId=0x7f030000;
+        public static final int highscore=0x7f03000f;
+        public static final int howto=0x7f030003;
+        public static final int level=0x7f03000a;
+        public static final int next=0x7f030009;
+        public static final int no=0x7f03001e;
+        public static final int play=0x7f030002;
+        public static final int play_again=0x7f030008;
+        public static final int quit=0x7f030006;
+        public static final int rate_info=0x7f03001b;
+        public static final int rate_later=0x7f03001d;
+        public static final int rate_top=0x7f03001a;
+        public static final int rate_yes=0x7f03001c;
+        public static final int resume=0x7f030007;
+        public static final int scores=0x7f030004;
+        public static final int share_app=0x7f030017;
+        public static final int share_text=0x7f030018;
+        public static final int share_via=0x7f030019;
+        public static final int shared_pref_level_status_string=0x7f03001f;
+        public static final int tutorial_1=0x7f030010;
+        public static final int tutorial_2=0x7f030011;
+        public static final int tutorial_3=0x7f030012;
+        public static final int tutorial_4=0x7f030013;
+        public static final int victory=0x7f03000c;
+        public static final int victory_info=0x7f03000e;
     }
     public static final class style {
         /** 
@@ -80,10 +91,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f050000;
+        public static final int AppBaseTheme=0x7f060000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f050001;
+        public static final int AppTheme=0x7f060001;
     }
 }

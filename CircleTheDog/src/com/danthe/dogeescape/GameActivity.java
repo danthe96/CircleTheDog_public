@@ -19,6 +19,8 @@ import com.danthe.dogeescape.SceneManager.SceneType;
 import com.danthe.dogeescape.interfaces.AssetManagerProvider;
 import com.danthe.dogeescape.interfaces.KeyListener;
 import com.danthe.dogeescape.model.level.LevelManager;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.GoogleAnalytics;
 
 public class GameActivity extends BaseGameActivity implements
 		AssetManagerProvider {
@@ -40,6 +42,24 @@ public class GameActivity extends BaseGameActivity implements
 		// Can be used as soon as there is another activity to start the game
 		// this.level = getIntent().getExtras().getInt("level", 0);
 
+		// Google Analytics
+
+	}
+
+	@Override
+	public void onStart() {
+		super.onStop();
+
+		// Google Analytics
+		EasyTracker.getInstance(getApplicationContext()).activityStart(this);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+
+		// Google Analytics
+		EasyTracker.getInstance(getApplicationContext()).activityStop(this);
 	}
 
 	@Override
@@ -59,7 +79,7 @@ public class GameActivity extends BaseGameActivity implements
 		sceneManager.loadResources(SceneType.SPLASHSCENE);
 
 		LevelManager.init(this);
-		
+
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
