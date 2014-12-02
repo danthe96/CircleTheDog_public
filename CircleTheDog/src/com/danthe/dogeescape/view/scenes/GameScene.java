@@ -44,8 +44,19 @@ import com.danthe.dogeescape.view.TileView;
  * 
  */
 public class GameScene extends Scene {
+
 	private static final String TAG = "GAME_SCENE";
+
+	private MenuScene pauseMenu;
+	private MenuButtonMenuScene menuButtons;
+
 	private static final float MENU_POSITION_Y = 0.82f;
+
+	private static final int GAMEOVERLAY_X = 22;
+	private static final int GAMEOVERLAY_Y = 332;
+	private static final int GAMEOVERLAY_WIDTH = 676;
+	private static final int GAMEOVERLAY_HEIGHT = 648;
+
 	private static GameScene instance = null;
 
 	private static ITextureRegion gameFieldTextureReg = TextureManager.gameFieldTextureReg;
@@ -59,14 +70,13 @@ public class GameScene extends Scene {
 	private List<TileView> tileViews = new LinkedList<TileView>();
 	private LinkedList<EnemySprite> enemySprites;
 
-	// ich nehme mal an das soll ein Singleton werden, da hab ich das jetzt
-	// fertiggemacht
 	public static GameScene createScene(
 			AssetManagerProvider assetManagerProvider,
 			VertexBufferObjectManager vertexBufferObjectManager,
 			Context context, int levelID, SceneSetter sceneSetter, Camera camera) {
 		instance = new GameScene(assetManagerProvider,
-				vertexBufferObjectManager, context, levelID, sceneSetter, camera);
+				vertexBufferObjectManager, context, levelID, sceneSetter,
+				camera);
 		return instance;
 	}
 
@@ -84,8 +94,9 @@ public class GameScene extends Scene {
 				vertexBufferObjectManager);
 		setBackground(new SpriteBackground(0, 0, 0, background));
 
-		Sprite backgroundSprite = new Sprite(22, 332, 676, 648,
-				gameFieldTextureReg, vertexBufferObjectManager);
+		Sprite backgroundSprite = new Sprite(GAMEOVERLAY_X, GAMEOVERLAY_Y,
+				GAMEOVERLAY_WIDTH, GAMEOVERLAY_HEIGHT, gameFieldTextureReg,
+				vertexBufferObjectManager);
 		attachChild(backgroundSprite);
 
 		try {
@@ -146,25 +157,32 @@ public class GameScene extends Scene {
 			this.attachChild(enemySprites.getLast());
 			enemySprites.getLast().setZIndex(2 * p.getPosition() + 4);
 
-			enemySprites.getLast().animate(new long[] { 200, 250 }, 0, 1, true);
+			enemySprites.getLast().animate(new long[] { 200, 250 }, 0, 1, true,
+					enemySprites.getLast());
 			p.setChangeListener(enemySprites.getLast());
 
 		}
 
 		this.sortChildren();
-		
-		//initMenuButtons
+
+		// initMenuButtons
 		initMenuButtons(vertexBufferObjectManager, cam);
-		
+
+		pauseMenu = PauseMenu.createScene(cam, context,
+				vertexBufferObjectManager);
+
 		this.setBackgroundEnabled(true);
 
 	}
 
-	private void initMenuButtons(VertexBufferObjectManager vertexBufferObjectManager, Camera cam) {
-		MenuScene buttons = new GameSceneMenuButtons(vertexBufferObjectManager, cam);
-		buttons.setPosition(0, GameActivity.CAMERA_HEIGHT*MENU_POSITION_Y);
-		attachChild(buttons);
-		
+	private void initMenuButtons(
+			VertexBufferObjectManager vertexBufferObjectManager, Camera cam) {
+		menuButtons = new MenuButtonMenuScene(cam, vertexBufferObjectManager,
+				GameActivity.CAMERA_WIDTH, currentLevel.levelID);
+		menuButtons.setPosition(
+				(GameActivity.CAMERA_WIDTH - menuButtons.getWidth()) / 2,
+				GameActivity.CAMERA_HEIGHT * MENU_POSITION_Y);
+		setChildScene(menuButtons);
 	}
 
 	// currently not in use, modular loading seems to be too slow.
@@ -218,6 +236,15 @@ public class GameScene extends Scene {
 
 	public int getGraphicalTileWidth() {
 		return graphicalTileWidth;
+	}
+
+	public void switchChildScene() {
+		if (this.getChildScene() == pauseMenu) {
+			this.setChildScene(menuButtons);
+		} else {
+			this.setChildScene(pauseMenu);
+		}
+
 	}
 
 }

@@ -3,9 +3,6 @@ package com.danthe.dogeescape;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
-import org.andengine.entity.scene.menu.item.IMenuItem;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,12 +10,10 @@ import android.view.KeyEvent;
 import com.danthe.dogeescape.interfaces.KeyListener;
 import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.model.level.LevelManager.Story;
-import com.danthe.dogeescape.GameActivity;
 import com.danthe.dogeescape.view.TileView;
 import com.danthe.dogeescape.view.scenes.EndScene;
 import com.danthe.dogeescape.view.scenes.GameScene;
 import com.danthe.dogeescape.view.scenes.LevelSelectScene;
-import com.danthe.dogeescape.view.scenes.PauseMenu;
 import com.danthe.dogeescape.view.scenes.SplashScene;
 import com.danthe.dogeescape.view.scenes.StorySelectScene;
 
@@ -34,19 +29,19 @@ import com.danthe.dogeescape.view.scenes.StorySelectScene;
  * @author Daniel
  * 
  */
-public class SceneManager implements IOnMenuItemClickListener, KeyListener,
-		SceneSetter {
+public class SceneManager implements KeyListener, SceneSetter {
 	private static final String TAG = "SCENE_MANAGER";
 
 	private static final Story DEFAULT_STORY = Story.THE_GARDEN;
+
+	private static SceneSetter sceneSetter;
 
 	private SceneType currentScene;
 	private GameActivity activity;
 	private Engine engine;
 	private Camera camera;
 
-	private Scene mainGameScene;
-	private MenuScene pauseScene;
+	private GameScene mainGameScene;
 	private Scene endScene;
 	private Scene levelSelectScene;
 	private Scene storySelectScene;
@@ -57,13 +52,15 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	private Story currentStory = DEFAULT_STORY;
 
 	public enum SceneType {
-		MAINGAME, SPLASHSCENE, PAUSEMENUSCENE, LEVELSELECTSCENE, ENDSCENE, STORYSELECTSCENE
+		MAINGAME, SPLASHSCENE, LEVELSELECTSCENE, ENDSCENE, STORYSELECTSCENE
 	}
 
 	public SceneManager(GameActivity activity, Engine engine, Camera camera) {
 		this.activity = activity;
 		this.engine = engine;
 		this.camera = camera;
+
+		sceneSetter = this;
 
 		TextureManager.init(activity);
 	}
@@ -111,16 +108,12 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 		case MAINGAME:
 			mainGameScene = GameScene.createScene(activity,
 					activity.getVertexBufferObjectManager(),
-					activity.getApplicationContext(), currentLevelID, this, camera);
+					activity.getApplicationContext(), currentLevelID, this,
+					camera);
 			return mainGameScene;
 		case SPLASHSCENE:
 			splashScene = SplashScene.createScene(camera, activity);
 			return splashScene;
-		case PAUSEMENUSCENE:
-			pauseScene = PauseMenu.createScene(camera,
-					activity.getApplicationContext(),
-					activity.getVertexBufferObjectManager());
-			return pauseScene;
 		case LEVELSELECTSCENE:
 			levelSelectScene = LevelSelectScene.createScene(
 					activity.getVertexBufferObjectManager(), camera, this,
@@ -128,7 +121,7 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 			return levelSelectScene;
 		case ENDSCENE:
 			endScene = EndScene.createScene(activity.getApplicationContext(),
-					activity.getVertexBufferObjectManager(), this,
+					camera, activity.getVertexBufferObjectManager(),
 					currentLevelID);
 			return endScene;
 		case STORYSELECTSCENE:
@@ -147,44 +140,23 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 	}
 
 	@Override
-	// Danthy wieso hast du diese Design-Entscheidung getroffen? Wieso soll der
-	// SceneManager Menüeingaben verwalten?
-	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
-			float pMenuItemLocalX, float pMenuItemLocalY) {
-		switch (pMenuItem.getID()) {
-		case 0:
-			mainGameScene.clearChildScene();
-			TileView.blockInput = false;
-			return true;
-		case 1:
-			setScene(SceneType.LEVELSELECTSCENE);
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN
 				&& currentScene != SceneType.STORYSELECTSCENE) {
 			if (currentScene == SceneType.MAINGAME) {
-				if (!mainGameScene.hasChildScene()) {
-					createScene(SceneType.PAUSEMENUSCENE);
-					mainGameScene.setChildScene(pauseScene);
-					pauseScene.setOnMenuItemClickListener(this);
-					TileView.blockInput = true;
-				} else {
-					mainGameScene.reset();
-					TileView.blockInput = false;
-				}
+					mainGameScene.switchChildScene();
+					TileView.blockInput = !TileView.blockInput;
 			} else {
 				this.setScene(SceneType.STORYSELECTSCENE);
 			}
 			return true;
 		}
 		return false;
+	}
+
+	public static SceneSetter getSceneSetter() {
+		return sceneSetter;
 	}
 
 	@Override
@@ -208,7 +180,6 @@ public class SceneManager implements IOnMenuItemClickListener, KeyListener,
 		Log.d(TAG, "Scene Attached: " + scene.toString());
 		switch (scene) {
 		case MAINGAME:
-			createScene(SceneType.PAUSEMENUSCENE);
 			engine.setScene(mainGameScene);
 			break;
 		case SPLASHSCENE:

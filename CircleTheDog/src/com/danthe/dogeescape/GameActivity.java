@@ -20,7 +20,6 @@ import com.danthe.dogeescape.interfaces.AssetManagerProvider;
 import com.danthe.dogeescape.interfaces.KeyListener;
 import com.danthe.dogeescape.model.level.LevelManager;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.GoogleAnalytics;
 
 public class GameActivity extends BaseGameActivity implements
 		AssetManagerProvider {

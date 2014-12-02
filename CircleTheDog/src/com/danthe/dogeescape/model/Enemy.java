@@ -67,10 +67,13 @@ public class Enemy {
 		}
 
 		if (unreachable >= borderTiles.size()) {
-			lost = true;
-			changeListener.onStateChanged();
+			if (!lost) {
+				lost = true;
+				changeListener.onStateChanged();
+			}
 			return;
-		}
+		} else
+			lost = false;
 
 		// Debug.e(Arrays.toString(previous) + " \n " + pos);
 		// Debug.e(Arrays.toString(distance));
@@ -142,7 +145,6 @@ public class Enemy {
 			if (borderTiles.contains(position))
 				won = true;
 			changeListener.onStateChanged();
-
 		}
 	}
 
@@ -152,6 +154,8 @@ public class Enemy {
 
 	public void recheckPath() {
 		if (!recalculate) {
+			if (path.size() == 0)
+				recalculate = true;
 			for (Integer i : path) {
 				if (tileList.get(i).isBlocked()
 						|| level.enemyOnTile(tileList.get(i))) {

@@ -12,7 +12,6 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.font.Font;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 
@@ -32,13 +31,11 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 
 	private SceneSetter sceneSetter;
 
-	private static ITextureRegion textBoxTextureReg = TextureManager.textBoxTextureReg;
 	private static Font comicSansFont = TextureManager.comicSansFont;
 
 	private static final float HINT_X = 0.5f;
 	private static final float HINT_Y = 0.9f;
-	
-	
+
 	private StorySelectScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
 			SceneSetter levelSceneSetter) {
@@ -88,21 +85,22 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 			TextMenuItem storyText = new TextMenuItem(1, comicSansFont,
 					story.getOutputString(), vbo);
 			final IMenuItem backItem = new AnimatedSpriteMenuItem(
-					story.ordinal(), 550, 220, TextureManager.storyTextures[story.ordinal()], vbo, true,
+					story.ordinal(), 550, 220,
+					TextureManager.storyTextures[story.ordinal()], vbo, true,
 					false, storyText);
 			menuChildScene.addMenuItem(backItem);
 		}
-		
-		
 
 		menuChildScene.setMenuAnimator(new DirectMenuAnimator());
 		menuChildScene.buildAnimations();
 		menuChildScene.setBackgroundEnabled(false);
 		setChildScene(menuChildScene);
-		
-		
-		Text hint = new Text(0,0, comicSansFont, "Select a story to start!",new TextOptions(HorizontalAlign.CENTER), vbo);
-		hint.setPosition(HINT_X*GameActivity.CAMERA_WIDTH-HINT_X*hint.getWidth(), HINT_Y*GameActivity.CAMERA_HEIGHT);
+
+		Text hint = new Text(0, 0, comicSansFont, "Select a story to start!",
+				new TextOptions(HorizontalAlign.CENTER), vbo);
+		hint.setPosition(
+				HINT_X * GameActivity.CAMERA_WIDTH - HINT_X * hint.getWidth(),
+				HINT_Y * GameActivity.CAMERA_HEIGHT);
 		attachChild(hint);
 	}
 

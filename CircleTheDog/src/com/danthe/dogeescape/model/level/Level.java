@@ -32,7 +32,7 @@ public class Level implements Runnable, HumanActivityListener {
 	/**
 	 * ID of the level to be loaded
 	 */
-	private final int levelID;
+	public final int levelID;
 	private final String levelDir;
 
 	/**
@@ -117,11 +117,7 @@ public class Level implements Runnable, HumanActivityListener {
 				//
 				break;
 			case STAKE:
-				// TODO Danthy erklär mir was das hier tut.
-				// Das deregistriert den Bereich im Touchlistener, weil wir
-				// Felder mit Hindernis nicht auf Berührung überprüfen müssen
-				// Kann auch weg, wenn es sein muss.
-				// gameScene.unregisterTouchArea(tile);
+				
 				break;
 			case ROCK:
 				//
