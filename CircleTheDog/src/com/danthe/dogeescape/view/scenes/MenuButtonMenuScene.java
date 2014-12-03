@@ -64,7 +64,7 @@ public class MenuButtonMenuScene extends MenuScene implements
 		addMenuItem(back);
 
 		IMenuItem retry = new ScaleMenuItemDecorator(new SpriteMenuItem(
-				BACK_ID, button_size, button_size,
+				RETRY_ID, button_size, button_size,
 				TextureManager.retryTextureReg, vbom), EXP_BUTTON_SIZE,
 				BUTTON_SIZE);
 		retry.setPosition(back.getX() + button_size + DISTANCE_BETWEEN_BUTTONS,

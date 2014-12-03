@@ -42,7 +42,7 @@ public class GameActivity extends BaseGameActivity implements
 		// this.level = getIntent().getExtras().getInt("level", 0);
 
 		// Google Analytics
-
+		Tracker.init(this);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class GameActivity extends BaseGameActivity implements
 		super.onStop();
 
 		// Google Analytics
-		EasyTracker.getInstance(getApplicationContext()).activityStart(this);
+		Tracker.getInstance().triggerOnStart();
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class GameActivity extends BaseGameActivity implements
 		super.onStop();
 
 		// Google Analytics
-		EasyTracker.getInstance(getApplicationContext()).activityStop(this);
+		Tracker.getInstance().triggerOnStop();
 	}
 
 	@Override
