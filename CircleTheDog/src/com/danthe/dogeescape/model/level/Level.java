@@ -117,7 +117,7 @@ public class Level implements Runnable, HumanActivityListener {
 				//
 				break;
 			case STAKE:
-				
+
 				break;
 			case ROCK:
 				//
@@ -270,6 +270,14 @@ public class Level implements Runnable, HumanActivityListener {
 	public boolean enemyOnTile(Tile tile) {
 		for (Enemy e : enemies) {
 			if (e.getPosition() == tileList.indexOf(tile))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean enemyOnTile(int position) {
+		for (Enemy e : enemies) {
+			if (e.getPosition() == position)
 				return true;
 		}
 		return false;

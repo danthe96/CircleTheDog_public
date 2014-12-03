@@ -45,6 +45,7 @@ public class Enemy {
 	private void calculateWay() {
 		doDijkstra(position, tileList);
 		LinkedList<Integer> lucrativeFields = new LinkedList<Integer>();
+		LinkedList<Integer> secondChoice = new LinkedList<Integer>();
 
 		for (int i : borderTiles) {
 			if (!tileList.get(i).isBlocked()) {
@@ -60,8 +61,13 @@ public class Enemy {
 				unreachable++;
 			else if (!tileList.get(i).isBlocked()
 					&& distance[i] <= distance[lucrativeFields.get(0)]) {
-				if (distance[i] <= distance[lucrativeFields.get(0)])
+				if (distance[i] < distance[lucrativeFields.get(0)]) {
+					secondChoice.clear();
+					if (distance[i] == distance[lucrativeFields.get(0)] - 1)
+						for (int l : lucrativeFields)
+							secondChoice.add(l);
 					lucrativeFields.clear();
+				}
 				lucrativeFields.add(i);
 			}
 		}
@@ -75,17 +81,25 @@ public class Enemy {
 		} else
 			lost = false;
 
-		// Debug.e(Arrays.toString(previous) + " \n " + pos);
-		// Debug.e(Arrays.toString(distance));
-
 		path.clear();
-		int v = lucrativeFields.get((int) (Math.random() * lucrativeFields
-				.size()));
-		while (v != position) {
-			path.add(0, v);
-			// Debug.e("path size " + path.size());
-			// Debug.e(Arrays.toString(previous) + " \n " + pos);
-			v = previous[v];
+
+		for (int s : secondChoice)
+			lucrativeFields.add(s);
+
+		for (int v : lucrativeFields) {
+			while (v != position) {
+				path.add(0, v);
+				if (previous[v] == position && level.enemyOnTile(v)) {
+					path.clear();
+					break;
+				}
+				v = previous[v];
+			}
+			if (!path.isEmpty()) {
+				if (secondChoice.contains(v))
+					recalculate = true;
+				break;
+			}
 		}
 
 		recalculate = false;
@@ -101,8 +115,7 @@ public class Enemy {
 				distance[i] = Integer.MAX_VALUE;
 				previous[i] = -1;
 			}
-			if (!tileList.get(i).isBlocked()
-					&& (i == index || !level.enemyOnTile(tileList.get(i))))
+			if (!tileList.get(i).isBlocked())
 				q.add(i);
 		}
 
@@ -140,7 +153,7 @@ public class Enemy {
 	}
 
 	public void move() {
-		if (!(won || lost)) {
+		if (!(won || lost) && !path.isEmpty()) {
 			this.position = path.poll();
 			if (borderTiles.contains(position))
 				won = true;
@@ -157,8 +170,8 @@ public class Enemy {
 			if (path.size() == 0)
 				recalculate = true;
 			for (Integer i : path) {
-				if (tileList.get(i).isBlocked()
-						|| level.enemyOnTile(tileList.get(i))) {
+				if (level.enemyOnTile(path.get(0))
+						|| tileList.get(i).isBlocked()) {
 					recalculate = true;
 					break;
 				}

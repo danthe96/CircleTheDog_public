@@ -50,12 +50,12 @@ public class GameScene extends Scene {
 	private MenuScene pauseMenu;
 	private MenuButtonMenuScene menuButtons;
 
-	private static final float MENU_POSITION_Y = 0.82f;
+	private static final float MENU_POSITION_Y = 0.85f;
 
-	private static final int GAMEOVERLAY_X = 22;
+	private static final int GAMEOVERLAY_X = 4;
 	private static final int GAMEOVERLAY_Y = 332;
-	private static final int GAMEOVERLAY_WIDTH = 676;
-	private static final int GAMEOVERLAY_HEIGHT = 648;
+	private static final int GAMEOVERLAY_WIDTH = 712;
+	private static final int GAMEOVERLAY_HEIGHT = 712;
 
 	private static GameScene instance = null;
 
@@ -105,8 +105,8 @@ public class GameScene extends Scene {
 			e.printStackTrace();
 		}
 
-		final int BORDER = 44;
-		graphicalTileWidth = (int) (backgroundSprite.getWidth() - 2 * BORDER)
+		final int BORDER = 32;
+		graphicalTileWidth = (int) (GAMEOVERLAY_WIDTH - 2 * BORDER)
 				/ Math.max(currentLevel.getTileYLength(),
 						currentLevel.getTileXLength());
 		int alternate = -graphicalTileWidth / 4;
