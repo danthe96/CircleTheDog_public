@@ -198,6 +198,8 @@ public class Level implements Runnable, HumanActivityListener {
 				e.recheckPath();
 				e.updateWay();
 				checkVictory();
+				if (e.hasLost() || e.hasWon())
+					continue;
 				e.move();
 				try {
 					Thread.sleep(50);
@@ -256,6 +258,11 @@ public class Level implements Runnable, HumanActivityListener {
 		if (lost || won) {
 			if (won) {
 				LevelManager.getInstance().setLevelSolved(levelID, turns);
+			}
+			try {
+				Thread.sleep(750);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 			sceneSetter.setScene(SceneType.ENDSCENE);
 			t.interrupt();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="app_name">Circle the Dog</string>
     <string name="play">PLAY</string>
     <string name="howto">HOW TO PLAY</string>
@@ -10,25 +10,39 @@
     <string name="resume">RESUME</string>
     <string name="play_again">PLAY AGAIN</string>
     <string name="next">NEXT</string>
-    <string name="defeat">You lost.</string>
+    <string name="level">Level %1$d</string>
     <string name="victory">You Win!</string>
     <string name="defeat_info">The Dog escaped after\n%1$d moves. Try again!</string>
-    <string name="victory_info">You needed %1$d moves\nto catch him.</string>
+    <string name="victory_info">You finished after %1$d\nmoves.</string>
     <string name="highscore">Your highscores</string>
     <string name="tutorial_1">The dog tries to\nescape from the screen...</string>
     <string name="tutorial_2">Block the tiles in his way...</string>
     <string name="tutorial_3">...until you catch him ...</string>
     <string name="tutorial_4">... and win.</string>
-    
     <string name="doge">Doge</string>
+    <string name="dogecoin_url">http://dogecoin.com/getting-started/</string>
+    <string name="app_url">https://play.google.com/store/apps/details?id=com.danthe.dogeescape</string>
     <string name="share_app">SHARE APP</string>
     <string name="share_text">Get the game \'Circle the Dog\'. Its great!</string>
     <string name="share_via">Share via</string>
-    
     <string name="rate_top">Do you like the game?</string>
     <string name="rate_info">Please support our game\nby rating it. It REALLY\nhelps us.</string>
     <string name="rate_yes">OF COURSE!</string>
     <string name="rate_later">REMIND ME LATER.</string>
     <string name="no">NO, NEVER.</string>
+    <string name="shared_pref_level_status_string">level_status_</string>
+    <string name="SM_0">\"Isn\'t it nice to be second\nsometimes?\"</string>
+    <string name="SM_1">\"How are you any different\nfrom a rat pulling a lever?\"</string>
+    <string name="SM_2">\"Hold my beer while I try\nthat again.\"</string>
+    <string name="SM_3">\"Hey, there is probably\nsomething YOU are good\nat, too.\"</string>
+    <string name="SM_4">\"You didn\'t lose. You did\nthe right thing. Isn\'t winning\nlike… animal cruelty?\"</string>
+    <string name="SM_5">\"After all what we\'ve been\nthrough, we should marry\nand settle down. Definitely.\"</string>
+    <string name="SM_6">\"An Earthworm learns after\n100 tries.\"</string>
+    <string name="SM_7">\"History is written by the\nvictorious.\"</string>
+    <string name="SM_8">\"The difference between a\nwinner and a loser? The\nwinner has lost more often.\"</string>
+    <string name="SM_9">\"Maybe this level is\nunsolvable, and the\ndevelopers are laughing\ntheir asses of?\"</string>
+    <string name="SM_10">\"Seek help. Tell your\nfriends about this app.\"</string>
+    <string name="SM_11">\"The cake is a lie.\"</string>
+    <string name="SM_12">\"Don\'t try that.\nI won\'t feel pity for you.\nI\'m a computer program.\"</string>
 
 </resources>

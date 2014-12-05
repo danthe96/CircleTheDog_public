@@ -9,7 +9,6 @@
     <string name="resume">FORTSETZEN</string>
     <string name="play_again">NOCHMAL SPIELEN</string>
     <string name="next">WEITER</string>
-    <string name="defeat">Niederlage.</string>
     <string name="victory">Sieg!</string>
     <string name="defeat_info">Du hast verloren. Der\nHund ist nach %1$d\nZügen entkommen.</string>
     <string name="victory_info">Du hast gewonnen! Du\nhast %1$d Züge gebraucht,\num ihn zu fangen.</string>
@@ -26,5 +25,6 @@
     <string name="rate_yes">NA KLAR!</string>
     <string name="rate_later">SPÄTER VIELLEICHT.</string>
     <string name="no">NEIN, NIEMALS!</string>
+    
 
 </resources>

@@ -34,53 +34,52 @@ public final class R {
         public static final int rect_ic_launcher2=0x7f020001;
     }
     public static final class string {
-        public static final int SM_0=0x7f030020;
-        public static final int SM_1=0x7f030021;
-        public static final int SM_10=0x7f03002a;
-        public static final int SM_11=0x7f03002b;
-        public static final int SM_12=0x7f03002c;
-        public static final int SM_2=0x7f030022;
-        public static final int SM_3=0x7f030023;
-        public static final int SM_4=0x7f030024;
-        public static final int SM_5=0x7f030025;
-        public static final int SM_6=0x7f030026;
-        public static final int SM_7=0x7f030027;
-        public static final int SM_8=0x7f030028;
-        public static final int SM_9=0x7f030029;
+        public static final int SM_0=0x7f03001f;
+        public static final int SM_1=0x7f030020;
+        public static final int SM_10=0x7f030029;
+        public static final int SM_11=0x7f03002a;
+        public static final int SM_12=0x7f03002b;
+        public static final int SM_2=0x7f030021;
+        public static final int SM_3=0x7f030022;
+        public static final int SM_4=0x7f030023;
+        public static final int SM_5=0x7f030024;
+        public static final int SM_6=0x7f030025;
+        public static final int SM_7=0x7f030026;
+        public static final int SM_8=0x7f030027;
+        public static final int SM_9=0x7f030028;
         public static final int app_name=0x7f030001;
-        public static final int app_url=0x7f030016;
+        public static final int app_url=0x7f030015;
         public static final int back=0x7f030005;
-        public static final int defeat=0x7f03000b;
-        public static final int defeat_info=0x7f03000d;
-        public static final int doge=0x7f030014;
-        public static final int dogecoin_url=0x7f030015;
+        public static final int defeat_info=0x7f03000c;
+        public static final int doge=0x7f030013;
+        public static final int dogecoin_url=0x7f030014;
         /** Replace placeholder ID with your tracking ID
          */
         public static final int ga_trackingId=0x7f030000;
-        public static final int highscore=0x7f03000f;
+        public static final int highscore=0x7f03000e;
         public static final int howto=0x7f030003;
         public static final int level=0x7f03000a;
         public static final int next=0x7f030009;
-        public static final int no=0x7f03001e;
+        public static final int no=0x7f03001d;
         public static final int play=0x7f030002;
         public static final int play_again=0x7f030008;
         public static final int quit=0x7f030006;
-        public static final int rate_info=0x7f03001b;
-        public static final int rate_later=0x7f03001d;
-        public static final int rate_top=0x7f03001a;
-        public static final int rate_yes=0x7f03001c;
+        public static final int rate_info=0x7f03001a;
+        public static final int rate_later=0x7f03001c;
+        public static final int rate_top=0x7f030019;
+        public static final int rate_yes=0x7f03001b;
         public static final int resume=0x7f030007;
         public static final int scores=0x7f030004;
-        public static final int share_app=0x7f030017;
-        public static final int share_text=0x7f030018;
-        public static final int share_via=0x7f030019;
-        public static final int shared_pref_level_status_string=0x7f03001f;
-        public static final int tutorial_1=0x7f030010;
-        public static final int tutorial_2=0x7f030011;
-        public static final int tutorial_3=0x7f030012;
-        public static final int tutorial_4=0x7f030013;
-        public static final int victory=0x7f03000c;
-        public static final int victory_info=0x7f03000e;
+        public static final int share_app=0x7f030016;
+        public static final int share_text=0x7f030017;
+        public static final int share_via=0x7f030018;
+        public static final int shared_pref_level_status_string=0x7f03001e;
+        public static final int tutorial_1=0x7f03000f;
+        public static final int tutorial_2=0x7f030010;
+        public static final int tutorial_3=0x7f030011;
+        public static final int tutorial_4=0x7f030012;
+        public static final int victory=0x7f03000b;
+        public static final int victory_info=0x7f03000d;
     }
     public static final class style {
         /** 

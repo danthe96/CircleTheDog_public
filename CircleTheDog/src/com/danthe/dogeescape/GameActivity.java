@@ -48,7 +48,7 @@ public class GameActivity extends BaseGameActivity implements
 
 	@Override
 	public void onStart() {
-		super.onStop();
+		super.onStart();
 
 		// Google Analytics
 		Tracker.getInstance().triggerOnStart();

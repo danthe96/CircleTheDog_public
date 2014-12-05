@@ -43,7 +43,9 @@ public class TileView extends TiledSprite implements ChangeListener {
 		switch (tile.getTileType()) {
 		case EMPTY:
 			this.setCurrentTileIndex(0);
-			this.setPosition((float) (defaultX*(1+(Math.random()-0.5f)/100f)), (float) (defaultY*(1+(Math.random()-0.5f)/100f)));
+			this.setPosition(
+					(float) (defaultX * (1 + (Math.random() - 0.5f) / 100f)),
+					(float) (defaultY * (1 + (Math.random() - 0.5f) / 100f)));
 			this.setWidth(defaultWidth);
 			this.setHeight(defaultHeight);
 			break;
@@ -69,11 +71,13 @@ public class TileView extends TiledSprite implements ChangeListener {
 			this.setHeight(1.75f * defaultHeight);
 			break;
 		case ICE:
-			this.setCurrentTileIndex(7 - tile.getCountdown());
-			this.setPosition(defaultX - defaultWidth * .2f, defaultY
-					- defaultHeight / 2f);
-			this.setWidth(1.4f * defaultWidth);
-			this.setHeight(1.4f * defaultHeight);
+			if (tile.getCountdown() > 0) {
+				this.setCurrentTileIndex(7 - tile.getCountdown());
+				this.setPosition(defaultX - defaultWidth * .2f, defaultY
+						- defaultHeight / 2f);
+				this.setWidth(1.4f * defaultWidth);
+				this.setHeight(1.4f * defaultHeight);
+			}
 			break;
 		case LAVA:
 			this.setCurrentTileIndex(7);

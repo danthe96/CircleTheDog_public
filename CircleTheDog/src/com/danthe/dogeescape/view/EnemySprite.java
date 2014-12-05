@@ -55,16 +55,8 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 
 		if (enemy.hasWon()) {
 			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
-			try {
-				Thread.sleep(750);
-			} catch (InterruptedException e) {
-			}
 		} else if (enemy.hasLost()) {
 			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
-			try {
-				Thread.sleep(750);
-			} catch (InterruptedException e) {
-			}
 		}
 
 	}

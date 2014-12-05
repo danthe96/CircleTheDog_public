@@ -21,8 +21,8 @@ import com.danthe.dogeescape.model.level.Level;
 
 public class EndScene extends Scene {
 	private static final int TEXTBOX_WIDTH = 578;
-	private static final int TEXTBOX_HEIGHT = 310;
-	private static final int TEXTBOX_Y = 192;
+	private static final int TEXTBOX_HEIGHT = 390;
+	private static final int TEXTBOX_Y = 184;
 	private static final int TEXTBOX_X = 64;
 	private static final int MENUSCENE_Y = 600;
 	private static final String TAG = "END_SCENE";
@@ -66,6 +66,8 @@ public class EndScene extends Scene {
 
 		if (Level.won) {
 
+			final int SPACE_IN_BETWEEN = 20;
+
 			Text doge_victory = new Text(0, 0, TextureManager.defaultFont,
 					context.getText(R.string.victory), vbo);
 			doge_victory.setColor(Color.BLACK);
@@ -83,31 +85,32 @@ public class EndScene extends Scene {
 			float centeredY = backgroundSprite.getY()
 					+ TEXTBOX_Y
 					+ (TEXTBOX_HEIGHT - doge_victory.getHeight()
-							- victory_info.getHeight() - 20) / 2;
+							- victory_info.getHeight() - SPACE_IN_BETWEEN) / 2;
 			doge_victory.setY(centeredY);
-			victory_info.setY(centeredY + doge_victory.getHeight() + 20);
+			victory_info.setY(centeredY + doge_victory.getHeight()
+					+ SPACE_IN_BETWEEN);
 
 		} else if (Level.lost) {
 
-			Text doge_defeat = new Text(0, 0, TextureManager.defaultFont,
-					context.getText(R.string.defeat), vbo);
-			doge_defeat.setColor(Color.BLACK);
-			doge_defeat.setX(TEXTBOX_X
-					+ (TEXTBOX_WIDTH - doge_defeat.getWidth()) / 2);
-			attachChild(doge_defeat);
-
-			Text supportiveText = new Text(0, 0, TextureManager.defaultFont,
-					SupportiveMessageManager.getInstance().getSupportiveMessage()[0],
-					new TextOptions(HorizontalAlign.CENTER), vbo);
+			Text supportiveText = new Text(0, 0, TextureManager.comicSansFont,
+					SupportiveMessageManager.getInstance()
+							.getSupportiveMessage()[0], new TextOptions(
+							HorizontalAlign.CENTER), vbo);
 			supportiveText.setColor(Color.BLACK);
 			supportiveText.setX(TEXTBOX_X
 					+ (TEXTBOX_WIDTH - supportiveText.getWidth()) / 2);
 			attachChild(supportiveText);
 
-			
-			supportiveText.setY(TEXTBOX_Y+TEXTBOX_HEIGHT*1.08f);
-			doge_defeat.setY((TEXTBOX_Y+MENUSCENE_Y)*1.11f);
-			
+			Text doge_defeat = new Text(0, 0, TextureManager.defaultFont,
+					context.getString(R.string.defeat_info, Level.turns), vbo);
+			doge_defeat.setColor(Color.BLACK);
+			doge_defeat.setX(TEXTBOX_X
+					+ (TEXTBOX_WIDTH - doge_defeat.getWidth()) / 2);
+			attachChild(doge_defeat);
+
+			supportiveText.setY(backgroundSprite.getY() + TEXTBOX_Y);
+			doge_defeat.setY(backgroundSprite.getY() + TEXTBOX_Y
+					+ TEXTBOX_HEIGHT - doge_defeat.getHeight());
 
 		}
 
