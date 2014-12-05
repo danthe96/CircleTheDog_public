@@ -4,8 +4,10 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
@@ -13,6 +15,7 @@ import android.util.Log;
 
 import com.danthe.dogeescape.GameActivity;
 import com.danthe.dogeescape.R;
+import com.danthe.dogeescape.SupportiveMessageManager;
 import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.model.level.Level;
 
@@ -93,19 +96,18 @@ public class EndScene extends Scene {
 					+ (TEXTBOX_WIDTH - doge_defeat.getWidth()) / 2);
 			attachChild(doge_defeat);
 
-			Text defeat_info = new Text(0, 0, TextureManager.defaultFont,
-					context.getString(R.string.defeat_info, Level.turns), vbo);
-			defeat_info.setColor(Color.BLACK);
-			defeat_info.setX(TEXTBOX_X
-					+ (TEXTBOX_WIDTH - defeat_info.getWidth()) / 2);
-			attachChild(defeat_info);
+			Text supportiveText = new Text(0, 0, TextureManager.defaultFont,
+					SupportiveMessageManager.getInstance().getSupportiveMessage()[0],
+					new TextOptions(HorizontalAlign.CENTER), vbo);
+			supportiveText.setColor(Color.BLACK);
+			supportiveText.setX(TEXTBOX_X
+					+ (TEXTBOX_WIDTH - supportiveText.getWidth()) / 2);
+			attachChild(supportiveText);
 
-			float centeredY = backgroundSprite.getY()
-					+ TEXTBOX_Y
-					+ (TEXTBOX_HEIGHT - doge_defeat.getHeight()
-							- defeat_info.getHeight() - 20) / 2;
-			doge_defeat.setY(centeredY);
-			defeat_info.setY(centeredY + doge_defeat.getHeight() + 20);
+			
+			supportiveText.setY(TEXTBOX_Y+TEXTBOX_HEIGHT*1.08f);
+			doge_defeat.setY((TEXTBOX_Y+MENUSCENE_Y)*1.11f);
+			
 
 		}
 

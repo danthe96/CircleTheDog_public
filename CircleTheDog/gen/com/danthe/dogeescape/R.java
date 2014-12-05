@@ -34,6 +34,19 @@ public final class R {
         public static final int rect_ic_launcher2=0x7f020001;
     }
     public static final class string {
+        public static final int SM_0=0x7f030020;
+        public static final int SM_1=0x7f030021;
+        public static final int SM_10=0x7f03002a;
+        public static final int SM_11=0x7f03002b;
+        public static final int SM_12=0x7f03002c;
+        public static final int SM_2=0x7f030022;
+        public static final int SM_3=0x7f030023;
+        public static final int SM_4=0x7f030024;
+        public static final int SM_5=0x7f030025;
+        public static final int SM_6=0x7f030026;
+        public static final int SM_7=0x7f030027;
+        public static final int SM_8=0x7f030028;
+        public static final int SM_9=0x7f030029;
         public static final int app_name=0x7f030001;
         public static final int app_url=0x7f030016;
         public static final int back=0x7f030005;

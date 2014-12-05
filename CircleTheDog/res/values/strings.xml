@@ -35,5 +35,19 @@
     <string name="no">NO, NEVER.</string>
     <string name="shared_pref_level_status_string">level_status_</string>
     
+    <string name="SM_0">‘Isn’t it nice to be second\nsometimes?’</string>
+    <string name="SM_1">‘How are you any different\nfrom a rat pulling a lever?’</string>
+    <string name="SM_2">-‘Hold my beer while I try\nthat again’</string>
+    <string name="SM_3">‘Hey, there is probably\nsomething YOU are good\nat, too’</string>
+    <string name="SM_4">‘You didn’t lose. You did\nthe right thing. Isn’t winning\nlike… animal cruelty?’</string>
+    <string name="SM_5">‘After all what we’ve been\nthrough, we should marry and\nsettle down. Definitely.’</string>
+    <string name="SM_6">‘An Earthworm learns after\n100 tries.’</string>
+    <string name="SM_7">‘History is written by the\nvictorious.’</string>
+    <string name="SM_8">‘The difference between a\nwinner and a looser is that the\nwinner has lost more often.’</string>
+    <string name="SM_9">‘Maybe this level is unsolvable\nand the developers are laughing\ntheir asses of?’</string>
+    <string name="SM_10">‘Seek help.\nTell your friends about this app.’</string>
+    <string name="SM_11">‘The cake is a lie.’</string>
+    <string name="SM_12">‘Don’t try that.\nI won’t feel pity for you.\nI’m a computer program.’</string>
+    
 
 </resources>

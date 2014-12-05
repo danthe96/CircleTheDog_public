@@ -17,11 +17,12 @@ import android.view.KeyEvent;
 
 import com.danthe.dogeescape.SceneManager.SceneType;
 import com.danthe.dogeescape.interfaces.AssetManagerProvider;
+import com.danthe.dogeescape.interfaces.IResourceProvider;
 import com.danthe.dogeescape.interfaces.KeyListener;
 import com.danthe.dogeescape.model.level.LevelManager;
 
 public class GameActivity extends BaseGameActivity implements
-		AssetManagerProvider {
+		AssetManagerProvider, IResourceProvider {
 	private static final String TAG = "GAME_ACTIVITY";
 	private static final SceneType DEFAULT_SCENE = SceneType.STORYSELECTSCENE;
 
@@ -42,6 +43,7 @@ public class GameActivity extends BaseGameActivity implements
 
 		// Google Analytics
 		Tracker.init(this);
+		SupportiveMessageManager.init(this);
 	}
 
 	@Override
