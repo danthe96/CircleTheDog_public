@@ -12,7 +12,8 @@ public class LevelManager {
 	private static LevelManager levelManager;
 	public static final int numLevels = 32;
 	public static final int numLevelsPerStory = 16;
-	private static final Status DEFAULT_STATUS = Status.LOCKED;
+	private static final int numOpenLevelsPerStory = 3;
+	// private static final Status DEFAULT_STATUS = Status.LOCKED;
 	private Activity activity;
 
 	/**
@@ -41,6 +42,15 @@ public class LevelManager {
 		public CharSequence getOutputString() {
 			return storylines[ordinal()];
 		}
+
+		/**
+		 * String to be used in SharedPreferences
+		 * 
+		 * @return
+		 */
+		public String getSaveString() {
+			return "NUM_SOLVED_LEVELS_" + toString();
+		}
 	}
 
 	/**
@@ -55,11 +65,6 @@ public class LevelManager {
 	private LevelManager(Activity activity) {
 		this.activity = activity;
 
-		for (Story s : Story.values()) {
-			if (getStatus(s.ordinal() * numLevelsPerStory) == Status.LOCKED) {
-				setStatus(s.ordinal() * numLevelsPerStory, Status.PLAYABLE);
-			}
-		}
 	}
 
 	public static LevelManager getInstance() {
@@ -73,7 +78,9 @@ public class LevelManager {
 	}
 
 	/**
-	 * 
+	 * gets the Status of the game. if the Status of a level is not set yet
+	 * (occurs when it was solved), the DefaultStatus is returned, which is
+	 * determined by the number of solved levels.
 	 * 
 	 * @param LevelID
 	 * @return
@@ -81,12 +88,25 @@ public class LevelManager {
 	public Status getStatus(int LevelID) {
 		SharedPreferences sharedPref = activity
 				.getPreferences(Context.MODE_PRIVATE);
-		Status defaultValue = DEFAULT_STATUS;
+		Status defaultValue = getDefaultStatus(LevelID);
 		Status result = Status.values()[sharedPref.getInt(
 				activity.getString(R.string.shared_pref_level_status_string)
 						+ LevelID, defaultValue.ordinal())];
 
 		return result;
+	}
+
+	private Status getDefaultStatus(int levelID) {
+		Story story = getStoryForLevelID(levelID);
+		SharedPreferences sharedPref = activity
+				.getPreferences(Context.MODE_PRIVATE);
+
+		if (sharedPref.getInt(story.getSaveString(), 0) + numOpenLevelsPerStory > levelID
+				% numLevelsPerStory) {
+			return Status.PLAYABLE;
+		} else
+			return Status.LOCKED;
+
 	}
 
 	/**
@@ -103,11 +123,13 @@ public class LevelManager {
 		editor.putInt(
 				activity.getString(R.string.shared_pref_level_status_string)
 						+ LevelID, status.ordinal());
+
 		editor.commit();
 	}
 
 	/**
-	 * This method flags the level as solved and the next level as playable
+	 * This method flags the level as solved and increases the amount of solved
+	 * levels, what results in the unlocking of a new level
 	 * 
 	 * @param LevelID
 	 */
@@ -120,12 +142,27 @@ public class LevelManager {
 			setStatus(LevelID, Status.SOLVED1STAR);
 
 		// open up the next level
-		if (LevelID < numLevels - 1 && getStatus(LevelID + 1) == Status.LOCKED)
-			setStatus(LevelID + 1, Status.PLAYABLE);
+		increaseNumSolvedLevels(getStoryForLevelID(LevelID));
+	}
+
+	private void increaseNumSolvedLevels(Story story) {
+		SharedPreferences sharedPref = activity
+				.getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+
+		editor.putInt(story.getSaveString(),
+				sharedPref.getInt(story.getSaveString(), 0) + 1);
+
+		editor.commit();
+
 	}
 
 	public boolean isOpenToPlay(int LevelID) {
 		Status status = getStatus(LevelID);
 		return (status != Status.LOCKED);
+	}
+
+	private Story getStoryForLevelID(int levelID) {
+		return Story.values()[levelID / numLevelsPerStory];
 	}
 }
