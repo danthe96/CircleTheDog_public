@@ -59,9 +59,8 @@ public class GameScene extends Scene {
 
 	private static GameScene instance = null;
 
-	private static ITextureRegion gameFieldTextureReg = TextureManager.gameFieldTextureReg;
-	private static ITiledTextureRegion enemyTextureReg = TextureManager.enemyTextureReg,
-			tileTextureReg = TextureManager.tileTextureReg;
+	private static ITextureRegion gameFieldTextureReg;
+	private static ITiledTextureRegion enemyTextureReg, tileTextureReg;
 
 	private Level currentLevel;
 
@@ -88,6 +87,10 @@ public class GameScene extends Scene {
 			VertexBufferObjectManager vertexBufferObjectManager,
 			Context context, int levelID, SceneSetter sceneSetter, Camera cam) {
 		Log.d(TAG, "CREATE SCENE");
+		
+		gameFieldTextureReg = TextureManager.gameFieldTextureReg;
+		enemyTextureReg = TextureManager.enemyTextureReg;
+		tileTextureReg = TextureManager.tileTextureReg;
 
 		Sprite background = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
 				GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,

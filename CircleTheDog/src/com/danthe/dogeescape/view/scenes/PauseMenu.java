@@ -6,8 +6,6 @@ import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.animator.DirectMenuAnimator;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.content.Context;
@@ -24,9 +22,6 @@ import com.danthe.dogeescape.view.TileView;
 public class PauseMenu extends MenuScene implements IOnMenuItemClickListener {
 	private static final String TAG = "PAUSE_MENU";
 	private static PauseMenu instance = null;
-
-	private static ITextureRegion textBoxTextureReg = TextureManager.textBoxTextureReg;
-	private static Font comicSansFont = TextureManager.comicSansFont;
 
 	private final SceneSetter sceneSetter;
 	private GameScene parent;
@@ -46,16 +41,19 @@ public class PauseMenu extends MenuScene implements IOnMenuItemClickListener {
 
 		sceneSetter = SceneManager.getSceneSetter();
 
-		TextMenuItem continueText = new TextMenuItem(0, comicSansFont,
-				context.getText(R.string.resume), vbo);
+		TextMenuItem continueText = new TextMenuItem(0,
+				TextureManager.comicSansFont, context.getText(R.string.resume),
+				vbo);
 		final IMenuItem continueItem = new AnimatedSpriteMenuItem(0, 550, 220,
-				textBoxTextureReg, vbo, true, false, continueText);
+				TextureManager.textBoxTextureReg, vbo, true, false,
+				continueText);
 		this.addMenuItem(continueItem);
 
-		TextMenuItem backText = new TextMenuItem(1, comicSansFont,
-				context.getText(R.string.back), vbo);
+		TextMenuItem backText = new TextMenuItem(1,
+				TextureManager.comicSansFont, context.getText(R.string.back),
+				vbo);
 		final IMenuItem backItem = new AnimatedSpriteMenuItem(1, 550, 220,
-				textBoxTextureReg, vbo, true, false, backText);
+				TextureManager.textBoxTextureReg, vbo, true, false, backText);
 		this.addMenuItem(backItem);
 
 		this.setMenuAnimator(new DirectMenuAnimator());

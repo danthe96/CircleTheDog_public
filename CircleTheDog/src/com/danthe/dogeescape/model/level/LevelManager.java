@@ -85,13 +85,13 @@ public class LevelManager {
 	 * @param LevelID
 	 * @return
 	 */
-	public Status getStatus(int LevelID) {
+	public Status getStatus(int levelID) {
 		SharedPreferences sharedPref = activity
 				.getPreferences(Context.MODE_PRIVATE);
-		Status defaultValue = getDefaultStatus(LevelID);
+		Status defaultValue = getDefaultStatus(levelID);
 		Status result = Status.values()[sharedPref.getInt(
 				activity.getString(R.string.shared_pref_level_status_string)
-						+ LevelID, defaultValue.ordinal())];
+						+ levelID, defaultValue.ordinal())];
 
 		return result;
 	}
@@ -117,12 +117,12 @@ public class LevelManager {
 	 * @param LevelID
 	 * @param status
 	 */
-	private void setStatus(int LevelID, Status status) {
+	private void setStatus(int levelID, Status status) {
 		SharedPreferences.Editor editor = activity.getPreferences(
 				Context.MODE_PRIVATE).edit();
 		editor.putInt(
 				activity.getString(R.string.shared_pref_level_status_string)
-						+ LevelID, status.ordinal());
+						+ levelID, status.ordinal());
 
 		editor.commit();
 	}
@@ -133,16 +133,18 @@ public class LevelManager {
 	 * 
 	 * @param LevelID
 	 */
-	public void setLevelSolved(int LevelID, int turns) {
-		if (turns <= 5)
-			setStatus(LevelID, Status.SOLVED3STAR);
-		else if (turns <= 10)
-			setStatus(LevelID, Status.SOLVED2STAR);
-		else
-			setStatus(LevelID, Status.SOLVED1STAR);
+	public void setLevelSolved(int levelID, int turns) {
+		// open up the next level if current level hasn't been solved before
+		if (getStatus(levelID) == Status.PLAYABLE)
+			increaseNumSolvedLevels(getStoryForLevelID(levelID));
 
-		// open up the next level
-		increaseNumSolvedLevels(getStoryForLevelID(LevelID));
+		if (turns <= 5)
+			setStatus(levelID, Status.SOLVED3STAR);
+		else if (turns <= 10)
+			setStatus(levelID, Status.SOLVED2STAR);
+		else
+			setStatus(levelID, Status.SOLVED1STAR);
+
 	}
 
 	private void increaseNumSolvedLevels(Story story) {
@@ -150,16 +152,17 @@ public class LevelManager {
 				.getPreferences(Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 
-		editor.putInt(story.getSaveString(),
-				sharedPref.getInt(story.getSaveString(), 0) + 1);
+		int solvedLevels = sharedPref.getInt(story.getSaveString(), 0);
+
+		if (solvedLevels < numLevelsPerStory)
+			editor.putInt(story.getSaveString(), solvedLevels + 1);
 
 		editor.commit();
 
 	}
 
-	public boolean isOpenToPlay(int LevelID) {
-		Status status = getStatus(LevelID);
-		return (status != Status.LOCKED);
+	public boolean isOpenToPlay(int levelID) {
+		return getStatus(levelID) != Status.LOCKED;
 	}
 
 	private Story getStoryForLevelID(int levelID) {

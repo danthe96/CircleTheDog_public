@@ -19,7 +19,7 @@ import org.andengine.ui.activity.BaseGameActivity;
  */
 public class SplashScene extends Scene {
 
-	private static SplashScene instance = null;
+	// private static SplashScene instance = null;
 
 	private static BitmapTextureAtlas splashTextureAtlas;
 	private static TextureRegion splashTextureRegion;
@@ -37,10 +37,7 @@ public class SplashScene extends Scene {
 
 	public static SplashScene createScene(Camera camera,
 			BaseGameActivity activity) {
-		if(instance == null)
-			instance = new SplashScene(camera, activity);
-		
-		return instance;
+		return new SplashScene(camera, activity);
 	}
 
 	SplashScene(Camera camera, BaseGameActivity activity) {

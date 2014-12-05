@@ -36,17 +36,17 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 		this.setZIndex(2 * enemy.getPosition() + 4);
 		parent.sortChildren();
 
-		float xStep = (tileViews.get(enemy.getPosition()).getX() - mX) / 10f;
-		float yStep = (tileViews.get(enemy.getPosition()).getY() - 9
-				* parent.getGraphicalTileWidth() / 8 - mY) / 10f;
+		double xStep = (tileViews.get(enemy.getPosition()).getX() - mX) / 25d;
+		double yStep = (tileViews.get(enemy.getPosition()).getY() - 9
+				* parent.getGraphicalTileWidth() / 8 - mY) / 25d;
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 25; i++) {
 
-			mX += xStep;
-			mY += yStep;
+			mX += (1.5-i/24d)*xStep;
+			mY += (1.5-i/24d)*yStep;
 
 			try {
-				Thread.sleep(10);
+				Thread.sleep(8);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

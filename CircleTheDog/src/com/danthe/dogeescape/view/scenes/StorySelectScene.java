@@ -11,7 +11,6 @@ import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
-import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 
@@ -30,8 +29,6 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 	private MenuScene menuChildScene;
 
 	private SceneSetter sceneSetter;
-
-	private static Font comicSansFont = TextureManager.comicSansFont;
 
 	private static final float HINT_X = 0.5f;
 	private static final float HINT_Y = 0.9f;
@@ -82,8 +79,8 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 		Log.d(TAG, "CREATE SCENE");
 
 		for (Story story : LevelManager.Story.values()) {
-			TextMenuItem storyText = new TextMenuItem(1, comicSansFont,
-					story.getOutputString(), vbo);
+			TextMenuItem storyText = new TextMenuItem(1,
+					TextureManager.comicSansFont, story.getOutputString(), vbo);
 			final IMenuItem backItem = new AnimatedSpriteMenuItem(
 					story.ordinal(), 550, 220,
 					TextureManager.storyTextures[story.ordinal()], vbo, true,
@@ -96,8 +93,9 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 		menuChildScene.setBackgroundEnabled(false);
 		setChildScene(menuChildScene);
 
-		Text hint = new Text(0, 0, comicSansFont, "Select a story to start!",
-				new TextOptions(HorizontalAlign.CENTER), vbo);
+		Text hint = new Text(0, 0, TextureManager.comicSansFont,
+				"Select a story to start!", new TextOptions(
+						HorizontalAlign.CENTER), vbo);
 		hint.setPosition(
 				HINT_X * GameActivity.CAMERA_WIDTH - HINT_X * hint.getWidth(),
 				HINT_Y * GameActivity.CAMERA_HEIGHT);

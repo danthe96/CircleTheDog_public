@@ -66,7 +66,7 @@ public class EndScene extends Scene {
 
 		if (Level.won) {
 
-			final int SPACE_IN_BETWEEN = 20;
+			final int SPACE_IN_BETWEEN = 40;
 
 			Text doge_victory = new Text(0, 0, TextureManager.defaultFont,
 					context.getText(R.string.victory), vbo);
@@ -94,7 +94,7 @@ public class EndScene extends Scene {
 
 			Text supportiveText = new Text(0, 0, TextureManager.comicSansFont,
 					SupportiveMessageManager.getInstance()
-							.getSupportiveMessage()[0], new TextOptions(
+							.getSupportiveMessage(), new TextOptions(
 							HorizontalAlign.CENTER), vbo);
 			supportiveText.setColor(Color.BLACK);
 			supportiveText.setX(TEXTBOX_X

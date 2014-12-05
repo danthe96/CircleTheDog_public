@@ -97,7 +97,7 @@ public class Level implements Runnable, HumanActivityListener {
 					tileList, this));
 		}
 
-		if (t != null && !isGameOver()) {
+		if (t != null) {
 			while (t.isAlive()) {
 				t.interrupt();
 			}
@@ -169,10 +169,6 @@ public class Level implements Runnable, HumanActivityListener {
 
 	public ArrayList<Tile> getTileList() {
 		return tileList;
-	}
-
-	public boolean isGameOver() {
-		return won || lost;
 	}
 
 	@Override
@@ -248,10 +244,10 @@ public class Level implements Runnable, HumanActivityListener {
 	private void checkVictory() {
 		won = true;
 		lost = false;
-		for (Enemy p : enemies) {
-			if (!p.hasLost())
+		for (Enemy e : enemies) {
+			if (!e.hasLost())
 				won = false;
-			if (p.hasWon())
+			if (e.hasWon())
 				lost = true;
 		}
 
