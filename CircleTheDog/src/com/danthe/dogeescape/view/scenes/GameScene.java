@@ -64,7 +64,7 @@ public class GameScene extends Scene {
 
 	private Level currentLevel;
 
-	private int graphicalTileWidth;
+	private float graphicalTileWidth;
 
 	private List<TileView> tileViews = new LinkedList<TileView>();
 	private LinkedList<EnemySprite> enemySprites;
@@ -87,7 +87,7 @@ public class GameScene extends Scene {
 			VertexBufferObjectManager vertexBufferObjectManager,
 			Context context, int levelID, SceneSetter sceneSetter, Camera cam) {
 		Log.d(TAG, "CREATE SCENE");
-		
+
 		gameFieldTextureReg = TextureManager.gameFieldTextureReg;
 		enemyTextureReg = TextureManager.enemyTextureReg;
 		tileTextureReg = TextureManager.tileTextureReg;
@@ -109,18 +109,24 @@ public class GameScene extends Scene {
 		}
 
 		final int BORDER = 32;
-		graphicalTileWidth = (int) (GAMEOVERLAY_WIDTH - 2 * BORDER)
-				/ Math.max(currentLevel.getTileYLength(),
-						currentLevel.getTileXLength());
-		int alternate = -graphicalTileWidth / 4;
-		int startingPointX = (int) backgroundSprite.getX() + BORDER;
-		int startingPointY = (int) backgroundSprite.getY() + BORDER;
-		if (currentLevel.getTileYLength() >= currentLevel.getTileXLength())
-			startingPointX += ((backgroundSprite.getWidth() - 2 * BORDER) - currentLevel
-					.getTileXLength() * graphicalTileWidth) / 2;
-		else
-			startingPointY += ((backgroundSprite.getHeight() - 2 * BORDER) - currentLevel
-					.getTileYLength() * graphicalTileWidth) / 2;
+		float max = Math.max(currentLevel.getTileYLength(),
+				currentLevel.getTileXLength());
+		graphicalTileWidth = (GAMEOVERLAY_WIDTH - 2 * BORDER) / (max);
+		float alternate = -graphicalTileWidth / 4;
+		if (graphicalTileWidth * currentLevel.getTileXLength() - 2 * alternate
+				+ 2 * BORDER > GAMEOVERLAY_WIDTH - 2 * BORDER) {
+			float ratio = max * graphicalTileWidth
+					/ (max * graphicalTileWidth - 2 * alternate);
+			graphicalTileWidth *= ratio;
+			alternate *= ratio;
+		}
+
+		float startingPointX = GAMEOVERLAY_X + BORDER - alternate;
+		float startingPointY = GAMEOVERLAY_Y + BORDER;
+		startingPointX += (GAMEOVERLAY_WIDTH - 2 * BORDER
+				- currentLevel.getTileXLength() * graphicalTileWidth + 2 * alternate) / 2f;
+		startingPointY += (GAMEOVERLAY_HEIGHT - 2 * BORDER - currentLevel
+				.getTileYLength() * graphicalTileWidth) / 2f;
 
 		// leave room between tiles
 		graphicalTileWidth = 15 * graphicalTileWidth / 16;
@@ -159,7 +165,7 @@ public class GameScene extends Scene {
 					vertexBufferObjectManager, p, tileViews, this));
 			this.attachChild(enemySprites.getLast());
 			enemySprites.getLast().setZIndex(2 * p.getPosition() + 4);
-			
+
 			p.setChangeListener(enemySprites.getLast());
 
 		}
@@ -235,7 +241,7 @@ public class GameScene extends Scene {
 		}
 	}
 
-	public int getGraphicalTileWidth() {
+	public float getGraphicalTileWidth() {
 		return graphicalTileWidth;
 	}
 

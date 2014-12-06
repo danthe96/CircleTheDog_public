@@ -41,6 +41,8 @@ public class SupportiveMessageManager {
 		}
 
 		Collections.shuffle(messages);
+		
+		lastID = 0;
 	}
 
 	/**
