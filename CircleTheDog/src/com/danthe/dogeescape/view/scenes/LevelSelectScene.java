@@ -12,14 +12,18 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.danthe.dogeescape.GameActivity;
 import com.danthe.dogeescape.SceneManager.SceneType;
 import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.interfaces.SceneSetter;
-import com.danthe.dogeescape.model.level.LevelManager;
 import com.danthe.dogeescape.model.level.Level.Status;
+import com.danthe.dogeescape.model.level.LevelManager;
 import com.danthe.dogeescape.model.level.LevelManager.Story;
 
 public class LevelSelectScene extends Scene implements IOnMenuItemClickListener {
@@ -27,6 +31,7 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	private MenuScene menuChildScene;
 	private final Story story;
+	private final Activity activity;
 
 	private SceneSetter levelSceneSetter;
 	private static final int MenuItemPixel = 256;
@@ -36,7 +41,8 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 	private static final float MenuSideOffset = 0.125f;
 
 	private static final float DistanceBetweenElements = 0.03f;
-	private static final int STORY_SELECT_ID = -666;
+	private static final int STORY_SELECT_ID = -1;
+	private static final int TUTORIAL_ID = -2;
 
 	private static float ButtonSize() {
 		return (1f - 2 * MenuSideOffset - (ElementsPerRow - 1)
@@ -49,38 +55,59 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 
 	private LevelSelectScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
-			SceneSetter levelSceneSetter, Story story) {
+			SceneSetter levelSceneSetter, Story story, Activity activity) {
 		this.levelSceneSetter = levelSceneSetter;
 		this.story = story;
+		this.activity = activity;
 		createBackground(vertexBufferObjectManager);
 		createMenuChildScene(vertexBufferObjectManager, camera);
+
+		
+	}
+	
+	public boolean checkForTutorial(){
+		SharedPreferences prefs = activity.getPreferences(Context.MODE_PRIVATE);
+		if (prefs.getBoolean("firstTime", true)) {
+			Log.d(TAG, "First time, showing tutorial");
+			Editor editor = prefs.edit();
+			editor.putBoolean("firstTime", false);
+			editor.commit();
+
+			levelSceneSetter.setScene(SceneType.TUTORIALSCENE);
+			return true;
+		}
+		return false;
 	}
 
 	public static LevelSelectScene createScene(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
-			SceneSetter levelSceneSetter, Story story) {
+			SceneSetter levelSceneSetter, Story story, Activity activity) {
 		LevelSelectScene result = new LevelSelectScene(
-				vertexBufferObjectManager, camera, levelSceneSetter, story);
+				vertexBufferObjectManager, camera, levelSceneSetter, story,
+				activity);
 		return result;
 
 	}
 
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
-		if (pMenuItem.getID() == STORY_SELECT_ID) {
+		switch (pMenuItem.getID()) {
+		case STORY_SELECT_ID:
 			levelSceneSetter.setScene(SceneType.STORYSELECTSCENE);
 			return true;
+		case TUTORIAL_ID:
+			levelSceneSetter.setScene(SceneType.TUTORIALSCENE);
+			return true;
+		default:
+			int levelID = pMenuItem.getID();
+			if (LevelManager.getInstance().isOpenToPlay(levelID)) {
+				levelSceneSetter.setLevelScene(pMenuItem.getID());
+				return true;
+			} else {
+				// TODO Play some sound here.
+			}
 		}
-		
-		
-		int levelID = pMenuItem.getID();
-		if (LevelManager.getInstance().isOpenToPlay(levelID)) {
-			levelSceneSetter.setLevelScene(pMenuItem.getID());
-		} else {
-			// TODO Play some sound here.
-
-		}
-		return true;
+		return false;
 	}
 
 	private void createBackground(
@@ -137,15 +164,31 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 			menuChildScene.addMenuItem(menuItem);
 		}
 
-		//Add back to Story Button
-		menuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(STORY_SELECT_ID,
-				TextureManager.backToMenuTextureReg, vbom), ExpandedButtonSize,
-				ButtonSize());
+		// Add back to Story Button
+		IMenuItem backToMenuItem = new ScaleMenuItemDecorator(
+				new SpriteMenuItem(STORY_SELECT_ID,
+						TextureManager.backToMenuTextureReg, vbom),
+				ExpandedButtonSize, ButtonSize());
+		moveToTopCenter(backToMenuItem);
+		move(backToMenuItem, 0, y + 2);
+		menuChildScene.addMenuItem(backToMenuItem);
 
-		moveToTopCenter(menuItem);
-		move(menuItem, 0, y+2);
+		// Add tutorial button
+		IMenuItem tutorialMenuItem = new ScaleMenuItemDecorator(
+				new SpriteMenuItem(TUTORIAL_ID,
+						TextureManager.tutorialButtonTextureReg, vbom),
+				ExpandedButtonSize, ButtonSize());
+		moveToTopCenter(tutorialMenuItem);
+		move(tutorialMenuItem, 0, y + 2);
+		menuChildScene.addMenuItem(tutorialMenuItem);
 
-		menuChildScene.addMenuItem(menuItem);
+		float center = (GameActivity.CAMERA_WIDTH - backToMenuItem.getWidth()
+				- tutorialMenuItem.getWidth() - GameActivity.CAMERA_WIDTH
+				* DistanceBetweenElements) / 2;
+		backToMenuItem.setX(center);
+		tutorialMenuItem.setX(center + backToMenuItem.getWidth()
+				+ GameActivity.CAMERA_WIDTH * DistanceBetweenElements);
+
 	}
 
 	/**

@@ -52,10 +52,10 @@ public class GameScene extends Scene {
 
 	private static final float MENU_POSITION_Y = 0.85f;
 
-	private static final int GAMEOVERLAY_X = 4;
-	private static final int GAMEOVERLAY_Y = 332;
-	private static final int GAMEOVERLAY_WIDTH = 712;
-	private static final int GAMEOVERLAY_HEIGHT = 712;
+	private static final int GAMEOVERLAY_X = 0;
+	private static final int GAMEOVERLAY_Y = 489;
+	private static final int GAMEOVERLAY_WIDTH = 1080;
+	private static final int GAMEOVERLAY_HEIGHT = 1080;
 
 	private static GameScene instance = null;
 
@@ -159,9 +159,7 @@ public class GameScene extends Scene {
 					vertexBufferObjectManager, p, tileViews, this));
 			this.attachChild(enemySprites.getLast());
 			enemySprites.getLast().setZIndex(2 * p.getPosition() + 4);
-
-			enemySprites.getLast().animate(new long[] { 200, 250 }, 0, 1, true,
-					enemySprites.getLast());
+			
 			p.setChangeListener(enemySprites.getLast());
 
 		}

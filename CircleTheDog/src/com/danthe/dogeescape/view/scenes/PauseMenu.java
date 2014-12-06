@@ -21,17 +21,14 @@ import com.danthe.dogeescape.view.TileView;
 
 public class PauseMenu extends MenuScene implements IOnMenuItemClickListener {
 	private static final String TAG = "PAUSE_MENU";
-	private static PauseMenu instance = null;
+	// private static PauseMenu instance = null;
 
 	private final SceneSetter sceneSetter;
 	private GameScene parent;
 
 	public static PauseMenu createScene(Camera camera, Context context,
 			VertexBufferObjectManager vbo) {
-		if (instance == null)
-			instance = new PauseMenu(camera, context, vbo);
-
-		return instance;
+		return new PauseMenu(camera, context, vbo);
 	}
 
 	private PauseMenu(Camera camera, Context context,
@@ -44,7 +41,7 @@ public class PauseMenu extends MenuScene implements IOnMenuItemClickListener {
 		TextMenuItem continueText = new TextMenuItem(0,
 				TextureManager.comicSansFont, context.getText(R.string.resume),
 				vbo);
-		final IMenuItem continueItem = new AnimatedSpriteMenuItem(0, 550, 220,
+		final IMenuItem continueItem = new AnimatedSpriteMenuItem(0, 825, 330,
 				TextureManager.textBoxTextureReg, vbo, true, false,
 				continueText);
 		this.addMenuItem(continueItem);
@@ -52,7 +49,7 @@ public class PauseMenu extends MenuScene implements IOnMenuItemClickListener {
 		TextMenuItem backText = new TextMenuItem(1,
 				TextureManager.comicSansFont, context.getText(R.string.back),
 				vbo);
-		final IMenuItem backItem = new AnimatedSpriteMenuItem(1, 550, 220,
+		final IMenuItem backItem = new AnimatedSpriteMenuItem(1, 825, 330,
 				TextureManager.textBoxTextureReg, vbo, true, false, backText);
 		this.addMenuItem(backItem);
 

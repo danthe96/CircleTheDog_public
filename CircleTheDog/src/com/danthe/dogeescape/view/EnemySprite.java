@@ -28,6 +28,8 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 		this.enemy = player;
 		this.tileViews = tileViews;
 		this.parent = parent;
+
+		animate(new long[] { 200, 250 }, 0, 1, true, this);
 	}
 
 	@Override
@@ -42,8 +44,8 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 
 		for (int i = 0; i < 25; i++) {
 
-			mX += (1.5-i/24d)*xStep;
-			mY += (1.5-i/24d)*yStep;
+			mX += (1.5 - i / 24d) * xStep;
+			mY += (1.5 - i / 24d) * yStep;
 
 			try {
 				Thread.sleep(8);

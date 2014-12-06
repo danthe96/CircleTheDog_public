@@ -6,6 +6,5 @@
 	<classpathentry kind="src" path="/AndEngine"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libs/libGoogleAnalyticsServices.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

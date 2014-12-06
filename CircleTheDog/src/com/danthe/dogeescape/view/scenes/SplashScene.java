@@ -42,7 +42,7 @@ public class SplashScene extends Scene {
 
 	SplashScene(Camera camera, BaseGameActivity activity) {
 		setBackground(new Background(0, 0, 0));
-		Sprite splash = new Sprite(0, 0, splashTextureRegion,
+		Sprite splash = new Sprite(0, 0, 768, 768, splashTextureRegion,
 				activity.getVertexBufferObjectManager()) {
 			@Override
 			protected void preDraw(GLState pGLState, Camera pCamera) {

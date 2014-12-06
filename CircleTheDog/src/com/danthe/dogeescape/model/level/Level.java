@@ -10,7 +10,9 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.danthe.dogeescape.Tracker;
 import com.danthe.dogeescape.SceneManager.SceneType;
+import com.danthe.dogeescape.Tracker.LevelSuccess;
 import com.danthe.dogeescape.interfaces.AssetManagerProvider;
 import com.danthe.dogeescape.interfaces.HumanActivityListener;
 import com.danthe.dogeescape.interfaces.SceneSetter;
@@ -81,10 +83,10 @@ public class Level implements Runnable, HumanActivityListener {
 		ArrayList<TileType> tileTypes = LevelLoader.readLevel(bfr, tileYLength,
 				tileXLength);
 
-		int a = 0;
+		int i = 0;
 		for (TileType t : tileTypes) {
-			a++;
-			tileList.add(new Tile(a % tileXLength, a / tileXLength, t, this));
+			i++;
+			tileList.add(new Tile(i % tileXLength, i / tileXLength, t, this));
 		}
 
 		enemies = new LinkedList<Enemy>();
@@ -191,16 +193,18 @@ public class Level implements Runnable, HumanActivityListener {
 			}
 
 			for (Enemy e : enemies) {
-				e.recheckPath();
-				e.updateWay();
-				checkVictory();
-				if (e.hasLost() || e.hasWon())
-					continue;
-				e.move();
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e1) {
-					continue main;
+				if (!t.isInterrupted()) {
+					e.recheckPath();
+					e.updateWay();
+					checkVictory();
+					if (e.hasLost() || e.hasWon())
+						continue;
+					e.move();
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e1) {
+						continue main;
+					}
 				}
 			}
 			checkVictory();
@@ -254,6 +258,11 @@ public class Level implements Runnable, HumanActivityListener {
 		if (lost || won) {
 			if (won) {
 				LevelManager.getInstance().setLevelSolved(levelID, turns);
+				Tracker.getInstance().triggerLevel(levelID, LevelSuccess.WIN,
+						turns);
+			} else if (lost) {
+				Tracker.getInstance().triggerLevel(levelID, LevelSuccess.FAIL,
+						turns);
 			}
 			try {
 				Thread.sleep(750);

@@ -31,8 +31,8 @@ public class GameActivity extends BaseGameActivity implements
 
 	private Camera camera;
 
-	public static int CAMERA_WIDTH = 720;
-	public static int CAMERA_HEIGHT = 1280;
+	public static int CAMERA_WIDTH = 1080;
+	public static int CAMERA_HEIGHT = 1920;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

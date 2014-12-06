@@ -20,17 +20,18 @@ import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.model.level.Level;
 
 public class EndScene extends Scene {
-	private static final int TEXTBOX_WIDTH = 578;
-	private static final int TEXTBOX_HEIGHT = 390;
-	private static final int TEXTBOX_Y = 184;
-	private static final int TEXTBOX_X = 64;
-	private static final int MENUSCENE_Y = 600;
+	private static final int TEXTBOX_WIDTH = 867;
+	private static final float TEXTBOX_HEIGHT = 577.5f;
+	private static final int TEXTBOX_Y = 276;
+	private static final int TEXTBOX_X = 96;
+	private static final int MENUSCENE_Y = 924;
 	private static final String TAG = "END_SCENE";
 	private static EndScene instance = null;
 
 	private final float WINDOW_X;
-	private static final int WINDOW_Y = 350;
-	private static final int WINDOW_WIDTH = 712;
+	private static final int WINDOW_Y = 525;
+	private static final int WINDOW_WIDTH = 1068;
+	private static final int WINDOW_HEIGHT = 1212;
 
 	public static EndScene createScene(Context context, Camera cam,
 			VertexBufferObjectManager vertexBufferObjectManager, int levelID) {
@@ -49,14 +50,14 @@ public class EndScene extends Scene {
 		Log.d(TAG, "CREATE SCENE");
 
 		TextureRegion endScreenTextureReg = TextureManager.endScreenTextureReg;
-		WINDOW_X = (GameActivity.CAMERA_WIDTH - endScreenTextureReg.getWidth()) / 2;
+		WINDOW_X = (GameActivity.CAMERA_WIDTH - WINDOW_WIDTH) / 2;
 
 		this.setBackgroundEnabled(false);
-		Sprite backgroundSprite = new Sprite(WINDOW_X, WINDOW_Y,
-				endScreenTextureReg, vbo);
+		Sprite backgroundSprite = new Sprite(WINDOW_X, WINDOW_Y, WINDOW_WIDTH,
+				WINDOW_HEIGHT, endScreenTextureReg, vbo);
 		attachChild(backgroundSprite);
 
-		Text levelName = new Text(0, backgroundSprite.getY() + 55,
+		Text levelName = new Text(0, backgroundSprite.getY() + 82.5f,
 				TextureManager.defaultBigFont, context.getString(
 						R.string.level, levelID + 1), vbo);
 		levelName.setColor(Color.BLACK);
@@ -66,7 +67,7 @@ public class EndScene extends Scene {
 
 		if (Level.won) {
 
-			final int SPACE_IN_BETWEEN = 40;
+			final int SPACE_IN_BETWEEN = 60;
 
 			Text doge_victory = new Text(0, 0, TextureManager.defaultFont,
 					context.getText(R.string.victory), vbo);
@@ -110,7 +111,7 @@ public class EndScene extends Scene {
 
 			supportiveText.setY(backgroundSprite.getY() + TEXTBOX_Y);
 			doge_defeat.setY(backgroundSprite.getY() + TEXTBOX_Y
-					+ TEXTBOX_HEIGHT - doge_defeat.getHeight());
+					+ TEXTBOX_HEIGHT - doge_defeat.getHeight() - 30);
 
 		}
 

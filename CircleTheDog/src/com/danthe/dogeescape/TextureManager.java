@@ -57,13 +57,21 @@ public class TextureManager {
 	private static BitmapTextureAtlas endButtonsBTA;
 	private static Texture endScreenTexture;
 	public static TextureRegion endScreenTextureReg, backToMenuTextureReg,
-			retryTextureReg, nextTextureReg;
+			retryTextureReg, nextTextureReg, tutorialButtonTextureReg;
 
-	//StorySelectScene
-	public static BitmapTextureAtlas storyBTA;
-	public static String[] storyTextureName = { "the_garden.png", "multiplying_problems.png"};
-	public static TextureRegion[] storyTextures = new TextureRegion[LevelManager.Story.values().length];
-	
+	// StorySelectScene
+	private static BitmapTextureAtlas storyBTA;
+	public static String[] storyTextureName = { "the_garden.png",
+			"multiplying_problems.png" };
+	public static TextureRegion[] storyTextures = new TextureRegion[LevelManager.Story
+			.values().length];
+
+	public static final int TUTORIAL_PANEL_COUNT = 4;
+	private static BitmapTextureAtlas tutorialBTA;
+	public static TextureRegion[] tutorialPictures = new TextureRegion[TUTORIAL_PANEL_COUNT];
+	private static Texture tutorialBackgroundTexture;
+	public static TextureRegion tutorialBackgroundTextureReg;
+
 	public static void init(BaseGameActivity activity) {
 		Log.d(TAG, "INIT");
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -73,8 +81,8 @@ public class TextureManager {
 		initGameTexture(activity);
 		initEndTextures(activity);
 		initStoryTextures(activity);
+		initHowToTextures(activity);
 	}
-
 
 	public static void load() {
 		Log.d(TAG, "LOAD");
@@ -84,13 +92,13 @@ public class TextureManager {
 		loadGameTextures();
 		loadEndTextures();
 		loadStoryTextures();
+		loadHowToTextures();
 	}
 
 	private static void loadStoryTextures() {
 		storyBTA.load();
-		
-	}
 
+	}
 
 	private static void initLevelSelectResources(BaseGameActivity activity) {
 		Log.d(TAG, "INIT levelSelect");
@@ -165,21 +173,21 @@ public class TextureManager {
 		}
 
 		comicSansFont = FontFactory.create(activity.getFontManager(), activity
-				.getTextureManager(), 512, 512, TextureOptions.BILINEAR,
+				.getTextureManager(), 768, 768, TextureOptions.BILINEAR,
 				Typeface.createFromAsset(activity.getAssets(),
-						"ttf/LDFComicSans.ttf"), 46f, true,
+						"ttf/LDFComicSans.ttf"), 69f, true,
 				Color.WHITE_ARGB_PACKED_INT);
 		activity.getFontManager().loadFont(comicSansFont);
 
 		defaultFont = FontFactory.create(activity.getFontManager(),
-				activity.getTextureManager(), 512, 512,
-				TextureOptions.BILINEAR, Typeface.DEFAULT_BOLD, 42f, true,
+				activity.getTextureManager(), 768, 768,
+				TextureOptions.BILINEAR, Typeface.DEFAULT_BOLD, 63f, true,
 				Color.WHITE_ARGB_PACKED_INT);
 		activity.getFontManager().loadFont(defaultFont);
 
 		defaultBigFont = FontFactory.create(activity.getFontManager(),
-				activity.getTextureManager(), 512, 512,
-				TextureOptions.BILINEAR, Typeface.DEFAULT_BOLD, 64f, true,
+				activity.getTextureManager(), 768, 768,
+				TextureOptions.BILINEAR, Typeface.DEFAULT_BOLD, 96f, true,
 				Color.WHITE_ARGB_PACKED_INT);
 		activity.getFontManager().loadFont(defaultBigFont);
 
@@ -200,16 +208,18 @@ public class TextureManager {
 	private static void initStoryTextures(BaseGameActivity activity) {
 		Log.d(TAG, "INIT story textures");
 		storyBTA = new BitmapTextureAtlas(activity.getTextureManager(), 535,
-				185*storyTextures.length, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		//Log.d(TAG, ""+185*storyTextures.length);
-		for (int i=0; i<storyTextures.length; i++) {
+				185 * storyTextures.length,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		// Log.d(TAG, ""+185*storyTextures.length);
+		for (int i = 0; i < storyTextures.length; i++) {
 			storyTextures[i] = BitmapTextureAtlasTextureRegionFactory
-					.createFromAsset(storyBTA, activity, storyTextureName[i], 0, 185*i);
-			//Log.d(TAG, ""+185*i);
+					.createFromAsset(storyBTA, activity, storyTextureName[i],
+							0, 185 * i);
+			// Log.d(TAG, ""+185*i);
 		}
-		
+
 	}
-	
+
 	private static void initGameTexture(final BaseGameActivity activity) {
 		Log.d(TAG, "INIT game textures");
 
@@ -269,7 +279,7 @@ public class TextureManager {
 		}
 
 		endButtonsBTA = new BitmapTextureAtlas(activity.getTextureManager(),
-				256, 768, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+				256, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		backToMenuTextureReg = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(endButtonsBTA, activity, "menu.png", 0, 0);
@@ -277,6 +287,9 @@ public class TextureManager {
 				.createFromAsset(endButtonsBTA, activity, "next.png", 0, 256);
 		retryTextureReg = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(endButtonsBTA, activity, "retry.png", 0, 512);
+		tutorialButtonTextureReg = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(endButtonsBTA, activity, "tutorial.png", 0,
+						768);
 
 	}
 
@@ -288,6 +301,53 @@ public class TextureManager {
 		endScreenTexture.load();
 		endScreenTextureReg = TextureRegionFactory
 				.extractFromTexture(endScreenTexture);
+	}
+
+	/**
+	 * 
+	 * @param activity
+	 * 
+	 *            TODO: Change textures into something sensible. A white textbox
+	 *            is definitely not going to be the tutorial's background.
+	 *            Individual tutorial pictures are not up-to-date either.
+	 */
+	private static void initHowToTextures(final BaseGameActivity activity) {
+		Log.d(TAG, "INIT tutorial textures");
+
+		try {
+			tutorialBackgroundTexture = new BitmapTexture(
+					activity.getTextureManager(), new IInputStreamOpener() {
+						@Override
+						public InputStream open() throws IOException {
+							return activity.getAssets().open(
+									"gfx/textbox_white.png");
+						}
+					});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		tutorialBTA = new BitmapTextureAtlas(activity.getTextureManager(),
+				TUTORIAL_PANEL_COUNT * 500, 500,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		for (int i = 0; i < TUTORIAL_PANEL_COUNT; i++) {
+			tutorialPictures[i] = BitmapTextureAtlasTextureRegionFactory
+					.createFromAsset(tutorialBTA, activity, "tut" + (i + 1)
+							+ ".png", 500 * i, 0);
+		}
+
+	}
+
+	private static void loadHowToTextures() {
+		Log.d(TAG, "LOAD tutorial textures");
+
+		tutorialBTA.load();
+
+		tutorialBackgroundTexture.load();
+		tutorialBackgroundTextureReg = TextureRegionFactory
+				.extractFromTexture(tutorialBackgroundTexture);
+
 	}
 
 }

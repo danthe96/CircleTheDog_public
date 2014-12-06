@@ -10,9 +10,9 @@ import android.view.KeyEvent;
 import com.danthe.dogeescape.interfaces.KeyListener;
 import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.model.level.LevelManager.Story;
-import com.danthe.dogeescape.view.TileView;
 import com.danthe.dogeescape.view.scenes.EndScene;
 import com.danthe.dogeescape.view.scenes.GameScene;
+import com.danthe.dogeescape.view.scenes.HowToScene;
 import com.danthe.dogeescape.view.scenes.LevelSelectScene;
 import com.danthe.dogeescape.view.scenes.SplashScene;
 import com.danthe.dogeescape.view.scenes.StorySelectScene;
@@ -43,8 +43,9 @@ public class SceneManager implements KeyListener, SceneSetter {
 
 	private GameScene mainGameScene;
 	private Scene endScene;
-	private Scene levelSelectScene;
+	private LevelSelectScene levelSelectScene;
 	private Scene storySelectScene;
+	private Scene tutorialScene;
 
 	private Scene splashScene;
 
@@ -52,7 +53,7 @@ public class SceneManager implements KeyListener, SceneSetter {
 	private Story currentStory = DEFAULT_STORY;
 
 	public enum SceneType {
-		MAINGAME, SPLASHSCENE, LEVELSELECTSCENE, ENDSCENE, STORYSELECTSCENE
+		MAINGAME, SPLASHSCENE, LEVELSELECTSCENE, ENDSCENE, STORYSELECTSCENE, TUTORIALSCENE
 	}
 
 	public SceneManager(GameActivity activity, Engine engine, Camera camera) {
@@ -117,7 +118,7 @@ public class SceneManager implements KeyListener, SceneSetter {
 		case LEVELSELECTSCENE:
 			levelSelectScene = LevelSelectScene.createScene(
 					activity.getVertexBufferObjectManager(), camera, this,
-					currentStory);
+					currentStory, activity);
 			return levelSelectScene;
 		case ENDSCENE:
 			endScene = EndScene.createScene(activity.getApplicationContext(),
@@ -128,6 +129,11 @@ public class SceneManager implements KeyListener, SceneSetter {
 			storySelectScene = StorySelectScene.createScene(
 					activity.getVertexBufferObjectManager(), camera, this);
 			return storySelectScene;
+		case TUTORIALSCENE:
+			tutorialScene = new HowToScene(camera,
+					activity.getVertexBufferObjectManager(),
+					activity.getApplicationContext());
+			return tutorialScene;
 		default:
 			throw new RuntimeException("Tried to create unknown scene: "
 					+ scene);
@@ -142,13 +148,13 @@ public class SceneManager implements KeyListener, SceneSetter {
 	@Override
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
-				&& event.getAction() == KeyEvent.ACTION_DOWN
-				&& currentScene != SceneType.STORYSELECTSCENE) {
+				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 			if (currentScene == SceneType.MAINGAME) {
-					mainGameScene.switchChildScene();
-					TileView.blockInput = !TileView.blockInput;
-			} else {
+				this.setScene(SceneType.LEVELSELECTSCENE);
+			} else if (currentScene != SceneType.STORYSELECTSCENE) {
 				this.setScene(SceneType.STORYSELECTSCENE);
+			} else {
+				return false;
 			}
 			return true;
 		}
@@ -187,13 +193,19 @@ public class SceneManager implements KeyListener, SceneSetter {
 			break;
 		case LEVELSELECTSCENE:
 			engine.setScene(levelSelectScene);
+			if (levelSelectScene.checkForTutorial())
+				return;
 			break;
 		case ENDSCENE:
-			if (currentScene == SceneType.MAINGAME)
+			if (engine.getScene() == mainGameScene)
 				mainGameScene.setChildScene(endScene);
 			break;
 		case STORYSELECTSCENE:
 			engine.setScene(storySelectScene);
+			break;
+		case TUTORIALSCENE:
+			if (engine.getScene() == levelSelectScene)
+				levelSelectScene.setChildScene(tutorialScene);
 			break;
 		default:
 			throw new RuntimeException("Tried to set unknown scene " + scene);

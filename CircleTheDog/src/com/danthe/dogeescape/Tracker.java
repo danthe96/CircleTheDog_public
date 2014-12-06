@@ -3,23 +3,34 @@ package com.danthe.dogeescape;
 import android.app.Activity;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 
 /**
- * Singelton to handle all the tracking towards google. Not much in here by now.
+ * Singleton to handle all the tracking towards google. Not much in here by now.
  * 
  * @author Daniel
  * 
  */
 public class Tracker {
-	@SuppressWarnings("unused")
 	private EasyTracker easyTracker;
 
 	private Activity activity;
 
 	private static Tracker instance;
 
+	private static final String LABEL = "TURNS NEEDED";
+
 	public enum LevelSuccess {
-		FAIL, WIN, RETRY
+		FAIL("DEFEAT"), WIN("WIN");
+		private String name;
+
+		LevelSuccess(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
 	}
 
 	public static Tracker getInstance() {
@@ -39,25 +50,14 @@ public class Tracker {
 	}
 
 	public void triggerOnStart() {
-
-		EasyTracker.getInstance(activity.getApplicationContext())
-				.activityStart(activity);
+		easyTracker.activityStart(activity);
 	}
 
 	public void triggerOnStop() {
-
-		EasyTracker.getInstance(activity.getApplicationContext()).activityStop(
-				activity);
+		easyTracker.activityStop(activity);
 	}
 
-	public void triggerLevel(int LevelID, LevelSuccess levelSuccess) {
-		// HitBuilders h;
-		// easyTracker.send(new EventBuilder()
-		// .setCategory("Barren Fields")
-		// .setAction("Visited")
-		// .setLabel("Magic Tree")
-		// .setValue(1)
-		// .build());
-		throw new RuntimeException("NOT IMPLEMENTED YET");
+	public void triggerLevel(int levelID, LevelSuccess levelSuccess, long turns) {
+		easyTracker.send(MapBuilder.createEvent("Level "+levelID, levelSuccess.toString(), LABEL, turns).build());
 	}
 }
