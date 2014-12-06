@@ -9,8 +9,10 @@ import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
@@ -27,28 +29,31 @@ public class HowToScene extends Scene implements IOnMenuItemClickListener {
 
 	private int panel_nr;
 	private final TextureRegion tutorialBackgroundTextureReg;
-	private MenuScene[] tutorialMenuScenes = new MenuScene[TextureManager.TUTORIAL_PANEL_COUNT];
+	private MenuScene[] tutorialMenuScenes;// = new MenuScene[TextureManager.TUTORIAL_PANEL_COUNT];
 
 	private SceneSetter sceneSetter;
+	private int lastPanelNumber;
 
 	public static final int SCENE_WIDTH = 825, SCENE_HEIGHT = 1425,
 			SCENE_X = (GameActivity.CAMERA_WIDTH - SCENE_WIDTH) / 2,
 			SCENE_Y = (GameActivity.CAMERA_HEIGHT - SCENE_HEIGHT) / 2;
 	private static final float CONTENT_X = 37.5f, CONTENT_Y = 37.5f;
 
-	public HowToScene(Camera cam, VertexBufferObjectManager vbo, Context context) {
+	public HowToScene(Camera cam, VertexBufferObjectManager vbo, Context context, int panelStart, int panelEnd) {
 		super();
+		tutorialMenuScenes = new MenuScene[panelEnd-panelStart];
 		tutorialBackgroundTextureReg = TextureManager.tutorialBackgroundTextureReg;
 		sceneSetter = SceneManager.getSceneSetter();
 		panel_nr = 0;
+		lastPanelNumber = panelEnd-panelStart;
 
 		Sprite backgroundSprite = new Sprite(SCENE_X, SCENE_Y, SCENE_WIDTH,
 				SCENE_HEIGHT, tutorialBackgroundTextureReg, vbo);
 		attachChild(backgroundSprite);
 
-		for (int i = 0; i < tutorialMenuScenes.length; i++) {
-			tutorialMenuScenes[i] = new HowToMenuScene(cam, vbo, context, i);
-			tutorialMenuScenes[i].setOnMenuItemClickListener(this);
+		for (int i = panelStart; i < panelEnd; i++) {
+			tutorialMenuScenes[i-panelStart] = new HowToMenuScene(cam, vbo, context, i);
+			tutorialMenuScenes[i-panelStart].setOnMenuItemClickListener(this);
 		}
 
 		this.setBackgroundEnabled(false);
@@ -65,7 +70,7 @@ public class HowToScene extends Scene implements IOnMenuItemClickListener {
 		switch (pMenuItem.getID()) {
 		case HowToMenuScene.CONTINUE_ID:
 			panel_nr++;
-			if (panel_nr < TextureManager.TUTORIAL_PANEL_COUNT) {
+			if (panel_nr < lastPanelNumber) {
 				this.setChildScene(tutorialMenuScenes[panel_nr]);
 				tutorialMenuScenes[panel_nr].setPosition(SCENE_X + CONTENT_X,
 						SCENE_Y + CONTENT_Y);
@@ -82,7 +87,7 @@ public class HowToScene extends Scene implements IOnMenuItemClickListener {
 
 		private final TextureRegion[] tutorialPictures;
 		private final int[] TEXT_RESOURCES = { R.string.tutorial_1,
-				R.string.tutorial_2, R.string.tutorial_3, R.string.tutorial_4 };
+				R.string.tutorial_2, R.string.tutorial_3, R.string.tutorial_4, R.string.tutorial_5,R.string.tutorial_6};
 
 		private final float MENUSCENE_WIDTH = HowToScene.SCENE_WIDTH - 2
 				* HowToScene.CONTENT_X,
@@ -101,7 +106,8 @@ public class HowToScene extends Scene implements IOnMenuItemClickListener {
 			Text manualText = new Text(0, howToPicItem.getY()
 					+ howToPicItem.getHeight() + 30,
 					TextureManager.defaultFont,
-					context.getText(TEXT_RESOURCES[panel_nr]), vbo);
+					context.getText(TEXT_RESOURCES[panel_nr]), new TextOptions(
+							HorizontalAlign.CENTER), vbo);
 			manualText.setColor(Color.BLACK);
 			attachChild(manualText);
 			manualText.setX((MENUSCENE_WIDTH - manualText.getWidth()) / 2);

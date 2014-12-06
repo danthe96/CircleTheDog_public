@@ -66,8 +66,8 @@ public class TextureManager {
 	public static TextureRegion[] storyTextures = new TextureRegion[LevelManager.Story
 			.values().length];
 
-	public static final int TUTORIAL_PANEL_COUNT = 4;
-	private static BitmapTextureAtlas tutorialBTA;
+	public static final int TUTORIAL_PANEL_COUNT = 6;
+	private static BitmapTextureAtlas tutorialBTA1,tutorialBTA2;
 	public static TextureRegion[] tutorialPictures = new TextureRegion[TUTORIAL_PANEL_COUNT];
 	private static Texture tutorialBackgroundTexture;
 	public static TextureRegion tutorialBackgroundTextureReg;
@@ -326,15 +326,23 @@ public class TextureManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		tutorialBTA = new BitmapTextureAtlas(activity.getTextureManager(),
-				TUTORIAL_PANEL_COUNT * 500, 500,
+		//BTA is too large
+		tutorialBTA1 = new BitmapTextureAtlas(activity.getTextureManager(),
+				TUTORIAL_PANEL_COUNT/2 * 1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-
-		for (int i = 0; i < TUTORIAL_PANEL_COUNT; i++) {
+		tutorialBTA2 = new BitmapTextureAtlas(activity.getTextureManager(),
+				TUTORIAL_PANEL_COUNT/2 * 1024, 1024,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		int i = 0;
+		for (i=i; i < TUTORIAL_PANEL_COUNT/2; i++) {
 			tutorialPictures[i] = BitmapTextureAtlasTextureRegionFactory
-					.createFromAsset(tutorialBTA, activity, "tut" + (i + 1)
-							+ ".png", 500 * i, 0);
+					.createFromAsset(tutorialBTA1, activity, "tut" + (i + 1)
+							+ ".png", 1024 * i, 0);
+		}
+		for (i=i; i < TUTORIAL_PANEL_COUNT; i++) {
+			tutorialPictures[i] = BitmapTextureAtlasTextureRegionFactory
+					.createFromAsset(tutorialBTA2, activity, "tut" + (i + 1)
+							+ ".png", 1024 * (i-TUTORIAL_PANEL_COUNT/2), 0);
 		}
 
 	}
@@ -342,7 +350,8 @@ public class TextureManager {
 	private static void loadHowToTextures() {
 		Log.d(TAG, "LOAD tutorial textures");
 
-		tutorialBTA.load();
+		tutorialBTA1.load();
+		tutorialBTA2.load();
 
 		tutorialBackgroundTexture.load();
 		tutorialBackgroundTextureReg = TextureRegionFactory

@@ -130,9 +130,10 @@ public class SceneManager implements KeyListener, SceneSetter {
 					activity.getVertexBufferObjectManager(), camera, this);
 			return storySelectScene;
 		case TUTORIALSCENE:
+			int[] range = currentStory.getTutorialRange();
 			tutorialScene = new HowToScene(camera,
 					activity.getVertexBufferObjectManager(),
-					activity.getApplicationContext());
+					activity.getApplicationContext(),range[0],range[1]);
 			return tutorialScene;
 		default:
 			throw new RuntimeException("Tried to create unknown scene: "
@@ -193,7 +194,7 @@ public class SceneManager implements KeyListener, SceneSetter {
 			break;
 		case LEVELSELECTSCENE:
 			engine.setScene(levelSelectScene);
-			if (levelSelectScene.checkForTutorial())
+			if (levelSelectScene.checkForTutorial(currentStory))
 				return;
 			break;
 		case ENDSCENE:

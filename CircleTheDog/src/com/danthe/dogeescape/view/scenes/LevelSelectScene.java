@@ -65,12 +65,12 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 		
 	}
 	
-	public boolean checkForTutorial(){
+	public boolean checkForTutorial(Story story){
 		SharedPreferences prefs = activity.getPreferences(Context.MODE_PRIVATE);
-		if (prefs.getBoolean("firstTime", true)) {
+		if (prefs.getBoolean("firstTime"+story.toString(), true)) {
 			Log.d(TAG, "First time, showing tutorial");
 			Editor editor = prefs.edit();
-			editor.putBoolean("firstTime", false);
+			editor.putBoolean("firstTime"+story.toString(), false);
 			editor.commit();
 
 			levelSceneSetter.setScene(SceneType.TUTORIALSCENE);

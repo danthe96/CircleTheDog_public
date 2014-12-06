@@ -51,6 +51,19 @@ public class LevelManager {
 		public String getSaveString() {
 			return "NUM_SOLVED_LEVELS_" + toString();
 		}
+
+		public int[] getTutorialRange() {
+			switch (this) {
+			case THE_GARDEN: 
+				int[] result = {0,4};
+				return result;
+			case MULTIPLYING_PROBLEMS: 
+				int[] result2 = {4,6};
+				return result2;
+			}
+		
+			return null;
+		}
 	}
 
 	/**

@@ -17,8 +17,10 @@
     <string name="highscore">Your highscores</string>
     <string name="tutorial_1">The dog tries to\nescape from the screen...</string>
     <string name="tutorial_2">Block the tiles in his way...</string>
-    <string name="tutorial_3">...until you catch him ...</string>
-    <string name="tutorial_4">... and win.</string>
+    <string name="tutorial_3">... and again ...</string>
+    <string name="tutorial_4">...until you catch him\nand win.</string>
+    <string name="tutorial_5">Two Dogs move\nsimultaneously.You need\nto catch both.</string>
+    <string name="tutorial_6">Thats Ice. It melts\nover time.</string>
     <string name="doge">Doge</string>
     <string name="dogecoin_url">http://dogecoin.com/getting-started/</string>
     <string name="app_url">https://play.google.com/store/apps/details?id=com.danthe.dogeescape</string>

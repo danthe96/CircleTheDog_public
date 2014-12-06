@@ -443,22 +443,22 @@ containing a value of this type.
         public static final int google_play_services_version=0x7f070000;
     }
     public static final class string {
-        public static final int SM_0=0x7f040042;
-        public static final int SM_1=0x7f040043;
-        public static final int SM_10=0x7f04004c;
-        public static final int SM_11=0x7f04004d;
-        public static final int SM_12=0x7f04004e;
-        public static final int SM_2=0x7f040044;
-        public static final int SM_3=0x7f040045;
-        public static final int SM_4=0x7f040046;
-        public static final int SM_5=0x7f040047;
-        public static final int SM_6=0x7f040048;
-        public static final int SM_7=0x7f040049;
-        public static final int SM_8=0x7f04004a;
-        public static final int SM_9=0x7f04004b;
+        public static final int SM_0=0x7f040044;
+        public static final int SM_1=0x7f040045;
+        public static final int SM_10=0x7f04004e;
+        public static final int SM_11=0x7f04004f;
+        public static final int SM_12=0x7f040050;
+        public static final int SM_2=0x7f040046;
+        public static final int SM_3=0x7f040047;
+        public static final int SM_4=0x7f040048;
+        public static final int SM_5=0x7f040049;
+        public static final int SM_6=0x7f04004a;
+        public static final int SM_7=0x7f04004b;
+        public static final int SM_8=0x7f04004c;
+        public static final int SM_9=0x7f04004d;
         public static final int accept=0x7f040002;
         public static final int app_name=0x7f040024;
-        public static final int app_url=0x7f040038;
+        public static final int app_url=0x7f04003a;
         public static final int back=0x7f040028;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
@@ -563,8 +563,8 @@ containing a value of this type.
         public static final int create_calendar_title=0x7f040004;
         public static final int decline=0x7f040003;
         public static final int defeat_info=0x7f04002f;
-        public static final int doge=0x7f040036;
-        public static final int dogecoin_url=0x7f040037;
+        public static final int doge=0x7f040038;
+        public static final int dogecoin_url=0x7f040039;
         /** Replace placeholder ID with your tracking ID
          */
         public static final int ga_trackingId=0x7f040023;
@@ -572,26 +572,28 @@ containing a value of this type.
         public static final int howto=0x7f040026;
         public static final int level=0x7f04002d;
         public static final int next=0x7f04002c;
-        public static final int no=0x7f040040;
+        public static final int no=0x7f040042;
         public static final int play=0x7f040025;
         public static final int play_again=0x7f04002b;
         public static final int quit=0x7f040029;
-        public static final int rate_info=0x7f04003d;
-        public static final int rate_later=0x7f04003f;
-        public static final int rate_top=0x7f04003c;
-        public static final int rate_yes=0x7f04003e;
+        public static final int rate_info=0x7f04003f;
+        public static final int rate_later=0x7f040041;
+        public static final int rate_top=0x7f04003e;
+        public static final int rate_yes=0x7f040040;
         public static final int resume=0x7f04002a;
         public static final int scores=0x7f040027;
-        public static final int share_app=0x7f040039;
-        public static final int share_text=0x7f04003a;
-        public static final int share_via=0x7f04003b;
-        public static final int shared_pref_level_status_string=0x7f040041;
+        public static final int share_app=0x7f04003b;
+        public static final int share_text=0x7f04003c;
+        public static final int share_via=0x7f04003d;
+        public static final int shared_pref_level_status_string=0x7f040043;
         public static final int store_picture_message=0x7f040001;
         public static final int store_picture_title=0x7f040000;
         public static final int tutorial_1=0x7f040032;
         public static final int tutorial_2=0x7f040033;
         public static final int tutorial_3=0x7f040034;
         public static final int tutorial_4=0x7f040035;
+        public static final int tutorial_5=0x7f040036;
+        public static final int tutorial_6=0x7f040037;
         public static final int victory=0x7f04002e;
         public static final int victory_info=0x7f040030;
         /**  Text on a placeholder buy button when Google Play services is not
