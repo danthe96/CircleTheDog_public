@@ -67,7 +67,7 @@ public class TextureManager {
 			.values().length];
 
 	public static final int TUTORIAL_PANEL_COUNT = 6;
-	private static BitmapTextureAtlas tutorialBTA1,tutorialBTA2;
+	private static BitmapTextureAtlas tutorialBTA1, tutorialBTA2;
 	public static TextureRegion[] tutorialPictures = new TextureRegion[TUTORIAL_PANEL_COUNT];
 	private static Texture tutorialBackgroundTexture;
 	public static TextureRegion tutorialBackgroundTextureReg;
@@ -326,23 +326,23 @@ public class TextureManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//BTA is too large
+		// BTA is too large
 		tutorialBTA1 = new BitmapTextureAtlas(activity.getTextureManager(),
-				TUTORIAL_PANEL_COUNT/2 * 1024, 1024,
+				TUTORIAL_PANEL_COUNT / 2 * 1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		tutorialBTA2 = new BitmapTextureAtlas(activity.getTextureManager(),
-				TUTORIAL_PANEL_COUNT/2 * 1024, 1024,
+				TUTORIAL_PANEL_COUNT / 2 * 1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		int i = 0;
-		for (i=i; i < TUTORIAL_PANEL_COUNT/2; i++) {
+		int i;
+		for (i = 0; i < TUTORIAL_PANEL_COUNT / 2; i++) {
 			tutorialPictures[i] = BitmapTextureAtlasTextureRegionFactory
 					.createFromAsset(tutorialBTA1, activity, "tut" + (i + 1)
 							+ ".png", 1024 * i, 0);
 		}
-		for (i=i; i < TUTORIAL_PANEL_COUNT; i++) {
+		for (; i < TUTORIAL_PANEL_COUNT; i++) {
 			tutorialPictures[i] = BitmapTextureAtlasTextureRegionFactory
 					.createFromAsset(tutorialBTA2, activity, "tut" + (i + 1)
-							+ ".png", 1024 * (i-TUTORIAL_PANEL_COUNT/2), 0);
+							+ ".png", 1024 * (i - TUTORIAL_PANEL_COUNT / 2), 0);
 		}
 
 	}

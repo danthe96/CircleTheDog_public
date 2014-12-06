@@ -17,6 +17,8 @@
     <string name="tutorial_2">Blockiere die Felder\n auf seinem Weg...</string>
     <string name="tutorial_3">...bis du ihn fängst ...</string>
     <string name="tutorial_4">... und gewinnst.</string>
+    <string name="tutorial_5">Zwei Hunde bewegen\nsich gleichzeitig.Du\n musst beide fangen.</string>
+    <string name="tutorial_6">Das ist Eis.\nEs schmilzt nach\nein paar Zügen.</string>
     <string name="share_app">APP TEILEN</string>
     <string name="share_text">Hol dir das Spiel \"Circle the Dog\". Es ist großartig!</string>
     <string name="share_via">Teilen in</string>
