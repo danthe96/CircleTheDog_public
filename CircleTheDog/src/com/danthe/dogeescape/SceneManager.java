@@ -14,6 +14,7 @@ import com.danthe.dogeescape.view.scenes.EndScene;
 import com.danthe.dogeescape.view.scenes.GameScene;
 import com.danthe.dogeescape.view.scenes.HowToScene;
 import com.danthe.dogeescape.view.scenes.LevelSelectScene;
+import com.danthe.dogeescape.view.scenes.MotherScene;
 import com.danthe.dogeescape.view.scenes.SplashScene;
 import com.danthe.dogeescape.view.scenes.StorySelectScene;
 
@@ -36,6 +37,8 @@ public class SceneManager implements KeyListener, SceneSetter {
 
 	private static SceneSetter sceneSetter;
 
+	private MotherScene motherScene;
+	
 	private SceneType currentScene;
 	private GameActivity activity;
 	private Engine engine;
@@ -145,6 +148,13 @@ public class SceneManager implements KeyListener, SceneSetter {
 	public SceneType getCurrentSceneType() {
 		return currentScene;
 	}
+	
+	public void initAndSetMotherScene() {
+
+		motherScene = new MotherScene(activity.getVertexBufferObjectManager());
+		engine.setScene(motherScene);
+		
+	}
 
 	@Override
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
@@ -187,25 +197,26 @@ public class SceneManager implements KeyListener, SceneSetter {
 		Log.d(TAG, "Scene Attached: " + scene.toString());
 		switch (scene) {
 		case MAINGAME:
-			engine.setScene(mainGameScene);
+			motherScene.swapScene(mainGameScene);
 			break;
 		case SPLASHSCENE:
 			engine.setScene(splashScene);
 			break;
 		case LEVELSELECTSCENE:
-			engine.setScene(levelSelectScene);
+			motherScene.swapScene(levelSelectScene);
 			if (levelSelectScene.checkForTutorial(currentStory))
 				return;
 			break;
 		case ENDSCENE:
-			if (engine.getScene() == mainGameScene)
+			if (motherScene.getChildScene() == mainGameScene)
 				mainGameScene.setChildScene(endScene);
 			break;
 		case STORYSELECTSCENE:
-			engine.setScene(storySelectScene);
+			motherScene.swapScene(storySelectScene);
+			
 			break;
 		case TUTORIALSCENE:
-			if (engine.getScene() == levelSelectScene)
+			if (motherScene.getChildScene() == levelSelectScene)
 				levelSelectScene.setChildScene(tutorialScene);
 			break;
 		default:

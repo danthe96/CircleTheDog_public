@@ -59,9 +59,9 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 		this.levelSceneSetter = levelSceneSetter;
 		this.story = story;
 		this.activity = activity;
-		createBackground(vertexBufferObjectManager);
+		//createBackground(vertexBufferObjectManager);
 		createMenuChildScene(vertexBufferObjectManager, camera);
-
+		setBackgroundEnabled(false);
 		
 	}
 	

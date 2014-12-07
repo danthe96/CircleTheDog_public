@@ -92,10 +92,6 @@ public class GameScene extends Scene {
 		enemyTextureReg = TextureManager.enemyTextureReg;
 		tileTextureReg = TextureManager.tileTextureReg;
 
-		Sprite background = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
-				GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
-				vertexBufferObjectManager);
-		setBackground(new SpriteBackground(0, 0, 0, background));
 
 		Sprite backgroundSprite = new Sprite(GAMEOVERLAY_X, GAMEOVERLAY_Y,
 				GAMEOVERLAY_WIDTH, GAMEOVERLAY_HEIGHT, gameFieldTextureReg,
@@ -178,7 +174,7 @@ public class GameScene extends Scene {
 		pauseMenu = PauseMenu.createScene(cam, context,
 				vertexBufferObjectManager);
 
-		this.setBackgroundEnabled(true);
+		this.setBackgroundEnabled(false);
 
 	}
 
