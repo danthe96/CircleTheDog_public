@@ -1,5 +1,7 @@
 package com.danthe.dogeescape.view.scenes;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
@@ -61,6 +63,7 @@ public class MenuButtonMenuScene extends MenuScene implements
 		IMenuItem back = new ScaleMenuItemDecorator(new SpriteMenuItem(BACK_ID,
 				button_size, button_size, TextureManager.backToMenuTextureReg,
 				vbom), EXP_BUTTON_SIZE, BUTTON_SIZE);
+		back.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		addMenuItem(back);
 
 		IMenuItem retry = new ScaleMenuItemDecorator(new SpriteMenuItem(
@@ -69,6 +72,7 @@ public class MenuButtonMenuScene extends MenuScene implements
 				BUTTON_SIZE);
 		retry.setPosition(back.getX() + button_size + DISTANCE_BETWEEN_BUTTONS,
 				0);
+		retry.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		addMenuItem(retry);
 
 		if (LevelManager.getInstance().isOpenToPlay(levelID + 1)
@@ -80,6 +84,7 @@ public class MenuButtonMenuScene extends MenuScene implements
 			next.setPosition(retry.getX() + button_size
 					+ DISTANCE_BETWEEN_BUTTONS, 0);
 			addMenuItem(next);
+			next.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		}
 
 		sceneWidth = getMenuItemCount() * button_size

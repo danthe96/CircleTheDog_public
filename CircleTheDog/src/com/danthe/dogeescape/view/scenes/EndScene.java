@@ -1,6 +1,13 @@
 package com.danthe.dogeescape.view.scenes;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.EntityModifier;
+import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -9,6 +16,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
+import org.andengine.util.modifier.ease.EaseStrongOut;
 
 import android.content.Context;
 import android.util.Log;
@@ -48,7 +56,7 @@ public class EndScene extends Scene {
 	private EndScene(Context context, Camera cam,
 			VertexBufferObjectManager vbo, final int levelID) {
 		Log.d(TAG, "CREATE SCENE");
-
+		setY(-2000);
 		TextureRegion endScreenTextureReg = TextureManager.endScreenTextureReg;
 		WINDOW_X = (GameActivity.CAMERA_WIDTH - WINDOW_WIDTH) / 2;
 
@@ -120,6 +128,18 @@ public class EndScene extends Scene {
 		menuScene.setPosition((WINDOW_WIDTH - menuScene.getWidth()) / 2,
 				WINDOW_Y + MENUSCENE_Y);
 		setChildScene(menuScene);
+		triggerAnimation(menuScene);
 
+	}
+
+	private void triggerAnimation(MenuButtonMenuScene menuScene) {
+		IEntityModifier modifier = new MoveModifier(0.2f, 0, 0,-2000f,0, EaseStrongOut.getInstance());
+		registerEntityModifier(modifier);
+		//menuScene.registerEntityModifier(modifier.deepCopy());
+		
+		//menuScene.getsetBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		IEntityModifier menuSceneModifier = new MoveModifier(0.2f, menuScene.getX(), menuScene.getX(),menuScene.getY()-2000f,menuScene.getY(), EaseStrongOut.getInstance());
+		menuScene.registerEntityModifier(menuSceneModifier);
+		
 	}
 }

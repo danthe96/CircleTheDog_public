@@ -1,17 +1,38 @@
 package com.danthe.dogeescape.view;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.DelayModifier;
+import org.andengine.entity.modifier.EntityModifier;
+import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationByModifier;
+import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.modifier.ease.EaseElasticIn;
+import org.andengine.util.modifier.ease.EaseElasticInOut;
+import org.andengine.util.modifier.ease.EaseElasticOut;
 
+import android.util.Log;
+
+import com.danthe.dogeescape.GameActivity;
 import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.model.Tile;
 import com.danthe.dogeescape.model.Tile.TileType;
 import com.danthe.dogeescape.model.level.Level;
 
 public class TileView extends TiledSprite implements ChangeListener {
-
+	private static final String TAG = "TileView";
+	
+	
 	private Level level;
 
 	public final Tile tile;
@@ -37,6 +58,17 @@ public class TileView extends TiledSprite implements ChangeListener {
 		blockInput = false;
 
 		tile.addChangeListener(this);
+		
+		triggerStartAnimation();
+	}
+
+	private void triggerStartAnimation() {
+		float distance = (float) (Math.sqrt(Math.pow((defaultX-GameActivity.CAMERA_WIDTH/2),2)+Math.pow((defaultY-GameActivity.CAMERA_HEIGHT/2),2))/(float) GameActivity.CAMERA_WIDTH);
+		//if (tile.getTileType() != TileType.EMPTY) setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		Log.d(TAG, "dist "+distance);
+		IEntityModifier modifier = new SequenceEntityModifier(new ScaleModifier((float) (distance/2f+Math.random()/10f),1f,1f),new AlphaModifier(0.1f, getAlpha(), 0f), new AlphaModifier(0.1f, 0f, getAlpha()));
+		registerEntityModifier(modifier);
+		
 	}
 
 	private void updateGraphics() {
@@ -120,6 +152,17 @@ public class TileView extends TiledSprite implements ChangeListener {
 	@Override
 	public void onStateChanged() {
 		updateGraphics();
+
+		triggerStakeSetAnimation();
+
+	}
+
+	private void triggerStakeSetAnimation() {
+		//, new MoveModifier(2f, getY(), getX(), getY()+getScaledHeight()/2, getX()+getWidth()/2);
+		setScaleCenter(getWidth()/2,getHeight());
+		final IEntityModifier scaleModifier = new ParallelEntityModifier(new ScaleModifier(0.25f, 0.001f, 1f, EaseElasticOut.getInstance()));
+		this.registerEntityModifier(scaleModifier);
+		Log.d(TAG, "Animation started");
 	}
 
 }

@@ -64,7 +64,7 @@ public class GameScene extends Scene {
 
 	private Level currentLevel;
 
-	private float graphicalTileWidth;
+	public static float graphicalTileWidth;
 
 	private List<TileView> tileViews = new LinkedList<TileView>();
 	private LinkedList<EnemySprite> enemySprites;

@@ -2,10 +2,14 @@ package com.danthe.dogeescape.view;
 
 import java.util.List;
 
+import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.AnimatedSprite.IAnimationListener;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.modifier.ease.EaseExponentialInOut;
+import org.andengine.util.modifier.ease.EaseQuadInOut;
 
 import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.model.Enemy;
@@ -17,6 +21,8 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 	private Enemy enemy;
 	private List<TileView> tileViews;
 	private GameScene parent;
+	
+	private int oldPosition;
 
 	public EnemySprite(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion pTiledTextureRegion,
@@ -30,6 +36,8 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 		this.parent = parent;
 
 		animate(new long[] { 200, 250 }, 0, 1, true, this);
+		
+		oldPosition = enemy.getPosition();
 	}
 
 	@Override
@@ -38,23 +46,30 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 		this.setZIndex(2 * enemy.getPosition() + 4);
 		parent.sortChildren();
 
-		double xStep = (tileViews.get(enemy.getPosition()).getX() - mX) / 25d;
-		double yStep = (tileViews.get(enemy.getPosition()).getY() - 9
-				* parent.getGraphicalTileWidth() / 8 - mY) / 25d;
-
-		for (int i = 0; i < 25; i++) {
-
-			mX += (1.5 - i / 24d) * xStep;
-			mY += (1.5 - i / 24d) * yStep;
-
-			try {
-				Thread.sleep(8);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-		}
-
+//		double xStep = (tileViews.get(enemy.getPosition()).getX() - mX) / 25d;
+//		double yStep = (tileViews.get(enemy.getPosition()).getY() - 9
+//				* parent.getGraphicalTileWidth() / 8 - mY) / 25d;
+//
+//		for (int i = 0; i < 25; i++) {
+//
+//			mX += (1.5 - i / 24d) * xStep;
+//			mY += (1.5 - i / 24d) * yStep;
+//
+//			try {
+//				Thread.sleep(8);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//
+//		}
+		float XStep = tileViews.get(enemy.getPosition()).getX() - tileViews.get(oldPosition).getX() + getX();
+		float YStep = tileViews.get(enemy.getPosition()).getY() - tileViews.get(oldPosition).getY() + getY();
+		
+		oldPosition = enemy.getPosition();
+		
+		IEntityModifier entityModifier = new DogeMoveModifier(0.2f, getX(), XStep, getY(), YStep);
+		registerEntityModifier(entityModifier);
+		
 		if (enemy.hasWon()) {
 			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
 		} else if (enemy.hasLost()) {
