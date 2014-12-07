@@ -175,7 +175,7 @@ public class LevelManager {
 	}
 
 	public boolean isOpenToPlay(int levelID) {
-		return getStatus(levelID) != Status.LOCKED;
+		return levelID < numLevels && getStatus(levelID) != Status.LOCKED;
 	}
 
 	private Story getStoryForLevelID(int levelID) {
