@@ -8,10 +8,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.andengine.util.debug.Debug;
+
 import android.util.Log;
 
-import com.danthe.dogeescape.Tracker;
 import com.danthe.dogeescape.SceneManager.SceneType;
+import com.danthe.dogeescape.Tracker;
 import com.danthe.dogeescape.Tracker.LevelSuccess;
 import com.danthe.dogeescape.interfaces.AssetManagerProvider;
 import com.danthe.dogeescape.interfaces.HumanActivityListener;
@@ -194,6 +196,7 @@ public class Level implements Runnable, HumanActivityListener {
 
 			for (Enemy e : enemies) {
 				if (!t.isInterrupted()) {
+					Debug.d(e + " checking in");
 					e.recheckPath();
 					e.updateWay();
 					checkVictory();
@@ -246,31 +249,33 @@ public class Level implements Runnable, HumanActivityListener {
 	}
 
 	private void checkVictory() {
-		won = true;
-		lost = false;
-		for (Enemy e : enemies) {
-			if (!e.hasLost())
-				won = false;
-			if (e.hasWon())
-				lost = true;
-		}
+		if (!(won || lost)) {
+			won = true;
+			lost = false;
+			for (Enemy e : enemies) {
+				if (!e.hasLost())
+					won = false;
+				if (e.hasWon())
+					lost = true;
+			}
 
-		if (lost || won) {
-			if (won) {
-				LevelManager.getInstance().setLevelSolved(levelID, turns);
-				Tracker.getInstance().triggerLevel(levelID, LevelSuccess.WIN,
-						turns);
-			} else if (lost) {
-				Tracker.getInstance().triggerLevel(levelID, LevelSuccess.FAIL,
-						turns);
+			if (lost || won) {
+				if (won) {
+					LevelManager.getInstance().setLevelSolved(levelID, turns);
+					Tracker.getInstance().triggerLevel(levelID,
+							LevelSuccess.WIN, turns);
+				} else if (lost) {
+					Tracker.getInstance().triggerLevel(levelID,
+							LevelSuccess.FAIL, turns);
+				}
+				try {
+					Thread.sleep(750);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				sceneSetter.setScene(SceneType.ENDSCENE);
+				t.interrupt();
 			}
-			try {
-				Thread.sleep(750);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			sceneSetter.setScene(SceneType.ENDSCENE);
-			t.interrupt();
 		}
 	}
 

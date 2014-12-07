@@ -14,9 +14,11 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.danthe.dogeescape.GameActivity;
+import com.danthe.dogeescape.R;
 import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.model.level.LevelManager;
@@ -33,18 +35,18 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 	private static final float HINT_X = 0.5f;
 	private static final float HINT_Y = 0.9f;
 
-	private StorySelectScene(
+	private StorySelectScene(Context context,
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
 			SceneSetter levelSceneSetter) {
 		this.sceneSetter = levelSceneSetter;
 		createBackground(vertexBufferObjectManager);
-		createMenuChildScene(vertexBufferObjectManager, camera);
+		createMenuChildScene(context, vertexBufferObjectManager, camera);
 	}
 
-	public static StorySelectScene createScene(
+	public static StorySelectScene createScene(Context context,
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
 			SceneSetter levelSceneSetter) {
-		StorySelectScene result = new StorySelectScene(
+		StorySelectScene result = new StorySelectScene(context,
 				vertexBufferObjectManager, camera, levelSceneSetter);
 		return result;
 
@@ -66,8 +68,8 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 
 	}
 
-	private void createMenuChildScene(VertexBufferObjectManager vbo,
-			Camera camera) {
+	private void createMenuChildScene(Context context,
+			VertexBufferObjectManager vbo, Camera camera) {
 		menuChildScene = new MenuScene(camera);
 		menuChildScene.setPosition(0, 0);// GameActivity.CAMERA_HEIGHT*MenuTopOffset);
 
@@ -78,9 +80,12 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 		menuChildScene.setOnMenuItemClickListener(this);
 		Log.d(TAG, "CREATE SCENE");
 
+		int[] storyStrings = { R.string.story_0, R.string.story_1 };
+
 		for (Story story : LevelManager.Story.values()) {
 			TextMenuItem storyText = new TextMenuItem(1,
-					TextureManager.comicSansFont, story.getOutputString(), vbo);
+					TextureManager.comicSansFont,
+					context.getText(storyStrings[story.ordinal()]), vbo);
 			final IMenuItem backItem = new AnimatedSpriteMenuItem(
 					story.ordinal(), 825, 330,
 					TextureManager.storyTextures[story.ordinal()], vbo, true,
@@ -94,7 +99,7 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 		setChildScene(menuChildScene);
 
 		Text hint = new Text(0, 0, TextureManager.comicSansFont,
-				"Select a story to start!", new TextOptions(
+				context.getText(R.string.story_select), new TextOptions(
 						HorizontalAlign.CENTER), vbo);
 		hint.setPosition(
 				HINT_X * GameActivity.CAMERA_WIDTH - HINT_X * hint.getWidth(),

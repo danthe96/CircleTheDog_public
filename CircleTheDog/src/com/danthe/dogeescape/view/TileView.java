@@ -1,24 +1,14 @@
 package com.danthe.dogeescape.view;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.DelayModifier;
-import org.andengine.entity.modifier.EntityModifier;
 import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
-import org.andengine.entity.modifier.RotationByModifier;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.modifier.ease.EaseElasticIn;
-import org.andengine.util.modifier.ease.EaseElasticInOut;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 
 import android.util.Log;

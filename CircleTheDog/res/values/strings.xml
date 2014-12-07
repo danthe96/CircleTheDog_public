@@ -10,10 +10,15 @@
     <string name="resume">RESUME</string>
     <string name="play_again">PLAY AGAIN</string>
     <string name="next">NEXT</string>
+    <string name="story_select">Select a story to start!</string>
+    <string name="story_0">The Garden</string>
+    <string name="story_1">Multiplying Problems</string>
     <string name="level">Level %1$d</string>
     <string name="victory">You Win!</string>
     <string name="defeat_info">The Dog escaped after\n%1$d moves. Try again!</string>
-    <string name="victory_info">You finished after %1$d\nmoves.</string>
+    <string name="victory_info">You finished after %1$d moves.</string>
+    <string name="highscore_new">\nCongratulations, this is now \nyour new highscore!</string>
+    <string name="highscore_old">\nYour highscore remains at %1$d.</string>
     <string name="highscore">Your highscores</string>
     <string name="tutorial_1">The dog tries to\nescape from the screen...</string>
     <string name="tutorial_2">Block the tiles in his way...</string>
@@ -33,6 +38,7 @@
     <string name="rate_later">REMIND ME LATER.</string>
     <string name="no">NO, NEVER.</string>
     <string name="shared_pref_level_status_string">level_status_</string>
+    <string name="shared_pref_level_highscore_string">level_highscore_</string>
     <string name="SM_0">\"Isn\'t it nice to be second\nsometimes?\"</string>
     <string name="SM_1">\"How are you any different\nfrom a rat pulling a lever?\"</string>
     <string name="SM_2">\"Hold my beer while I try\nthat again.\"</string>

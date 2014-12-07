@@ -39,9 +39,12 @@ public class LevelManager {
 			return result;
 		}
 
-		public CharSequence getOutputString() {
-			return storylines[ordinal()];
-		}
+		/**
+		 * Hardcoded strings should not be used
+		 */
+		// public CharSequence getOutputString() {
+		// return storylines[ordinal()];
+		// }
 
 		/**
 		 * String to be used in SharedPreferences
@@ -54,14 +57,14 @@ public class LevelManager {
 
 		public int[] getTutorialRange() {
 			switch (this) {
-			case THE_GARDEN: 
-				int[] result = {0,4};
+			case THE_GARDEN:
+				int[] result = { 0, 4 };
 				return result;
-			case MULTIPLYING_PROBLEMS: 
-				int[] result2 = {4,6};
+			case MULTIPLYING_PROBLEMS:
+				int[] result2 = { 4, 6 };
 				return result2;
 			}
-		
+
 			return null;
 		}
 	}

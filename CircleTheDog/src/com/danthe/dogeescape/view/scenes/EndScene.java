@@ -1,13 +1,8 @@
 package com.danthe.dogeescape.view.scenes;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.EntityModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveModifier;
-import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -18,7 +13,10 @@ import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseStrongOut;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.danthe.dogeescape.GameActivity;
@@ -28,10 +26,10 @@ import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.model.level.Level;
 
 public class EndScene extends Scene {
-	private static final int TEXTBOX_WIDTH = 867;
+	private static final float TEXTBOX_WIDTH = 876.5f;
 	private static final float TEXTBOX_HEIGHT = 577.5f;
 	private static final int TEXTBOX_Y = 276;
-	private static final int TEXTBOX_X = 96;
+	private static final int TEXTBOX_X = 98;
 	private static final int MENUSCENE_Y = 924;
 	private static final String TAG = "END_SCENE";
 	private static EndScene instance = null;
@@ -41,9 +39,9 @@ public class EndScene extends Scene {
 	private static final int WINDOW_WIDTH = 1068;
 	private static final int WINDOW_HEIGHT = 1212;
 
-	public static EndScene createScene(Context context, Camera cam,
+	public static EndScene createScene(Activity activity, Camera cam,
 			VertexBufferObjectManager vertexBufferObjectManager, int levelID) {
-		instance = new EndScene(context, cam, vertexBufferObjectManager,
+		instance = new EndScene(activity, cam, vertexBufferObjectManager,
 				levelID);
 
 		return instance;
@@ -53,9 +51,15 @@ public class EndScene extends Scene {
 		return instance;
 	}
 
-	private EndScene(Context context, Camera cam,
+	private EndScene(Activity activity, Camera cam,
 			VertexBufferObjectManager vbo, final int levelID) {
 		Log.d(TAG, "CREATE SCENE");
+
+		SharedPreferences prefs = activity.getPreferences(Context.MODE_PRIVATE);
+		int old_highscore = prefs.getInt(
+				activity.getString(R.string.shared_pref_level_highscore_string)
+						+ levelID + "_" + 0, Integer.MAX_VALUE);
+
 		setY(-2000);
 		TextureRegion endScreenTextureReg = TextureManager.endScreenTextureReg;
 		WINDOW_X = (GameActivity.CAMERA_WIDTH - WINDOW_WIDTH) / 2;
@@ -66,7 +70,7 @@ public class EndScene extends Scene {
 		attachChild(backgroundSprite);
 
 		Text levelName = new Text(0, backgroundSprite.getY() + 82.5f,
-				TextureManager.defaultBigFont, context.getString(
+				TextureManager.defaultBigFont, activity.getString(
 						R.string.level, levelID + 1), vbo);
 		levelName.setColor(Color.BLACK);
 		levelName
@@ -78,14 +82,29 @@ public class EndScene extends Scene {
 			final int SPACE_IN_BETWEEN = 60;
 
 			Text doge_victory = new Text(0, 0, TextureManager.defaultFont,
-					context.getText(R.string.victory), vbo);
+					activity.getText(R.string.victory), vbo);
 			doge_victory.setColor(Color.BLACK);
 			doge_victory.setX(TEXTBOX_X
 					+ (TEXTBOX_WIDTH - doge_victory.getWidth()) / 2);
 			attachChild(doge_victory);
 
+			StringBuffer strbuf = new StringBuffer(activity.getString(
+					R.string.victory_info, Level.turns));
+			if (old_highscore <= Level.turns)
+				strbuf.append(activity.getString(R.string.highscore_old,
+						old_highscore));
+			else {
+				strbuf.append(activity.getString(R.string.highscore_new));
+
+				Editor editor = prefs.edit();
+				editor.putInt(
+						activity.getString(R.string.shared_pref_level_highscore_string)
+								+ levelID + "_" + 0, Level.turns);
+				editor.commit();
+			}
+
 			Text victory_info = new Text(0, 0, TextureManager.defaultFont,
-					context.getString(R.string.victory_info, Level.turns), vbo);
+					strbuf.toString(), vbo);
 			victory_info.setColor(Color.BLACK);
 			victory_info.setX(TEXTBOX_X
 					+ (TEXTBOX_WIDTH - victory_info.getWidth()) / 2);
@@ -110,16 +129,22 @@ public class EndScene extends Scene {
 					+ (TEXTBOX_WIDTH - supportiveText.getWidth()) / 2);
 			attachChild(supportiveText);
 
+			StringBuffer strbuf = new StringBuffer(activity.getString(
+					R.string.defeat_info, Level.turns));
+			if (old_highscore < Integer.MAX_VALUE)
+				strbuf.append(activity.getString(R.string.highscore_old,
+						old_highscore));
+
 			Text doge_defeat = new Text(0, 0, TextureManager.defaultFont,
-					context.getString(R.string.defeat_info, Level.turns), vbo);
+					strbuf.toString(), vbo);
 			doge_defeat.setColor(Color.BLACK);
 			doge_defeat.setX(TEXTBOX_X
 					+ (TEXTBOX_WIDTH - doge_defeat.getWidth()) / 2);
 			attachChild(doge_defeat);
 
-			supportiveText.setY(backgroundSprite.getY() + TEXTBOX_Y);
-			doge_defeat.setY(backgroundSprite.getY() + TEXTBOX_Y
-					+ TEXTBOX_HEIGHT - doge_defeat.getHeight() - 30);
+			supportiveText.setY(WINDOW_Y + TEXTBOX_Y);
+			doge_defeat.setY(WINDOW_Y + TEXTBOX_Y + TEXTBOX_HEIGHT
+					- doge_defeat.getHeight());
 
 		}
 
@@ -133,13 +158,17 @@ public class EndScene extends Scene {
 	}
 
 	private void triggerAnimation(MenuButtonMenuScene menuScene) {
-		IEntityModifier modifier = new MoveModifier(0.2f, 0, 0,-2000f,0, EaseStrongOut.getInstance());
+		IEntityModifier modifier = new MoveModifier(0.2f, 0, 0, -2000f, 0,
+				EaseStrongOut.getInstance());
 		registerEntityModifier(modifier);
-		//menuScene.registerEntityModifier(modifier.deepCopy());
-		
-		//menuScene.getsetBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		IEntityModifier menuSceneModifier = new MoveModifier(0.2f, menuScene.getX(), menuScene.getX(),menuScene.getY()-2000f,menuScene.getY(), EaseStrongOut.getInstance());
+		// menuScene.registerEntityModifier(modifier.deepCopy());
+
+		// menuScene.getsetBlendFunction(GL10.GL_SRC_ALPHA,
+		// GL10.GL_ONE_MINUS_SRC_ALPHA);
+		IEntityModifier menuSceneModifier = new MoveModifier(0.2f,
+				menuScene.getX(), menuScene.getX(), menuScene.getY() - 2000f,
+				menuScene.getY(), EaseStrongOut.getInstance());
 		menuScene.registerEntityModifier(menuSceneModifier);
-		
+
 	}
 }
