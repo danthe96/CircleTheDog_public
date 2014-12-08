@@ -19,12 +19,14 @@ import com.danthe.dogeescape.interfaces.SceneSetter;
 import com.danthe.dogeescape.view.AnimatedSpriteMenuItem;
 import com.danthe.dogeescape.view.TileView;
 
+@Deprecated
 public class PauseMenu extends MenuScene implements IOnMenuItemClickListener {
 	private static final String TAG = "PAUSE_MENU";
 	// private static PauseMenu instance = null;
 
 	private final SceneSetter sceneSetter;
-	private GameScene parent;
+
+	// private GameScene parent;
 
 	public static PauseMenu createScene(Camera camera, Context context,
 			VertexBufferObjectManager vbo) {
@@ -63,10 +65,10 @@ public class PauseMenu extends MenuScene implements IOnMenuItemClickListener {
 	@Override
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
-		parent = GameScene.getInstance();
+		// parent = GameScene.getInstance();
 		switch (pMenuItem.getID()) {
 		case 0:
-			parent.switchChildScene();
+			// parent.switchChildScene();
 			TileView.blockInput = false;
 			return true;
 		case 1:

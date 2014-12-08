@@ -1,5 +1,6 @@
 package com.danthe.dogeescape.view.scenes;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +28,8 @@ import com.danthe.dogeescape.TextureManager;
  * 
  */
 public class MotherScene extends Scene {
-	private static final float TIME = 0.2f;
+	private static final float TIME = 0.25f;
+	private static final float CLOUD_TIME_MODIFIER = 5f;
 	public static final String TAG = "MotherScene";
 
 	public enum Direction {
@@ -59,68 +61,100 @@ public class MotherScene extends Scene {
 				GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
 				vertexBufferObjectManager);
 		setBackground(new SpriteBackground(0, 0, 0, backgroundSprite));
-		
-		attachChild(new Cloud(100f, 12f, 2f,vertexBufferObjectManager, TextureManager.clouds[0]));
-		attachChild(new Cloud(300f, 15f, 2.5f,vertexBufferObjectManager, TextureManager.clouds[1]));
-		attachChild(new Cloud(200f, 9f, 2f,vertexBufferObjectManager, TextureManager.clouds[2]));
-		
-		Sprite logo = new Sprite(0, 0, GameActivity.CAMERA_WIDTH, 512, TextureManager.logoTextureRegion, vertexBufferObjectManager);
+
+		attachChild(new Cloud(CLOUD_TIME_MODIFIER * 100f, 12f, 2f,
+				vertexBufferObjectManager, TextureManager.clouds[0]));
+		attachChild(new Cloud(CLOUD_TIME_MODIFIER * 300f, 15f, 2.5f,
+				vertexBufferObjectManager, TextureManager.clouds[1]));
+		attachChild(new Cloud(CLOUD_TIME_MODIFIER * 200f, 9f, 2f,
+				vertexBufferObjectManager, TextureManager.clouds[2]));
+
+		Sprite logo = new Sprite(0, 0, GameActivity.CAMERA_WIDTH, 512,
+				TextureManager.logoTextureRegion, vertexBufferObjectManager);
 		attachChild(logo);
 	}
 
 	public void swapScene(Scene newScene) {
 		Scene oldScene = getChildScene();
-		setChildScene(newScene);
-		if (oldScene == null)
+		if (oldScene == null) {
+			setChildScene(newScene);
 			return;
+		}
+		HashMap<Scene, Float> oldX = new HashMap<Scene, Float>();
+		float transformNewScene = getRanking(newScene) >= getRanking(oldScene) ? 2000f
+				: -2000f;
+		for (Scene s : getAllChildScenes(newScene)) {
+			oldX.put(s, s.getX());
+			s.setX(s.getX() + transformNewScene);
+		}
+		setChildScene(newScene);
 		attachChild(oldScene);
-		boolean moveOutAction = false;
-		if (newScene instanceof LevelSelectScene
-				&& oldScene instanceof StorySelectScene) {
+		// boolean moveOutAction = false;
+		if (getRanking(newScene) >= getRanking(oldScene)) {
 			moveOut(oldScene, Direction.LEFT);
-			moveIn(newScene, Direction.RIGHT);
-			moveOutAction = true;
-		}
-		if (oldScene instanceof LevelSelectScene
-				&& newScene instanceof StorySelectScene) {
-			Log.d(TAG, "animate to left");
+			moveIn(newScene, Direction.RIGHT, oldX);
+		} else {
 			moveOut(oldScene, Direction.RIGHT);
-			moveIn(newScene, Direction.LEFT);
-			moveOutAction = true;
-		}
-		if (oldScene instanceof LevelSelectScene
-				&& newScene instanceof GameScene) {
-			Log.d(TAG, "animate to left");
-			moveOut(oldScene, Direction.LEFT);
-			moveIn(newScene, Direction.RIGHT);
-			moveOutAction = true;
+			moveIn(newScene, Direction.LEFT, oldX);
 		}
 
-		if (oldScene instanceof GameScene
-				&& newScene instanceof LevelSelectScene) {
-			Log.d(TAG, "animate to left");
-			moveOut(oldScene, Direction.RIGHT);
-			moveIn(newScene, Direction.LEFT);
-			moveOutAction = true;
-		}
+		// if (newScene instanceof LevelSelectScene
+		// && oldScene instanceof StorySelectScene) {
+		// moveOut(oldScene, Direction.LEFT);
+		// moveIn(newScene, Direction.RIGHT);
+		//
+		// }
+		// if (oldScene instanceof LevelSelectScene
+		// && newScene instanceof StorySelectScene) {
+		// Log.d(TAG, "animate to left");
+		// moveOut(oldScene, Direction.RIGHT);
+		// moveIn(newScene, Direction.LEFT);
+		// moveOutAction = true;
+		// }
+		// if (oldScene instanceof LevelSelectScene
+		// && newScene instanceof GameScene) {
+		// Log.d(TAG, "animate to left");
+		// moveOut(oldScene, Direction.LEFT);
+		// moveIn(newScene, Direction.RIGHT);
+		// moveOutAction = true;
+		// }
+		//
+		// if (oldScene instanceof GameScene
+		// && newScene instanceof LevelSelectScene) {
+		// Log.d(TAG, "animate to left");
+		// moveOut(oldScene, Direction.RIGHT);
+		// moveIn(newScene, Direction.LEFT);
+		// moveOutAction = true;
+		// }
+		//
+		// if (oldScene instanceof GameScene
+		// && newScene instanceof StorySelectScene) {
+		// Log.d(TAG, "animate to left");
+		// moveOut(oldScene, Direction.RIGHT);
+		// moveIn(newScene, Direction.LEFT);
+		// moveOutAction = true;
+		// }
+		// if (moveOutAction == false)
+		// detachChild(oldScene);
 
-		if (oldScene instanceof GameScene
-				&& newScene instanceof StorySelectScene) {
-			Log.d(TAG, "animate to left");
-			moveOut(oldScene, Direction.RIGHT);
-			moveIn(newScene, Direction.LEFT);
-			moveOutAction = true;
-		}
-		if (moveOutAction == false) detachChild(oldScene);
+	}
 
+	private int getRanking(Scene scene) {
+		if (scene instanceof StorySelectScene) {
+			return 0;
+		} else if (scene instanceof LevelSelectScene) {
+			return 1;
+		} else if (scene instanceof GameScene) {
+			return 2;
+		}
+		return -1;
 	}
 
 	private void moveOut(Scene scene, Direction direction) {
 		float aim = (direction == Direction.RIGHT) ? 2000f : -2000f;
-		List<Scene> childList = new LinkedList<Scene>();
-		getAllChildScenes(scene, childList);
-		//Yes this is seriously necessary because otherwise childscenes wont move
-		for (Scene s : childList) {
+		// Yes this is seriously necessary because otherwise childscenes wont
+		// move
+		for (Scene s : getAllChildScenes(scene)) {
 			IEntityModifier moveOut = new MoveModifier(TIME, s.getX(), s.getX()
 					+ aim, s.getY(), s.getY(), EaseStrongInOut.getInstance());
 			moveOut.addModifierListener(oldSceneDetacher);
@@ -128,14 +162,14 @@ public class MotherScene extends Scene {
 		}
 	}
 
-	private void moveIn(Scene scene, Direction direction) {
-		float start = (direction == Direction.RIGHT) ? 2000f : -2000f;
-		List<Scene> childList = new LinkedList<Scene>();
-		getAllChildScenes(scene, childList);
-		//Yes this is seriously necessary because otherwise childscenes wont move
-		for (Scene s : childList) {
-			IEntityModifier moveIn = new MoveModifier(TIME, s.getX()
-					+ start, s.getX(), s.getY(), s.getY(),
+	private void moveIn(Scene scene, Direction direction,
+			HashMap<Scene, Float> destinationX) {
+		// float start = (direction == Direction.RIGHT) ? 2000f : -2000f;
+		// Yes this is seriously necessary because otherwise childscenes wont
+		// move
+		for (Scene s : getAllChildScenes(scene)) {
+			IEntityModifier moveIn = new MoveModifier(TIME, s.getX(),
+					destinationX.get(s), s.getY(), s.getY(),
 					EaseStrongInOut.getInstance());
 			// moveIn.addModifierListener(oldSceneDetacher);
 			s.registerEntityModifier(moveIn);
@@ -143,8 +177,15 @@ public class MotherScene extends Scene {
 		}
 	}
 
-	public void getAllChildScenes(Scene scene, List<Scene> list) {
-		if (scene == null) return;
+	private LinkedList<Scene> getAllChildScenes(Scene scene) {
+		LinkedList<Scene> list = new LinkedList<Scene>();
+		getAllChildScenes(scene, list);
+		return list;
+	}
+
+	private void getAllChildScenes(Scene scene, List<Scene> list) {
+		if (scene == null)
+			return;
 		getAllChildScenes(scene.getChildScene(), list);
 		list.add(scene);
 	}

@@ -181,7 +181,7 @@ public class Level implements Runnable, HumanActivityListener {
 		// initialization
 		lost = false;
 		won = false;
-		turns = 1;
+		turns = 0;
 		playersTurn = true;
 
 		// Main loop
@@ -193,6 +193,7 @@ public class Level implements Runnable, HumanActivityListener {
 					continue main;
 				}
 			}
+			turns++;
 
 			for (Enemy e : enemies) {
 				if (!t.isInterrupted()) {
@@ -212,7 +213,6 @@ public class Level implements Runnable, HumanActivityListener {
 			}
 			checkVictory();
 			updateTiles();
-			turns++;
 			playersTurn = true;
 		}
 

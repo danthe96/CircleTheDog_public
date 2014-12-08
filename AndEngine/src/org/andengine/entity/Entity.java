@@ -1,5 +1,6 @@
 package org.andengine.entity;
 
+import android.annotation.SuppressLint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1341,7 +1342,7 @@ public class Entity implements IEntity {
 		}
 	}
 
-	protected void onManagedDraw(final GLState pGLState, final Camera pCamera) {
+	@SuppressLint("WrongCall") protected void onManagedDraw(final GLState pGLState, final Camera pCamera) {
 		pGLState.pushModelViewGLMatrix();
 		{
 			this.onApplyTransformations(pGLState);
@@ -1397,8 +1398,7 @@ public class Entity implements IEntity {
 
 		if((this.mChildren != null) && !this.mChildrenIgnoreUpdate) {
 			final SmartList<IEntity> entities = this.mChildren;
-			final int entityCount = entities.size();
-			for(int i = 0; i < entityCount; i++) {
+			for(int i = 0; i < entities.size(); i++) {
 				entities.get(i).onUpdate(pSecondsElapsed);
 			}
 		}

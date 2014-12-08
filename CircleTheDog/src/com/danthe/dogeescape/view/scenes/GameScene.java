@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
@@ -46,7 +45,7 @@ public class GameScene extends Scene {
 
 	private static final String TAG = "GAME_SCENE";
 
-	private MenuScene pauseMenu;
+	// private MenuScene pauseMenu;
 	private MenuButtonMenuScene menuButtons;
 
 	private static final float MENU_POSITION_Y = 0.85f;
@@ -169,8 +168,8 @@ public class GameScene extends Scene {
 		// initMenuButtons
 		initMenuButtons(vertexBufferObjectManager, cam);
 
-		pauseMenu = PauseMenu.createScene(cam, context,
-				vertexBufferObjectManager);
+		// pauseMenu = PauseMenu.createScene(cam, context,
+		// vertexBufferObjectManager);
 
 		this.setBackgroundEnabled(false);
 
@@ -239,14 +238,14 @@ public class GameScene extends Scene {
 		return graphicalTileWidth;
 	}
 
-	public void switchChildScene() {
-		if (this.getChildScene() == pauseMenu) {
-			this.setChildScene(menuButtons);
-		} else {
-			this.setChildScene(pauseMenu);
-		}
-
-	}
+	// public void switchChildScene() {
+	// if (this.getChildScene() == pauseMenu) {
+	// this.setChildScene(menuButtons);
+	// } else {
+	// this.setChildScene(pauseMenu);
+	// }
+	//
+	// }
 
 	public Level getCurrentLevel() {
 		return currentLevel;

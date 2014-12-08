@@ -118,7 +118,6 @@ public class MenuButtonMenuScene extends MenuScene implements
 			if (inGame)
 				Tracker.getInstance().triggerLevel(level.levelID,
 						LevelSuccess.RETRY, level.turns);
-
 			return true;
 		case NEXT_ID:
 			sceneSetter.setLevelScene(level.levelID + 1);
