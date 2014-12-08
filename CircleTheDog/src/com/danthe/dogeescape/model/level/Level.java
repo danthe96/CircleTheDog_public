@@ -53,7 +53,7 @@ public class Level implements Runnable, HumanActivityListener {
 	 */
 	public final int tileYLength, tileXLength;
 
-	public static int turns = 0;
+	public int turns = 0;
 	public boolean playersTurn = false;
 	public static boolean lost = false;
 	public static boolean won = false;

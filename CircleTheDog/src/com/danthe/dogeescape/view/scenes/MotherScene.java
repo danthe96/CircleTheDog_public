@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.EntityModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.MoveModifier;

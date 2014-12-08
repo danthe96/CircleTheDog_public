@@ -2,14 +2,11 @@ package com.danthe.dogeescape.view.scenes;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.animator.DirectMenuAnimator;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -30,7 +27,7 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 	private static final String TAG = "STORY_SELECT_SCENE";
 
 	private MenuScene menuChildScene;
-	private Scene background;
+	// private Scene background;
 
 	private SceneSetter sceneSetter;
 
@@ -41,7 +38,7 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 			VertexBufferObjectManager vertexBufferObjectManager, Camera camera,
 			SceneSetter levelSceneSetter) {
 		this.sceneSetter = levelSceneSetter;
-		//createBackground(vertexBufferObjectManager);
+		// createBackground(vertexBufferObjectManager);
 		createMenuChildScene(context, vertexBufferObjectManager, camera);
 		setBackgroundEnabled(false);
 	}
@@ -62,16 +59,18 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 		return true;
 	}
 
-	private void createBackground(	VertexBufferObjectManager vertexBufferObjectManager) {
-		background = new Scene();
-		
-		Sprite backgroundSprite = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
-				GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
-				vertexBufferObjectManager);
-		background.setBackground(new SpriteBackground(0, 0, 0, backgroundSprite));
-		setChildScene(background);
-
-	}
+	// private void createBackground( VertexBufferObjectManager
+	// vertexBufferObjectManager) {
+	// background = new Scene();
+	//
+	// Sprite backgroundSprite = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
+	// GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
+	// vertexBufferObjectManager);
+	// background.setBackground(new SpriteBackground(0, 0, 0,
+	// backgroundSprite));
+	// setChildScene(background);
+	//
+	// }
 
 	private void createMenuChildScene(Context context,
 			VertexBufferObjectManager vbo, Camera camera) {

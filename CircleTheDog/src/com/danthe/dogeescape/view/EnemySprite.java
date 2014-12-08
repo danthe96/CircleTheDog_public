@@ -2,7 +2,6 @@ package com.danthe.dogeescape.view;
 
 import java.util.List;
 
-import org.andengine.entity.modifier.EntityModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.sprite.AnimatedSprite;

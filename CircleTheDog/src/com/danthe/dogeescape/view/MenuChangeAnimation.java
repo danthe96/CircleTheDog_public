@@ -7,6 +7,7 @@ import org.andengine.entity.modifier.IEntityModifier;
  * @author Daniel
  *
  */
+@SuppressWarnings("unused")
 public class MenuChangeAnimation {
 
 	public enum Direction {

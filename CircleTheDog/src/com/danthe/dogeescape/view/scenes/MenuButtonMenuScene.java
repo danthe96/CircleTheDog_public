@@ -16,7 +16,10 @@ import android.util.Log;
 import com.danthe.dogeescape.SceneManager;
 import com.danthe.dogeescape.SceneManager.SceneType;
 import com.danthe.dogeescape.TextureManager;
+import com.danthe.dogeescape.Tracker;
+import com.danthe.dogeescape.Tracker.LevelSuccess;
 import com.danthe.dogeescape.interfaces.SceneSetter;
+import com.danthe.dogeescape.model.level.Level;
 import com.danthe.dogeescape.model.level.LevelManager;
 
 /**
@@ -44,16 +47,20 @@ public class MenuButtonMenuScene extends MenuScene implements
 	public final float DISTANCE_BETWEEN_BUTTONS;
 
 	private final SceneSetter sceneSetter;
-	private final int levelID;
+	private final Level level;
 
 	private final float sceneWidth;
 
+	// tracker is only used when retry button is pressed during gameplay
+	private boolean inGame;
+
 	public MenuButtonMenuScene(Camera cam, VertexBufferObjectManager vbom,
-			int parent_width, int levelID) {
+			int parent_width, Level level, boolean inGame) {
 		super(cam);
 		Log.d(TAG, "Init");
 
-		this.levelID = levelID;
+		this.inGame = inGame;
+		this.level = level;
 		sceneSetter = SceneManager.getSceneSetter();
 
 		setBackgroundEnabled(false);
@@ -75,8 +82,8 @@ public class MenuButtonMenuScene extends MenuScene implements
 		retry.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		addMenuItem(retry);
 
-		if (LevelManager.getInstance().isOpenToPlay(levelID + 1)
-				&& (levelID + 1) % LevelManager.numLevelsPerStory != 0) {
+		if (LevelManager.getInstance().isOpenToPlay(level.levelID + 1)
+				&& (level.levelID + 1) % LevelManager.numLevelsPerStory != 0) {
 			IMenuItem next = new ScaleMenuItemDecorator(new SpriteMenuItem(
 					NEXT_ID, button_size, button_size,
 					TextureManager.nextTextureReg, vbom), EXP_BUTTON_SIZE,
@@ -84,7 +91,8 @@ public class MenuButtonMenuScene extends MenuScene implements
 			next.setPosition(retry.getX() + button_size
 					+ DISTANCE_BETWEEN_BUTTONS, 0);
 			addMenuItem(next);
-			next.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			next.setBlendFunction(GL10.GL_SRC_ALPHA,
+					GL10.GL_ONE_MINUS_SRC_ALPHA);
 		}
 
 		sceneWidth = getMenuItemCount() * button_size
@@ -106,10 +114,14 @@ public class MenuButtonMenuScene extends MenuScene implements
 			sceneSetter.setScene(SceneType.LEVELSELECTSCENE);
 			return true;
 		case RETRY_ID:
-			sceneSetter.setLevelScene(levelID);
+			sceneSetter.setLevelScene(level.levelID);
+			if (inGame)
+				Tracker.getInstance().triggerLevel(level.levelID,
+						LevelSuccess.RETRY, level.turns);
+
 			return true;
 		case NEXT_ID:
-			sceneSetter.setLevelScene(levelID + 1);
+			sceneSetter.setLevelScene(level.levelID + 1);
 			return true;
 		}
 		return false;

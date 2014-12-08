@@ -38,7 +38,7 @@ public class SceneManager implements KeyListener, SceneSetter {
 	private static SceneSetter sceneSetter;
 
 	private MotherScene motherScene;
-	
+
 	private SceneType currentScene;
 	private GameActivity activity;
 	private Engine engine;
@@ -125,7 +125,8 @@ public class SceneManager implements KeyListener, SceneSetter {
 			return levelSelectScene;
 		case ENDSCENE:
 			endScene = EndScene.createScene(activity, camera,
-					activity.getVertexBufferObjectManager(), currentLevelID);
+					activity.getVertexBufferObjectManager(),
+					mainGameScene.getCurrentLevel());
 			return endScene;
 		case STORYSELECTSCENE:
 			storySelectScene = StorySelectScene.createScene(
@@ -148,12 +149,12 @@ public class SceneManager implements KeyListener, SceneSetter {
 	public SceneType getCurrentSceneType() {
 		return currentScene;
 	}
-	
+
 	public void initAndSetMotherScene() {
 
 		motherScene = new MotherScene(activity.getVertexBufferObjectManager());
 		engine.setScene(motherScene);
-		
+
 	}
 
 	@Override
@@ -213,7 +214,7 @@ public class SceneManager implements KeyListener, SceneSetter {
 			break;
 		case STORYSELECTSCENE:
 			motherScene.swapScene(storySelectScene);
-			
+
 			break;
 		case TUTORIALSCENE:
 			if (motherScene.getChildScene() == levelSelectScene)

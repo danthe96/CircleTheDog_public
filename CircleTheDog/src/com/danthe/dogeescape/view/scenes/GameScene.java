@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.ITexture;
@@ -64,7 +63,7 @@ public class GameScene extends Scene {
 
 	private Level currentLevel;
 
-	public static float graphicalTileWidth;
+	private static float graphicalTileWidth;
 
 	private List<TileView> tileViews = new LinkedList<TileView>();
 	private LinkedList<EnemySprite> enemySprites;
@@ -91,7 +90,6 @@ public class GameScene extends Scene {
 		gameFieldTextureReg = TextureManager.gameFieldTextureReg;
 		enemyTextureReg = TextureManager.enemyTextureReg;
 		tileTextureReg = TextureManager.tileTextureReg;
-
 
 		Sprite backgroundSprite = new Sprite(GAMEOVERLAY_X, GAMEOVERLAY_Y,
 				GAMEOVERLAY_WIDTH, GAMEOVERLAY_HEIGHT, gameFieldTextureReg,
@@ -181,7 +179,7 @@ public class GameScene extends Scene {
 	private void initMenuButtons(
 			VertexBufferObjectManager vertexBufferObjectManager, Camera cam) {
 		menuButtons = new MenuButtonMenuScene(cam, vertexBufferObjectManager,
-				GameActivity.CAMERA_WIDTH, currentLevel.levelID);
+				GameActivity.CAMERA_WIDTH, currentLevel, true);
 		menuButtons.setPosition(
 				(GameActivity.CAMERA_WIDTH - menuButtons.getWidth()) / 2,
 				GameActivity.CAMERA_HEIGHT * MENU_POSITION_Y);
@@ -237,7 +235,7 @@ public class GameScene extends Scene {
 		}
 	}
 
-	public float getGraphicalTileWidth() {
+	public static float getGraphicalTileWidth() {
 		return graphicalTileWidth;
 	}
 
@@ -248,6 +246,10 @@ public class GameScene extends Scene {
 			this.setChildScene(pauseMenu);
 		}
 
+	}
+
+	public Level getCurrentLevel() {
+		return currentLevel;
 	}
 
 }

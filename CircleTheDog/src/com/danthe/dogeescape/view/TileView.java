@@ -11,7 +11,6 @@ import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.EaseExponentialInOut;
 
@@ -26,9 +25,6 @@ import com.danthe.dogeescape.model.level.Level;
 public class TileView extends TiledSprite implements ChangeListener {
 	private static final String TAG = "TileView";
 
-
-	
-	
 	private Level level;
 
 	public final Tile tile;
@@ -37,6 +33,7 @@ public class TileView extends TiledSprite implements ChangeListener {
 	public static boolean blockInput = false;
 
 	private IEntityModifier introModifier;
+
 	// TODO remove additional tile Positions
 	public TileView(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion circleTextureReg,
@@ -55,21 +52,22 @@ public class TileView extends TiledSprite implements ChangeListener {
 		blockInput = false;
 
 		tile.addChangeListener(this);
-		
+
 		triggerStartAnimation();
 	}
 
 	private void triggerStartAnimation() {
-		float distance = (float) (Math.sqrt(Math.pow((defaultX-GameActivity.CAMERA_WIDTH/2),2)+Math.pow((defaultY-GameActivity.CAMERA_HEIGHT/2),2))/(float) GameActivity.CAMERA_WIDTH);
+		float distance = (float) (Math.sqrt(Math.pow(
+				(defaultX - GameActivity.CAMERA_WIDTH / 2), 2)
+				+ Math.pow((defaultY - GameActivity.CAMERA_HEIGHT / 2), 2)) / (float) GameActivity.CAMERA_WIDTH);
 		setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		//Log.d(TAG, "dist "+distance);
-		introModifier = new SequenceEntityModifier(
-				new AlphaModifier((float) (distance/2f+Math.random()/10f),0f,0f),
-				new ParallelEntityModifier(
-						new AlphaModifier(0.25f, 0f, getAlpha(), EaseExponentialInOut.getInstance()))
-				);
+		// Log.d(TAG, "dist "+distance);
+		introModifier = new SequenceEntityModifier(new AlphaModifier(
+				(float) (distance / 2f + Math.random() / 10f), 0f, 0f),
+				new ParallelEntityModifier(new AlphaModifier(0.25f, 0f,
+						getAlpha(), EaseExponentialInOut.getInstance())));
 		registerEntityModifier(introModifier);
-		
+
 	}
 
 	private void updateGraphics() {
@@ -161,9 +159,12 @@ public class TileView extends TiledSprite implements ChangeListener {
 	}
 
 	private void triggerStakeSetAnimation() {
-		//, new MoveModifier(2f, getY(), getX(), getY()+getScaledHeight()/2, getX()+getWidth()/2);
-		setScaleCenter(getWidth()/2,getHeight());
-		final IEntityModifier scaleModifier = new ParallelEntityModifier(new ScaleModifier(0.25f, 0.001f, 1f, EaseElasticOut.getInstance()));
+		// , new MoveModifier(2f, getY(), getX(), getY()+getScaledHeight()/2,
+		// getX()+getWidth()/2);
+		setScaleCenter(getWidth() / 2, getHeight());
+		final IEntityModifier scaleModifier = new ParallelEntityModifier(
+				new ScaleModifier(0.25f, 0.001f, 1f,
+						EaseElasticOut.getInstance()));
 		this.registerEntityModifier(scaleModifier);
 		Log.d(TAG, "Animation started");
 	}

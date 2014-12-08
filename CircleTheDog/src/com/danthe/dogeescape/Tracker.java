@@ -18,10 +18,10 @@ public class Tracker {
 
 	private static Tracker instance;
 
-	private static final String LABEL = "TURNS NEEDED";
+	private static final String LABEL = "TURNS NEEDED: ";
 
 	public enum LevelSuccess {
-		FAIL("DEFEAT"), WIN("WIN");
+		FAIL("DEFEAT"), WIN("WIN"), RETRY("RETRY");
 		private String name;
 
 		LevelSuccess(String name) {
@@ -58,6 +58,7 @@ public class Tracker {
 	}
 
 	public void triggerLevel(int levelID, LevelSuccess levelSuccess, long turns) {
-		easyTracker.send(MapBuilder.createEvent("Level "+levelID, levelSuccess.toString(), LABEL, turns).build());
+		easyTracker.send(MapBuilder.createEvent("Level " + levelID,
+				levelSuccess.toString(), LABEL + turns, 0l).build());
 	}
 }

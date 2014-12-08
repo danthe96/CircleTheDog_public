@@ -40,9 +40,8 @@ public class EndScene extends Scene {
 	private static final int WINDOW_HEIGHT = 1212;
 
 	public static EndScene createScene(Activity activity, Camera cam,
-			VertexBufferObjectManager vertexBufferObjectManager, int levelID) {
-		instance = new EndScene(activity, cam, vertexBufferObjectManager,
-				levelID);
+			VertexBufferObjectManager vertexBufferObjectManager, Level level) {
+		instance = new EndScene(activity, cam, vertexBufferObjectManager, level);
 
 		return instance;
 	}
@@ -52,13 +51,13 @@ public class EndScene extends Scene {
 	}
 
 	private EndScene(Activity activity, Camera cam,
-			VertexBufferObjectManager vbo, final int levelID) {
+			VertexBufferObjectManager vbo, final Level level) {
 		Log.d(TAG, "CREATE SCENE");
 
 		SharedPreferences prefs = activity.getPreferences(Context.MODE_PRIVATE);
 		int old_highscore = prefs.getInt(
 				activity.getString(R.string.shared_pref_level_highscore_string)
-						+ levelID + "_" + 0, Integer.MAX_VALUE);
+						+ level.levelID + "_" + 0, Integer.MAX_VALUE);
 
 		setY(-2000);
 		TextureRegion endScreenTextureReg = TextureManager.endScreenTextureReg;
@@ -71,7 +70,7 @@ public class EndScene extends Scene {
 
 		Text levelName = new Text(0, backgroundSprite.getY() + 82.5f,
 				TextureManager.defaultBigFont, activity.getString(
-						R.string.level, levelID + 1), vbo);
+						R.string.level, level.levelID + 1), vbo);
 		levelName.setColor(Color.BLACK);
 		levelName
 				.setX((backgroundSprite.getWidth() - levelName.getWidth()) / 2);
@@ -89,8 +88,8 @@ public class EndScene extends Scene {
 			attachChild(doge_victory);
 
 			StringBuffer strbuf = new StringBuffer(activity.getString(
-					R.string.victory_info, Level.turns));
-			if (old_highscore <= Level.turns)
+					R.string.victory_info, level.turns));
+			if (old_highscore <= level.turns)
 				strbuf.append(activity.getString(R.string.highscore_old,
 						old_highscore));
 			else {
@@ -99,7 +98,7 @@ public class EndScene extends Scene {
 				Editor editor = prefs.edit();
 				editor.putInt(
 						activity.getString(R.string.shared_pref_level_highscore_string)
-								+ levelID + "_" + 0, Level.turns);
+								+ level.levelID + "_" + 0, level.turns);
 				editor.commit();
 			}
 
@@ -130,7 +129,7 @@ public class EndScene extends Scene {
 			attachChild(supportiveText);
 
 			StringBuffer strbuf = new StringBuffer(activity.getString(
-					R.string.defeat_info, Level.turns));
+					R.string.defeat_info, level.turns));
 			if (old_highscore < Integer.MAX_VALUE)
 				strbuf.append(activity.getString(R.string.highscore_old,
 						old_highscore));
@@ -149,7 +148,7 @@ public class EndScene extends Scene {
 		}
 
 		MenuButtonMenuScene menuScene = new MenuButtonMenuScene(cam, vbo,
-				WINDOW_WIDTH, levelID);
+				WINDOW_WIDTH, level, false);
 		menuScene.setPosition((WINDOW_WIDTH - menuScene.getWidth()) / 2,
 				WINDOW_Y + MENUSCENE_Y);
 		setChildScene(menuScene);

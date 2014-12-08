@@ -1,19 +1,13 @@
 package com.danthe.dogeescape.view.scenes;
 
-import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.sprite.vbo.ISpriteVertexBufferObject;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.modifier.IModifier;
 
 import com.danthe.dogeescape.GameActivity;
-import com.danthe.dogeescape.TextureManager;
 
 public class Cloud extends Sprite{
 

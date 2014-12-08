@@ -10,12 +10,14 @@ public class DogeMoveModifier extends SequenceEntityModifier {
 
 	public DogeMoveModifier(float time, float fromX, float toX, float fromY,
 			float toY) {
-		super(new MoveModifier(time / 2, fromX, interpolate(fromX, toX), fromY,
-				interpolate(fromY, toY) - GameScene.graphicalTileWidth / 2,
-				EaseQuadIn.getInstance()), new MoveModifier(time / 2,
-				interpolate(fromX, toX), toX, interpolate(fromY, toY)
-						- GameScene.graphicalTileWidth / 2, toY,
-				EaseQuadIn.getInstance())
+		super(
+				new MoveModifier(time / 2, fromX, interpolate(fromX, toX),
+						fromY, interpolate(fromY, toY)
+								- GameScene.getGraphicalTileWidth() / 2,
+						EaseQuadIn.getInstance()), new MoveModifier(time / 2,
+						interpolate(fromX, toX), toX, interpolate(fromY, toY)
+								- GameScene.getGraphicalTileWidth() / 2, toY,
+						EaseQuadIn.getInstance())
 
 		);
 		// new SequenceModifier(new MoveModifier(time/2, pFromX, pToX, pFromY,

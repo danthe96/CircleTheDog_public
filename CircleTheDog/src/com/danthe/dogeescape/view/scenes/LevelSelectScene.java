@@ -2,13 +2,11 @@ package com.danthe.dogeescape.view.scenes;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -110,14 +108,14 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 		return false;
 	}
 
-	private void createBackground(
-			VertexBufferObjectManager vertexBufferObjectManager) {
-		Sprite background = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
-				GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
-				vertexBufferObjectManager);
-		setBackground(new SpriteBackground(0, 0, 0, background));
-
-	}
+	// private void createBackground(
+	// VertexBufferObjectManager vertexBufferObjectManager) {
+	// Sprite background = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
+	// GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
+	// vertexBufferObjectManager);
+	// setBackground(new SpriteBackground(0, 0, 0, background));
+	//
+	// }
 
 	private void createMenuChildScene(VertexBufferObjectManager vbom,
 			Camera camera) {
