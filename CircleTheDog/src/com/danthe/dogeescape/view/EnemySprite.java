@@ -2,11 +2,14 @@ package com.danthe.dogeescape.view;
 
 import java.util.List;
 
+import org.andengine.entity.modifier.EntityModifier;
 import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.AnimatedSprite.IAnimationListener;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.modifier.ease.EaseBounceOut;
 
 import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.model.Enemy;
@@ -23,6 +26,8 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 	// dog sprite is a little bit further up than its corresponding tile
 	private final float OFFSET_Y;
 
+	private IEntityModifier enemyIn;
+	
 	public EnemySprite(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager vertexBufferObjectManager, Enemy enemy,
@@ -39,6 +44,10 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 		animate(new long[] { 200, 250 }, 0, 1, true, this);
 
 		oldPosition = enemy.getPosition();
+		
+		enemyIn = new MoveYModifier((float) (0.7f*(Math.random()/20f+1f)), -200, getY(), EaseBounceOut.getInstance());
+		this.registerEntityModifier(enemyIn);
+		
 	}
 
 	@Override
@@ -50,6 +59,7 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 		float XStep = tileViews.get(enemy.getPosition()).getX();
 		float YStep = tileViews.get(enemy.getPosition()).getY() + OFFSET_Y;
 
+		this.unregisterEntityModifier(enemyIn);
 		IEntityModifier entityModifier = new DogeMoveModifier(0.2f, tileViews
 				.get(oldPosition).getX(), XStep, tileViews.get(oldPosition)
 				.getY() + OFFSET_Y, YStep);

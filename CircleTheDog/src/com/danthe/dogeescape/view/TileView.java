@@ -1,5 +1,7 @@
 package com.danthe.dogeescape.view;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
@@ -9,7 +11,9 @@ import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.EaseElasticOut;
+import org.andengine.util.modifier.ease.EaseExponentialInOut;
 
 import android.util.Log;
 
@@ -21,6 +25,8 @@ import com.danthe.dogeescape.model.level.Level;
 
 public class TileView extends TiledSprite implements ChangeListener {
 	private static final String TAG = "TileView";
+
+
 	
 	
 	private Level level;
@@ -30,6 +36,7 @@ public class TileView extends TiledSprite implements ChangeListener {
 
 	public static boolean blockInput = false;
 
+	private IEntityModifier introModifier;
 	// TODO remove additional tile Positions
 	public TileView(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion circleTextureReg,
@@ -54,14 +61,20 @@ public class TileView extends TiledSprite implements ChangeListener {
 
 	private void triggerStartAnimation() {
 		float distance = (float) (Math.sqrt(Math.pow((defaultX-GameActivity.CAMERA_WIDTH/2),2)+Math.pow((defaultY-GameActivity.CAMERA_HEIGHT/2),2))/(float) GameActivity.CAMERA_WIDTH);
-		//if (tile.getTileType() != TileType.EMPTY) setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		Log.d(TAG, "dist "+distance);
-		IEntityModifier modifier = new SequenceEntityModifier(new ScaleModifier((float) (distance/2f+Math.random()/10f),1f,1f),new AlphaModifier(0.1f, getAlpha(), 0f), new AlphaModifier(0.1f, 0f, getAlpha()));
-		registerEntityModifier(modifier);
+		setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		//Log.d(TAG, "dist "+distance);
+		introModifier = new SequenceEntityModifier(
+				new AlphaModifier((float) (distance/2f+Math.random()/10f),0f,0f),
+				new ParallelEntityModifier(
+						new AlphaModifier(0.25f, 0f, getAlpha(), EaseExponentialInOut.getInstance()))
+				);
+		registerEntityModifier(introModifier);
 		
 	}
 
 	private void updateGraphics() {
+		this.unregisterEntityModifier(introModifier);
+		this.setAlpha(tile.getTileType().getAlpha());
 		switch (tile.getTileType()) {
 		case EMPTY:
 			this.setCurrentTileIndex(0);

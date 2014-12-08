@@ -9,7 +9,12 @@ import com.danthe.dogeescape.interfaces.HumanActivityListener;
 public class Tile {
 
 	public enum TileType {
-		EMPTY, STAKE, ROCK, BUSH, ICE, LAVA, SWAMP, TURTLE
+		EMPTY, STAKE, ROCK, BUSH, ICE, LAVA, SWAMP, TURTLE;
+		
+		public float getAlpha() {
+			if (this != EMPTY) return 1;
+			return 94/255f;
+		}
 	}
 
 	final int x;
