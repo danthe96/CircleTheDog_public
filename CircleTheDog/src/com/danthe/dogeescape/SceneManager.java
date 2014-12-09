@@ -3,6 +3,7 @@ package com.danthe.dogeescape;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -54,6 +55,8 @@ public class SceneManager implements KeyListener, SceneSetter {
 
 	private int currentLevelID = 0;
 	private Story currentStory = DEFAULT_STORY;
+
+	private Sprite filterOverlaySprite;
 
 	public enum SceneType {
 		MAINGAME, SPLASHSCENE, LEVELSELECTSCENE, ENDSCENE, STORYSELECTSCENE, TUTORIALSCENE
@@ -122,6 +125,10 @@ public class SceneManager implements KeyListener, SceneSetter {
 			levelSelectScene = LevelSelectScene.createScene(
 					activity.getVertexBufferObjectManager(), camera, this,
 					currentStory, activity);
+			filterOverlaySprite = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
+					GameActivity.CAMERA_HEIGHT,
+					TextureManager.backgroundFilterTextureReg,
+					activity.getVertexBufferObjectManager());
 			return levelSelectScene;
 		case ENDSCENE:
 			endScene = EndScene.createScene(activity, camera,
@@ -138,6 +145,10 @@ public class SceneManager implements KeyListener, SceneSetter {
 			tutorialScene = new HowToScene(camera,
 					activity.getVertexBufferObjectManager(),
 					activity.getApplicationContext(), range[0], range[1]);
+			filterOverlaySprite = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
+					GameActivity.CAMERA_HEIGHT,
+					TextureManager.backgroundFilterTextureReg,
+					activity.getVertexBufferObjectManager());
 			return tutorialScene;
 		default:
 			throw new RuntimeException("Tried to create unknown scene: "
@@ -209,16 +220,20 @@ public class SceneManager implements KeyListener, SceneSetter {
 				return;
 			break;
 		case ENDSCENE:
-			if (motherScene.getChildScene() == mainGameScene)
+			if (motherScene.getChildScene() == mainGameScene) {
+				mainGameScene.attachChild(filterOverlaySprite);
 				mainGameScene.setChildScene(endScene);
+			}
 			break;
 		case STORYSELECTSCENE:
 			motherScene.swapScene(storySelectScene);
 
 			break;
 		case TUTORIALSCENE:
-			if (motherScene.getChildScene() == levelSelectScene)
+			if (motherScene.getChildScene() == levelSelectScene) {
+				levelSelectScene.attachChild(filterOverlaySprite);
 				levelSelectScene.setChildScene(tutorialScene);
+			}
 			break;
 		default:
 			throw new RuntimeException("Tried to set unknown scene " + scene);

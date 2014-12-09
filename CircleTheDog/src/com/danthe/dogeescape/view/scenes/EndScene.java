@@ -1,7 +1,6 @@
 package com.danthe.dogeescape.view.scenes;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.scene.Scene;
@@ -17,8 +16,6 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
-import org.andengine.util.modifier.IModifier;
-import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseStrongOut;
 
 import android.app.Activity;
@@ -52,7 +49,6 @@ public class EndScene extends Scene {
 	private static final float WINDOW_X = (GameActivity.CAMERA_WIDTH - WINDOW_WIDTH) / 2f;
 
 	private final Scene endResultScene, rateAppScene;
-	private Sprite filterSprite;
 
 	public static EndScene createScene(Activity activity, Camera cam,
 			VertexBufferObjectManager vertexBufferObjectManager, Level level) {
@@ -76,10 +72,6 @@ public class EndScene extends Scene {
 		Sprite backgroundSprite = new Sprite(WINDOW_X, WINDOW_Y, WINDOW_WIDTH,
 				WINDOW_HEIGHT, endScreenTextureReg, vbo);
 		attachChild(backgroundSprite);
-
-		filterSprite = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
-				GameActivity.CAMERA_HEIGHT,
-				TextureManager.backgroundFilterTextureReg, vbo);
 
 		Text levelName = new Text(0, WINDOW_Y + 82.5f,
 				TextureManager.defaultBigFont, activity.getString(
@@ -116,25 +108,6 @@ public class EndScene extends Scene {
 				scene.getX(), scene.getY() - 2000f, scene.getY(),
 				EaseStrongOut.getInstance());
 		scene.registerEntityModifier(modifier);
-
-		if (scene == this) {
-			modifier.addModifierListener(new IModifierListener<IEntity>() {
-
-				@Override
-				public void onModifierStarted(IModifier<IEntity> pModifier,
-						IEntity pItem) {
-				}
-
-				@Override
-				public void onModifierFinished(IModifier<IEntity> pModifier,
-						IEntity pItem) {
-					attachChild(filterSprite);
-					filterSprite.setZIndex(-1);
-					sortChildren();
-				}
-			});
-		}
-
 	}
 
 	class EndResultScene extends Scene {
