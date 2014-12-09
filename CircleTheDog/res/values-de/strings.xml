@@ -29,8 +29,7 @@
     <string name="share_via">Teilen in</string>
     <string name="rate_top">Gefällt dir das Spiel?</string>
     <string name="rate_info">Bitte unterstütze unser\nSpiel, indem du es\nbewertest. Das hilft uns\nWIRKLICH sehr.</string>
-    <string name="rate_yes">NA KLAR!</string>
-    <string name="rate_later">SPÄTER VIELLEICHT.</string>
-    <string name="no">NEIN, NIEMALS!</string>
+    <string name="rate_yes">Ja, lass sie mich raten!</string>
+    <string name="rate_no">Nein, ich will Feedback geben.</string>
 
 </resources>

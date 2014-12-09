@@ -29,7 +29,8 @@ public class HowToScene extends Scene implements IOnMenuItemClickListener {
 
 	private int panel_nr;
 	private final TextureRegion tutorialBackgroundTextureReg;
-	private MenuScene[] tutorialMenuScenes;// = new MenuScene[TextureManager.TUTORIAL_PANEL_COUNT];
+	private MenuScene[] tutorialMenuScenes;// = new
+											// MenuScene[TextureManager.TUTORIAL_PANEL_COUNT];
 
 	private SceneSetter sceneSetter;
 	private int lastPanelNumber;
@@ -39,24 +40,31 @@ public class HowToScene extends Scene implements IOnMenuItemClickListener {
 			SCENE_Y = (GameActivity.CAMERA_HEIGHT - SCENE_HEIGHT) / 2;
 	private static final float CONTENT_X = 37.5f, CONTENT_Y = 37.5f;
 
-	public HowToScene(Camera cam, VertexBufferObjectManager vbo, Context context, int panelStart, int panelEnd) {
+	public HowToScene(Camera cam, VertexBufferObjectManager vbo,
+			Context context, int panelStart, int panelEnd) {
 		super();
-		tutorialMenuScenes = new MenuScene[panelEnd-panelStart];
+		tutorialMenuScenes = new MenuScene[panelEnd - panelStart];
 		tutorialBackgroundTextureReg = TextureManager.tutorialBackgroundTextureReg;
 		sceneSetter = SceneManager.getSceneSetter();
 		panel_nr = 0;
-		lastPanelNumber = panelEnd-panelStart;
+		lastPanelNumber = panelEnd - panelStart;
+
+		this.setBackgroundEnabled(false);
+
+		Sprite filterSprite = new Sprite(0, 0, GameActivity.CAMERA_WIDTH,
+				GameActivity.CAMERA_HEIGHT,
+				TextureManager.backgroundFilterTextureReg, vbo);
+		attachChild(filterSprite);
 
 		Sprite backgroundSprite = new Sprite(SCENE_X, SCENE_Y, SCENE_WIDTH,
 				SCENE_HEIGHT, tutorialBackgroundTextureReg, vbo);
 		attachChild(backgroundSprite);
 
 		for (int i = panelStart; i < panelEnd; i++) {
-			tutorialMenuScenes[i-panelStart] = new HowToMenuScene(cam, vbo, context, i);
-			tutorialMenuScenes[i-panelStart].setOnMenuItemClickListener(this);
+			tutorialMenuScenes[i - panelStart] = new HowToMenuScene(cam, vbo,
+					context, i);
+			tutorialMenuScenes[i - panelStart].setOnMenuItemClickListener(this);
 		}
-
-		this.setBackgroundEnabled(false);
 
 		this.setChildScene(tutorialMenuScenes[panel_nr]);
 		tutorialMenuScenes[panel_nr].setPosition(SCENE_X + CONTENT_X, SCENE_Y
@@ -87,7 +95,8 @@ public class HowToScene extends Scene implements IOnMenuItemClickListener {
 
 		private final TextureRegion[] tutorialPictures;
 		private final int[] TEXT_RESOURCES = { R.string.tutorial_1,
-				R.string.tutorial_2, R.string.tutorial_3, R.string.tutorial_4, R.string.tutorial_5,R.string.tutorial_6};
+				R.string.tutorial_2, R.string.tutorial_3, R.string.tutorial_4,
+				R.string.tutorial_5, R.string.tutorial_6 };
 
 		private final float MENUSCENE_WIDTH = HowToScene.SCENE_WIDTH - 2
 				* HowToScene.CONTENT_X,

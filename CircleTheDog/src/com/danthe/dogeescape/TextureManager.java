@@ -54,10 +54,12 @@ public class TextureManager {
 	public static Font defaultFont, defaultBigFont, comicSansFont;
 
 	// EndScene
+	private static Texture backgroundFilterTexture;
 	private static BitmapTextureAtlas endButtonsBTA;
 	private static Texture endScreenTexture;
 	public static TextureRegion endScreenTextureReg, backToMenuTextureReg,
-			retryTextureReg, nextTextureReg, tutorialButtonTextureReg;
+			retryTextureReg, nextTextureReg, tutorialButtonTextureReg,
+			backgroundFilterTextureReg;
 
 	// StorySelectScene
 	private static BitmapTextureAtlas storyBTA;
@@ -67,18 +69,17 @@ public class TextureManager {
 			.values().length];
 
 	// Background
-	private static BitmapTextureAtlas CloudAtlas; //The whole project was worth it just for the variable with that name
+	private static BitmapTextureAtlas CloudAtlas;
+	// The whole project was worth it just for the variable with that name
 	public static TextureRegion[] clouds;
 	public static Texture logo;
 	public static TextureRegion logoTextureRegion;
-	
-	
+
 	public static final int TUTORIAL_PANEL_COUNT = 6;
 	private static BitmapTextureAtlas tutorialBTA1, tutorialBTA2;
 	public static TextureRegion[] tutorialPictures = new TextureRegion[TUTORIAL_PANEL_COUNT];
 	private static Texture tutorialBackgroundTexture;
 	public static TextureRegion tutorialBackgroundTextureReg;
-
 
 	public static void init(BaseGameActivity activity) {
 		Log.d(TAG, "INIT");
@@ -229,29 +230,28 @@ public class TextureManager {
 		}
 
 	}
+
 	private static void loadCloudTextures() {
 		CloudAtlas.load();
 
 		logo.load();
-		logoTextureRegion = TextureRegionFactory
-				.extractFromTexture(logo);
+		logoTextureRegion = TextureRegionFactory.extractFromTexture(logo);
 
 	}
-	
+
 	private static void initCloudTextures(final BaseGameActivity activity) {
 		Log.d(TAG, "INIT story textures");
 		CloudAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512,
-				512*3,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+				512 * 3, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		// Log.d(TAG, ""+185*storyTextures.length);
-		 clouds = new TextureRegion[3];
+		clouds = new TextureRegion[3];
 		for (int i = 0; i < 3; i++) {
-			 Log.d(TAG, ""+512*i);
-			 clouds[i] = BitmapTextureAtlasTextureRegionFactory
-					.createFromAsset(CloudAtlas, activity, "cloud"+(1+i)+".png",
-							0, 512*i);
+			Log.d(TAG, "" + 512 * i);
+			clouds[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					CloudAtlas, activity, "cloud" + (1 + i) + ".png", 0,
+					512 * i);
 		}
-		
+
 		try {
 			logo = new BitmapTexture(activity.getTextureManager(),
 					new IInputStreamOpener() {
@@ -266,7 +266,7 @@ public class TextureManager {
 		}
 
 	}
-	
+
 	private static void initGameTexture(final BaseGameActivity activity) {
 		Log.d(TAG, "INIT game textures");
 
@@ -321,6 +321,13 @@ public class TextureManager {
 									"gfx/end_screen.png");
 						}
 					});
+			backgroundFilterTexture = new BitmapTexture(activity.getTextureManager(),
+					new IInputStreamOpener() {
+						@Override
+						public InputStream open() throws IOException {
+							return activity.getAssets().open("gfx/filter.png");
+						}
+					});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -345,6 +352,10 @@ public class TextureManager {
 
 		endButtonsBTA.load();
 
+		backgroundFilterTexture.load();
+		backgroundFilterTextureReg = TextureRegionFactory
+				.extractFromTexture(backgroundFilterTexture);
+		
 		endScreenTexture.load();
 		endScreenTextureReg = TextureRegionFactory
 				.extractFromTexture(endScreenTexture);

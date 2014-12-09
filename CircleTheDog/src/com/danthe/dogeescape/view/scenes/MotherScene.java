@@ -76,10 +76,12 @@ public class MotherScene extends Scene {
 
 	public void swapScene(Scene newScene) {
 		Scene oldScene = getChildScene();
-		if (oldScene == null) {
+		if (getRanking(newScene) == -1 || getRanking(oldScene) == -1
+				|| getRanking(newScene) == getRanking(oldScene)) {
 			setChildScene(newScene);
 			return;
 		}
+
 		HashMap<Scene, Float> oldX = new HashMap<Scene, Float>();
 		float transformNewScene = getRanking(newScene) >= getRanking(oldScene) ? 2000f
 				: -2000f;
@@ -177,13 +179,13 @@ public class MotherScene extends Scene {
 		}
 	}
 
-	private LinkedList<Scene> getAllChildScenes(Scene scene) {
+	public static LinkedList<Scene> getAllChildScenes(Scene scene) {
 		LinkedList<Scene> list = new LinkedList<Scene>();
 		getAllChildScenes(scene, list);
 		return list;
 	}
 
-	private void getAllChildScenes(Scene scene, List<Scene> list) {
+	private static void getAllChildScenes(Scene scene, List<Scene> list) {
 		if (scene == null)
 			return;
 		getAllChildScenes(scene.getChildScene(), list);

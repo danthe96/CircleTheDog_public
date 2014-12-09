@@ -329,10 +329,10 @@ containing a value of this type.
     public static final class bool {
         /** Enable automatic activity tracking
          */
-        public static final int ga_autoActivityTracking=0x7f080000;
+        public static final int ga_autoActivityTracking=0x7f070000;
         /** Enable automatic exception tracking
          */
-        public static final int ga_reportUncaughtExceptions=0x7f080001;
+        public static final int ga_reportUncaughtExceptions=0x7f070001;
     }
     public static final class color {
         public static final int common_action_bar_splitter=0x7f050009;
@@ -378,8 +378,8 @@ containing a value of this type.
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f090000;
-        public static final int activity_vertical_margin=0x7f090001;
+        public static final int activity_horizontal_margin=0x7f080000;
+        public static final int activity_vertical_margin=0x7f080001;
     }
     public static final class drawable {
         public static final int common_full_open_on_phone=0x7f020000;
@@ -417,44 +417,44 @@ containing a value of this type.
         public static final int rect_ic_launcher2=0x7f020020;
     }
     public static final class id {
-        public static final int book_now=0x7f060010;
-        public static final int buyButton=0x7f06000a;
-        public static final int buy_now=0x7f06000f;
-        public static final int buy_with_google=0x7f06000e;
-        public static final int classic=0x7f060011;
-        public static final int grayscale=0x7f060012;
-        public static final int holo_dark=0x7f060005;
-        public static final int holo_light=0x7f060006;
-        public static final int hybrid=0x7f060004;
-        public static final int match_parent=0x7f06000c;
-        public static final int monochrome=0x7f060013;
-        public static final int none=0x7f060000;
-        public static final int normal=0x7f060001;
-        public static final int production=0x7f060007;
-        public static final int sandbox=0x7f060008;
-        public static final int satellite=0x7f060002;
-        public static final int selectionDetails=0x7f06000b;
-        public static final int strict_sandbox=0x7f060009;
-        public static final int terrain=0x7f060003;
-        public static final int wrap_content=0x7f06000d;
+        public static final int book_now=0x7f09000e;
+        public static final int buyButton=0x7f09000a;
+        public static final int buy_now=0x7f09000f;
+        public static final int buy_with_google=0x7f090010;
+        public static final int classic=0x7f090011;
+        public static final int grayscale=0x7f090012;
+        public static final int holo_dark=0x7f090005;
+        public static final int holo_light=0x7f090006;
+        public static final int hybrid=0x7f090000;
+        public static final int match_parent=0x7f09000c;
+        public static final int monochrome=0x7f090013;
+        public static final int none=0x7f090001;
+        public static final int normal=0x7f090002;
+        public static final int production=0x7f090007;
+        public static final int sandbox=0x7f090008;
+        public static final int satellite=0x7f090003;
+        public static final int selectionDetails=0x7f09000b;
+        public static final int strict_sandbox=0x7f090009;
+        public static final int terrain=0x7f090004;
+        public static final int wrap_content=0x7f09000d;
     }
     public static final class integer {
-        public static final int google_play_services_version=0x7f070000;
+        public static final int google_play_services_version=0x7f060000;
     }
     public static final class string {
-        public static final int SM_0=0x7f04004a;
-        public static final int SM_1=0x7f04004b;
-        public static final int SM_10=0x7f040054;
-        public static final int SM_11=0x7f040055;
-        public static final int SM_12=0x7f040056;
-        public static final int SM_2=0x7f04004c;
-        public static final int SM_3=0x7f04004d;
-        public static final int SM_4=0x7f04004e;
-        public static final int SM_5=0x7f04004f;
-        public static final int SM_6=0x7f040050;
-        public static final int SM_7=0x7f040051;
-        public static final int SM_8=0x7f040052;
-        public static final int SM_9=0x7f040053;
+        public static final int SM_0=0x7f040049;
+        public static final int SM_1=0x7f04004a;
+        public static final int SM_10=0x7f040053;
+        public static final int SM_11=0x7f040054;
+        public static final int SM_12=0x7f040055;
+        public static final int SM_2=0x7f04004b;
+        public static final int SM_3=0x7f04004c;
+        public static final int SM_4=0x7f04004d;
+        public static final int SM_5=0x7f04004e;
+        public static final int SM_6=0x7f04004f;
+        public static final int SM_7=0x7f040050;
+        public static final int SM_8=0x7f040051;
+        public static final int SM_9=0x7f040052;
         public static final int accept=0x7f040002;
         public static final int app_name=0x7f040024;
         public static final int app_url=0x7f04003f;
@@ -573,12 +573,11 @@ containing a value of this type.
         public static final int howto=0x7f040026;
         public static final int level=0x7f040030;
         public static final int next=0x7f04002c;
-        public static final int no=0x7f040047;
         public static final int play=0x7f040025;
         public static final int play_again=0x7f04002b;
         public static final int quit=0x7f040029;
         public static final int rate_info=0x7f040044;
-        public static final int rate_later=0x7f040046;
+        public static final int rate_no=0x7f040046;
         public static final int rate_top=0x7f040043;
         public static final int rate_yes=0x7f040045;
         public static final int resume=0x7f04002a;
@@ -586,8 +585,8 @@ containing a value of this type.
         public static final int share_app=0x7f040040;
         public static final int share_text=0x7f040041;
         public static final int share_via=0x7f040042;
-        public static final int shared_pref_level_highscore_string=0x7f040049;
-        public static final int shared_pref_level_status_string=0x7f040048;
+        public static final int shared_pref_level_highscore_string=0x7f040048;
+        public static final int shared_pref_level_status_string=0x7f040047;
         public static final int store_picture_message=0x7f040001;
         public static final int store_picture_title=0x7f040000;
         public static final int story_0=0x7f04002e;

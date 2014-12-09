@@ -10,6 +10,9 @@
     <string name="resume">RESUME</string>
     <string name="play_again">PLAY AGAIN</string>
     <string name="next">NEXT</string>
+    <string name="story_select">Select a story to start!</string>
+    <string name="story_0">The Garden</string>
+    <string name="story_1">Multiplying Problems</string>
     <string name="level">Level %1$d</string>
     <string name="victory">You Win!</string>
     <string name="defeat_info">The Dog escaped after\n%1$d moves. Try again!</string>
@@ -31,11 +34,8 @@
     <string name="share_via">Share via</string>
     <string name="rate_top">Do you like the game?</string>
     <string name="rate_info">Please support our game\nby rating it. It REALLY\nhelps us.</string>
-    <string name="rate_yes">OF COURSE!</string>
-    <string name="rate_later">REMIND ME LATER.</string>
-    <string name="no">NO, NEVER.</string>
-    <string name="shared_pref_level_status_string">level_status_</string>
-    <string name="shared_pref_level_highscore_string">level_highscore_</string>
+    <string name="rate_yes">Yes, let me rate it!</string>
+    <string name="rate_no">No, I\'d like to give feedback.</string>
     <string name="SM_0">\"Isn\'t it nice to be second\nsometimes?\"</string>
     <string name="SM_1">\"How are you any different\nfrom a rat pulling a lever?\"</string>
     <string name="SM_2">\"Hold my beer while I try\nthat again.\"</string>

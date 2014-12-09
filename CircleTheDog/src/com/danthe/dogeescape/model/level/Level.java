@@ -70,7 +70,7 @@ public class Level implements Runnable, HumanActivityListener {
 		this.sceneSetter = sceneSetter;
 
 		// this.assetManagerProvider = assetManagerProvider;
-		levelDir = "level" + this.levelID + "/";
+		levelDir = "levels/level" + this.levelID + "/";
 		// this.parent = parent;
 
 		BufferedReader bfr = new BufferedReader(new InputStreamReader(
