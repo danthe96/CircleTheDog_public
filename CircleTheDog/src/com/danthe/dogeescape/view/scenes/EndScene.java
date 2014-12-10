@@ -1,6 +1,7 @@
 package com.danthe.dogeescape.view.scenes;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.scene.Scene;
@@ -16,6 +17,8 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
+import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseStrongOut;
 
 import android.app.Activity;
@@ -68,6 +71,7 @@ public class EndScene extends Scene {
 		// Part required regardless of rating status
 		TextureRegion endScreenTextureReg = TextureManager.endScreenTextureReg;
 		this.setBackgroundEnabled(false);
+		this.setVisible(false);
 
 		Sprite backgroundSprite = new Sprite(WINDOW_X, WINDOW_Y, WINDOW_WIDTH,
 				WINDOW_HEIGHT, endScreenTextureReg, vbo);
@@ -104,10 +108,27 @@ public class EndScene extends Scene {
 
 		// menuScene.getsetBlendFunction(GL10.GL_SRC_ALPHA,
 		// GL10.GL_ONE_MINUS_SRC_ALPHA);
-		IEntityModifier modifier = new MoveModifier(0.35f, scene.getX(),
+		IEntityModifier modifier = new MoveModifier(0.45f, scene.getX(),
 				scene.getX(), scene.getY() - 2000f, scene.getY(),
 				EaseStrongOut.getInstance());
 		scene.registerEntityModifier(modifier);
+		modifier.addModifierListener(new IModifierListener<IEntity>() {
+
+			@Override
+			public void onModifierStarted(IModifier<IEntity> pModifier,
+					IEntity pItem) {
+
+				instance.setVisible(true);
+
+			}
+
+			@Override
+			public void onModifierFinished(IModifier<IEntity> pModifier,
+					IEntity pItem) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	class EndResultScene extends Scene {

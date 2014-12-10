@@ -321,8 +321,8 @@ public class TextureManager {
 									"gfx/end_screen.png");
 						}
 					});
-			backgroundFilterTexture = new BitmapTexture(activity.getTextureManager(),
-					new IInputStreamOpener() {
+			backgroundFilterTexture = new BitmapTexture(
+					activity.getTextureManager(), new IInputStreamOpener() {
 						@Override
 						public InputStream open() throws IOException {
 							return activity.getAssets().open("gfx/filter.png");
@@ -355,7 +355,7 @@ public class TextureManager {
 		backgroundFilterTexture.load();
 		backgroundFilterTextureReg = TextureRegionFactory
 				.extractFromTexture(backgroundFilterTexture);
-		
+
 		endScreenTexture.load();
 		endScreenTextureReg = TextureRegionFactory
 				.extractFromTexture(endScreenTexture);
@@ -378,7 +378,7 @@ public class TextureManager {
 						@Override
 						public InputStream open() throws IOException {
 							return activity.getAssets().open(
-									"gfx/textbox_white.png");
+									"gfx/tutorial_box.png");
 						}
 					});
 		} catch (IOException e) {
