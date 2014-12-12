@@ -61,6 +61,18 @@ public class GameActivity extends BaseGameActivity implements
 		// Google Analytics
 		Tracker.getInstance().triggerOnStop();
 	}
+	
+	@Override
+	protected synchronized void onResume() {
+		mEngine.getSoundManager().onResume();
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		mEngine.getSoundManager().onPause();
+		super.onPause();
+	}
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {

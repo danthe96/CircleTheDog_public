@@ -54,7 +54,6 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 
 	@Override
 	public void onStateChanged() {
-
 		if (Level.won) {
 			TextureManager.doublebark.stop();
 			animate(new long[] { 200, 250 }, 0, 1, true, this);
@@ -67,14 +66,19 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 					250, 225, 250 }, new int[] { 4, 0, 4, 0, 4, 0, 4, 0, 4, 0,
 					4, 0 }, 1, this);
 			return;
-		} else if (enemy.hasWon()) {
+		} else if (enemy.hasWon() && !enemy.hasBarked()) {
+			enemy.bark();
 			TextureManager.doublebark.play();
 			animate(new long[] { 250, 100 }, new int[] { 4, 0 }, 1, this);
-		} else if (enemy.hasLost()) {
+		} else if (enemy.hasLost() && !enemy.hasBarked()) {
+			enemy.bark();
 			TextureManager.doublebark.play();
 			animate(new long[] { 250, 100 }, new int[] { 4, 0 }, 1, this);
 		}
+	}
 
+	@Override
+	public void onPositionChanged() {
 		this.setZIndex(2 * enemy.getPosition() + 4);
 		this.setZIndex(2 * getEnemy().getPosition() + 4);
 		parent.sortChildren();

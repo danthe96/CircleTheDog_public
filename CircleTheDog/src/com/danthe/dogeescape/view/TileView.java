@@ -169,4 +169,9 @@ public class TileView extends TiledSprite implements ChangeListener {
 		Log.d(TAG, "Animation started");
 	}
 
+	@Override
+	public void onPositionChanged() {
+		// TODO Auto-generated method stub
+	}
+
 }

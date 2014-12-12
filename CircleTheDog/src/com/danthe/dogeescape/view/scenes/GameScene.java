@@ -250,11 +250,5 @@ public class GameScene extends Scene {
 	public Level getCurrentLevel() {
 		return currentLevel;
 	}
-	
-	public static void stopGameSounds(){
-		TextureManager.win_bark.stop();
-		TextureManager.lose_whining.stop();
-		TextureManager.doublebark.stop();
-	}
 
 }

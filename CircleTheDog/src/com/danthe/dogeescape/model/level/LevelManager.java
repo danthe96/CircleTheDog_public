@@ -80,6 +80,13 @@ public class LevelManager {
 
 	private LevelManager(Activity activity) {
 		this.activity = activity;
+		
+		/**
+		 * TODO: load 3 star ranking
+		 */
+		
+		
+		
 
 	}
 

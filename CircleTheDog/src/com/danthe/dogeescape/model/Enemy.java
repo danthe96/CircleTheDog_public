@@ -3,8 +3,6 @@ package com.danthe.dogeescape.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.andengine.util.debug.Debug;
-
 import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.model.level.Level;
 
@@ -24,6 +22,8 @@ public class Enemy {
 	private boolean won = false;
 	private boolean lost = false;
 
+	private boolean hasBarked;
+
 	private Level level;
 
 	public Enemy(int position, int tileXLength, int tileYLength,
@@ -31,6 +31,8 @@ public class Enemy {
 		this.position = position;
 		this.tileList = tileList;
 		this.level = level;
+
+		hasBarked = false;
 
 		borderTiles = new LinkedList<Integer>();
 		for (int i = 0; i < tileXLength; i++) {
@@ -55,7 +57,7 @@ public class Enemy {
 				lucrativeFields.add(i);
 				break;
 			}
-			
+
 		}
 
 		int unreachable = 0;
@@ -80,12 +82,13 @@ public class Enemy {
 		if (unreachable >= borderTiles.size()) {
 			if (!lost) {
 				lost = true;
-				changeListener.onStateChanged();
+				// changeListener.onStateChanged();
 			}
 			return;
 		} else
 			lost = false;
 
+		hasBarked = false;
 		path.clear();
 
 		for (int s : secondChoice)
@@ -110,8 +113,8 @@ public class Enemy {
 		recalculate = false;
 	}
 
-	public void gameOver() {
-		Debug.d("Game over, " + this);
+	// I have a dream
+	public void instituteChange() {
 		changeListener.onStateChanged();
 	}
 
@@ -167,7 +170,7 @@ public class Enemy {
 			this.position = path.poll();
 			if (borderTiles.contains(position))
 				won = true;
-			changeListener.onStateChanged();
+			changeListener.onPositionChanged();
 		}
 	}
 
@@ -197,6 +200,14 @@ public class Enemy {
 
 	public int getPosition() {
 		return position;
+	}
+
+	public boolean hasBarked() {
+		return hasBarked;
+	}
+
+	public void bark() {
+		this.hasBarked = true;
 	}
 
 }

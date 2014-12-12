@@ -175,7 +175,7 @@ public class SceneManager implements KeyListener, SceneSetter {
 			TextureManager.click.play();
 			if (currentScene == SceneType.MAINGAME
 					|| currentScene == SceneType.ENDSCENE) {
-				GameScene.stopGameSounds();
+				stopSounds();
 				this.setScene(SceneType.LEVELSELECTSCENE);
 			} else if (currentScene != SceneType.STORYSELECTSCENE) {
 				this.setScene(SceneType.STORYSELECTSCENE);
@@ -245,6 +245,11 @@ public class SceneManager implements KeyListener, SceneSetter {
 		}
 
 		currentScene = scene;
+	}
+
+	@Override
+	public void stopSounds() {
+		engine.getSoundManager().onPause();
 	}
 
 }

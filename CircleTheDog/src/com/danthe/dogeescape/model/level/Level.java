@@ -259,9 +259,9 @@ public class Level implements Runnable, HumanActivityListener {
 					lost = true;
 			}
 
+			for (Enemy e : enemies)
+					e.instituteChange();
 			if (lost || won) {
-				for (Enemy e : enemies)
-					e.gameOver();
 				if (won) {
 					LevelManager.getInstance().setLevelSolved(levelID, turns);
 					Tracker.getInstance().triggerLevel(levelID,

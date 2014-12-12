@@ -8,5 +8,6 @@ public interface SceneSetter {
 	public void setLevelScene(int LevelID);
 	public void setScene(SceneType sceneType);
 	public void setLevelSelectScene(Story selectedStory);
+	public void stopSounds();
 	
 }
