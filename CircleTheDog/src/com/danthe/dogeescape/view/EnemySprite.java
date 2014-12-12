@@ -28,7 +28,6 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 	// dog sprite is a little bit further up than its corresponding tile
 	public final float OFFSET_Y;
 
-
 	public EnemySprite(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager vertexBufferObjectManager, Enemy enemy,
@@ -42,7 +41,7 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 
 		OFFSET_Y = pY - tileViews.get(enemy.getPosition()).getY();
 
-//		animate(new long[] { 200, 250 }, 0, 1, true, this);
+		// animate(new long[] { 200, 250 }, 0, 1, true, this);
 
 		setOldPosition(enemy.getPosition());
 		MoveYModifier enemyIn = new MoveYModifier(
@@ -50,7 +49,7 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 				EaseBounceOut.getInstance());
 		this.registerEntityModifier(enemyIn);
 		dogeModifier = new DogeModifier(this);
-		
+
 	}
 
 	@Override
@@ -68,39 +67,37 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 					250, 225, 250 }, new int[] { 4, 0, 4, 0, 4, 0, 4, 0, 4, 0,
 					4, 0 }, 1, this);
 			return;
+		} else if (enemy.hasWon()) {
+			TextureManager.doublebark.play();
+			animate(new long[] { 250, 100 }, new int[] { 4, 0 }, 1, this);
+		} else if (enemy.hasLost()) {
+			TextureManager.doublebark.play();
+			animate(new long[] { 250, 100 }, new int[] { 4, 0 }, 1, this);
 		}
 
 		this.setZIndex(2 * enemy.getPosition() + 4);
 		this.setZIndex(2 * getEnemy().getPosition() + 4);
 		parent.sortChildren();
 
-//		float XStep = tileViews.get(getEnemy().getPosition()).getX();
-//		float YStep = tileViews.get(getEnemy().getPosition()).getY() + OFFSET_Y;
-//
-//		this.unregisterEntityModifier(enemyIn);
-//		IEntityModifier entityModifier = new DogeMoveModifier(0.2f, tileViews
-//				.get(getOldPosition()).getX(), XStep, tileViews.get(getOldPosition())
-//				.getY() + OFFSET_Y, YStep);
-//		registerEntityModifier(entityModifier);
+		// float XStep = tileViews.get(getEnemy().getPosition()).getX();
+		// float YStep = tileViews.get(getEnemy().getPosition()).getY() +
+		// OFFSET_Y;
+		//
+		// this.unregisterEntityModifier(enemyIn);
+		// IEntityModifier entityModifier = new DogeMoveModifier(0.2f, tileViews
+		// .get(getOldPosition()).getX(), XStep, tileViews.get(getOldPosition())
+		// .getY() + OFFSET_Y, YStep);
+		// registerEntityModifier(entityModifier);
 		dogeModifier.setState(AnimationState.MOVE);
 		setOldPosition(getEnemy().getPosition());
 
-//		if (getEnemy().hasWon()) {
-//			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
-//		} else if (getEnemy().hasLost()) {
-//			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
-//		}
+		// if (getEnemy().hasWon()) {
+		// animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
+		// } else if (getEnemy().hasLost()) {
+		// animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
+		// }
 
 		oldPosition = enemy.getPosition();
-
-		if (enemy.hasWon()) {
-			TextureManager.doublebark.play();
-			animate(new long[] { 250, 100 }, new int[] { 4, 0 }, 2, this);
-		} else if (enemy.hasLost()) {
-			TextureManager.doublebark.play();
-			animate(new long[] { 250, 100 }, new int[] { 4, 0 }, 2, this);
-		}
-
 	}
 
 	@Override
