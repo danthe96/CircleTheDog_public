@@ -110,10 +110,7 @@ public class MenuButtonMenuScene extends MenuScene implements
 			float pMenuItemLocalX, float pMenuItemLocalY) {
 		Debug.d(TAG, "MenuItemClicked");
 
-		TextureManager.win_bark.stop();
-		TextureManager.lose_whining.stop();
-		TextureManager.doublebark.stop();
-
+		GameScene.stopGameSounds();
 		TextureManager.click.play();
 		switch (pMenuItem.getID()) {
 		case BACK_ID:

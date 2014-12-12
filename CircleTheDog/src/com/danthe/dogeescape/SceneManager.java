@@ -173,7 +173,9 @@ public class SceneManager implements KeyListener, SceneSetter {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 			TextureManager.click.play();
-			if (currentScene == SceneType.MAINGAME) {
+			if (currentScene == SceneType.MAINGAME
+					|| currentScene == SceneType.ENDSCENE) {
+				GameScene.stopGameSounds();
 				this.setScene(SceneType.LEVELSELECTSCENE);
 			} else if (currentScene != SceneType.STORYSELECTSCENE) {
 				this.setScene(SceneType.STORYSELECTSCENE);
