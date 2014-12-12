@@ -29,7 +29,7 @@ import com.danthe.dogeescape.TextureManager;
  */
 public class MotherScene extends Scene {
 	private static final float TIME = 0.25f;
-	private static final float CLOUD_TIME_MODIFIER = 5f;
+	private static final float CLOUD_TIME_MODIFIER = 2.5f;
 	public static final String TAG = "MotherScene";
 
 	public enum Direction {
@@ -61,12 +61,13 @@ public class MotherScene extends Scene {
 				GameActivity.CAMERA_HEIGHT, TextureManager.appBackground,
 				vertexBufferObjectManager);
 		setBackground(new SpriteBackground(0, 0, 0, backgroundSprite));
-
-		attachChild(new Cloud(CLOUD_TIME_MODIFIER * 100f, 12f, 2f,
+		
+		//Dear other developers. CLOUD_TIME_MODIFIER should not be applied on the cloud height
+		attachChild(new Cloud(100f, CLOUD_TIME_MODIFIER * 12f, 2f, 
 				vertexBufferObjectManager, TextureManager.clouds[0]));
-		attachChild(new Cloud(CLOUD_TIME_MODIFIER * 300f, 15f, 2.5f,
+		attachChild(new Cloud(300f, CLOUD_TIME_MODIFIER * 15f, 2.5f,
 				vertexBufferObjectManager, TextureManager.clouds[1]));
-		attachChild(new Cloud(CLOUD_TIME_MODIFIER * 200f, 9f, 2f,
+		attachChild(new Cloud(200f, CLOUD_TIME_MODIFIER * 9f, 2f,
 				vertexBufferObjectManager, TextureManager.clouds[2]));
 
 		Sprite logo = new Sprite(0, 0, GameActivity.CAMERA_WIDTH, 512,
