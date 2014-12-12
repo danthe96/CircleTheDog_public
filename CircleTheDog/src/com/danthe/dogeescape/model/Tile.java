@@ -3,6 +3,7 @@ package com.danthe.dogeescape.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.interfaces.HumanActivityListener;
 
@@ -10,10 +11,11 @@ public class Tile {
 
 	public enum TileType {
 		EMPTY, STAKE, ROCK, BUSH, ICE, LAVA, SWAMP, TURTLE;
-		
+
 		public float getAlpha() {
-			if (this != EMPTY) return 1;
-			return 94/255f;
+			if (this != EMPTY)
+				return 1;
+			return 94 / 255f;
 		}
 	}
 
@@ -47,6 +49,7 @@ public class Tile {
 	public void setTileTypeOnHumanOrder(TileType tileType) {
 		humanActivityListener.onHumanActivity();
 		setTileType(tileType);
+		TextureManager.place_stake.play();
 	}
 
 	public void setTileType(TileType tileType) {

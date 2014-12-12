@@ -75,6 +75,7 @@ public class HowToScene extends Scene implements IOnMenuItemClickListener {
 	@Override
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
+		TextureManager.click.play();
 		switch (pMenuItem.getID()) {
 		case HowToMenuScene.CONTINUE_ID:
 			panel_nr++;

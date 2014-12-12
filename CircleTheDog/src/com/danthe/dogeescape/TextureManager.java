@@ -3,6 +3,9 @@ package com.danthe.dogeescape;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
+import org.andengine.audio.sound.SoundManager;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.Texture;
@@ -17,10 +20,10 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.color.Color;
 
-import com.danthe.dogeescape.model.level.LevelManager;
-
 import android.graphics.Typeface;
 import android.util.Log;
+
+import com.danthe.dogeescape.model.level.LevelManager;
 
 /**
  * Idea: This class should hold all textures.
@@ -47,6 +50,7 @@ public class TextureManager {
 	public static TextureRegion gameFieldTextureReg;
 	private static BitmapTextureAtlas tilesBTA, enemyBTA;
 	public static TiledTextureRegion enemyTextureReg, tileTextureReg;
+	public static Sound doublebark, place_stake;
 
 	// PauseMenu
 	private static Texture textBoxTexture;
@@ -60,6 +64,7 @@ public class TextureManager {
 	public static TextureRegion endScreenTextureReg, backToMenuTextureReg,
 			retryTextureReg, nextTextureReg, tutorialButtonTextureReg,
 			backgroundFilterTextureReg;
+	public static Sound win_bark, lose_whining;
 
 	// StorySelectScene
 	private static BitmapTextureAtlas storyBTA;
@@ -67,6 +72,7 @@ public class TextureManager {
 			"multiplying_problems.png" };
 	public static TextureRegion[] storyTextures = new TextureRegion[LevelManager.Story
 			.values().length];
+	public static Sound click;
 
 	// Background
 	private static BitmapTextureAtlas CloudAtlas;
@@ -81,15 +87,15 @@ public class TextureManager {
 	private static Texture tutorialBackgroundTexture;
 	public static TextureRegion tutorialBackgroundTextureReg;
 
-	public static void init(BaseGameActivity activity) {
+	public static void init(BaseGameActivity activity, SoundManager soundManager) {
 		Log.d(TAG, "INIT");
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		initLevelSelectResources(activity);
 		initMainTextures(activity);
 		initMenuTextures(activity);
-		initGameTexture(activity);
-		initEndTextures(activity);
-		initStoryTextures(activity);
+		initGameTexture(activity, soundManager);
+		initEndTextures(activity, soundManager);
+		initStoryTextures(activity, soundManager);
 		initHowToTextures(activity);
 		initCloudTextures(activity);
 	}
@@ -178,7 +184,6 @@ public class TextureManager {
 							return activity.getAssets().open("gfx/textbox.png");
 						}
 					});
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -216,7 +221,8 @@ public class TextureManager {
 		defaultBigFont.getTexture().load();
 	}
 
-	private static void initStoryTextures(BaseGameActivity activity) {
+	private static void initStoryTextures(BaseGameActivity activity,
+			SoundManager soundManager) {
 		Log.d(TAG, "INIT story textures");
 		storyBTA = new BitmapTextureAtlas(activity.getTextureManager(), 535,
 				185 * storyTextures.length,
@@ -227,6 +233,15 @@ public class TextureManager {
 					.createFromAsset(storyBTA, activity, storyTextureName[i],
 							0, 185 * i);
 			// Log.d(TAG, ""+185*i);
+		}
+
+		// Sounds
+		try {
+			click = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"sfx/click.ogg");
+			click.setVolume(0.3f);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -267,7 +282,8 @@ public class TextureManager {
 
 	}
 
-	private static void initGameTexture(final BaseGameActivity activity) {
+	private static void initGameTexture(final BaseGameActivity activity,
+			SoundManager soundManager) {
 		Log.d(TAG, "INIT game textures");
 
 		try {
@@ -279,6 +295,12 @@ public class TextureManager {
 									"gfx/game_background.png");
 						}
 					});
+
+			// Sounds
+			doublebark = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "sfx/doublebark.ogg");
+			place_stake = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "sfx/place_stake.ogg");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -309,7 +331,8 @@ public class TextureManager {
 		enemyBTA.load();
 	}
 
-	private static void initEndTextures(final BaseGameActivity activity) {
+	private static void initEndTextures(final BaseGameActivity activity,
+			SoundManager soundManager) {
 		Log.d(TAG, "INIT end textures");
 
 		try {
@@ -321,13 +344,19 @@ public class TextureManager {
 									"gfx/end_screen.png");
 						}
 					});
-			backgroundFilterTexture = new BitmapTexture(activity.getTextureManager(),
-					new IInputStreamOpener() {
+			backgroundFilterTexture = new BitmapTexture(
+					activity.getTextureManager(), new IInputStreamOpener() {
 						@Override
 						public InputStream open() throws IOException {
 							return activity.getAssets().open("gfx/filter.png");
 						}
 					});
+
+			// Sounds
+			win_bark = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "sfx/win_bark.ogg");
+			lose_whining = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "sfx/lose_whining.ogg");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -355,7 +384,7 @@ public class TextureManager {
 		backgroundFilterTexture.load();
 		backgroundFilterTextureReg = TextureRegionFactory
 				.extractFromTexture(backgroundFilterTexture);
-		
+
 		endScreenTexture.load();
 		endScreenTextureReg = TextureRegionFactory
 				.extractFromTexture(endScreenTexture);
@@ -378,7 +407,7 @@ public class TextureManager {
 						@Override
 						public InputStream open() throws IOException {
 							return activity.getAssets().open(
-									"gfx/textbox_white.png");
+									"gfx/tutorial_box.png");
 						}
 					});
 		} catch (IOException e) {

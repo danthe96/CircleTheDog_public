@@ -109,6 +109,12 @@ public class MenuButtonMenuScene extends MenuScene implements
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
 		Debug.d(TAG, "MenuItemClicked");
+
+		TextureManager.win_bark.stop();
+		TextureManager.lose_whining.stop();
+		TextureManager.doublebark.stop();
+
+		TextureManager.click.play();
 		switch (pMenuItem.getID()) {
 		case BACK_ID:
 			sceneSetter.setScene(SceneType.LEVELSELECTSCENE);

@@ -69,7 +69,7 @@ public class SceneManager implements KeyListener, SceneSetter {
 
 		sceneSetter = this;
 
-		TextureManager.init(activity);
+		TextureManager.init(activity, engine.getSoundManager());
 	}
 
 	/**
@@ -172,6 +172,7 @@ public class SceneManager implements KeyListener, SceneSetter {
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+			TextureManager.click.play();
 			if (currentScene == SceneType.MAINGAME) {
 				this.setScene(SceneType.LEVELSELECTSCENE);
 			} else if (currentScene != SceneType.STORYSELECTSCENE) {
@@ -205,6 +206,8 @@ public class SceneManager implements KeyListener, SceneSetter {
 	@Override
 	public void setScene(SceneType scene) {
 		createScene(scene);
+		if (filterOverlaySprite != null)
+			filterOverlaySprite.detachSelf();
 
 		Log.d(TAG, "Scene Attached: " + scene.toString());
 		switch (scene) {

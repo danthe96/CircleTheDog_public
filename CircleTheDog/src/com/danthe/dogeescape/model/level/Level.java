@@ -260,6 +260,8 @@ public class Level implements Runnable, HumanActivityListener {
 			}
 
 			if (lost || won) {
+				for (Enemy e : enemies)
+					e.gameOver();
 				if (won) {
 					LevelManager.getInstance().setLevelSolved(levelID, turns);
 					Tracker.getInstance().triggerLevel(levelID,
@@ -267,11 +269,6 @@ public class Level implements Runnable, HumanActivityListener {
 				} else if (lost) {
 					Tracker.getInstance().triggerLevel(levelID,
 							LevelSuccess.FAIL, turns);
-				}
-				try {
-					Thread.sleep(750);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
 				}
 				sceneSetter.setScene(SceneType.ENDSCENE);
 				t.interrupt();

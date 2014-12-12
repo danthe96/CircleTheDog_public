@@ -3,6 +3,8 @@ package com.danthe.dogeescape.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.andengine.util.debug.Debug;
+
 import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.model.level.Level;
 
@@ -48,10 +50,12 @@ public class Enemy {
 		LinkedList<Integer> secondChoice = new LinkedList<Integer>();
 
 		for (int i : borderTiles) {
-			if (!tileList.get(i).isBlocked()) {
+			if (!tileList.get(i).isBlocked()
+					&& distance[i] != Integer.MAX_VALUE) {
 				lucrativeFields.add(i);
 				break;
 			}
+			
 		}
 
 		int unreachable = 0;
@@ -68,7 +72,8 @@ public class Enemy {
 							secondChoice.add(l);
 					lucrativeFields.clear();
 				}
-				lucrativeFields.add(i);
+				if (!lucrativeFields.contains(i))
+					lucrativeFields.add(i);
 			}
 		}
 
@@ -103,6 +108,11 @@ public class Enemy {
 		}
 
 		recalculate = false;
+	}
+
+	public void gameOver() {
+		Debug.d("Game over, " + this);
+		changeListener.onStateChanged();
 	}
 
 	private void doDijkstra(int index, List<Tile> tileList) {

@@ -91,18 +91,21 @@ public class LevelSelectScene extends Scene implements IOnMenuItemClickListener 
 			float pMenuItemLocalX, float pMenuItemLocalY) {
 		switch (pMenuItem.getID()) {
 		case STORY_SELECT_ID:
+			TextureManager.click.play();
 			levelSceneSetter.setScene(SceneType.STORYSELECTSCENE);
 			return true;
 		case TUTORIAL_ID:
+			TextureManager.click.play();
 			levelSceneSetter.setScene(SceneType.TUTORIALSCENE);
 			return true;
 		default:
 			int levelID = pMenuItem.getID();
 			if (LevelManager.getInstance().isOpenToPlay(levelID)) {
+				TextureManager.click.play();
 				levelSceneSetter.setLevelScene(pMenuItem.getID());
 				return true;
 			} else {
-				// TODO Play some sound here.
+				// TODO Play "locked" sound here.
 			}
 		}
 		return false;

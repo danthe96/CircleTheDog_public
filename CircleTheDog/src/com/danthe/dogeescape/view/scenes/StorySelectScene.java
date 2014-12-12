@@ -56,6 +56,7 @@ public class StorySelectScene extends Scene implements IOnMenuItemClickListener 
 			float pMenuItemLocalX, float pMenuItemLocalY) {
 		Story selectedStory = Story.values()[pMenuItem.getID()];
 		sceneSetter.setLevelSelectScene(selectedStory);
+		TextureManager.click.play();
 		return true;
 	}
 

@@ -10,8 +10,10 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 
+import com.danthe.dogeescape.TextureManager;
 import com.danthe.dogeescape.interfaces.ChangeListener;
 import com.danthe.dogeescape.model.Enemy;
+import com.danthe.dogeescape.model.level.Level;
 import com.danthe.dogeescape.view.scenes.GameScene;
 
 public class EnemySprite extends AnimatedSprite implements ChangeListener,
@@ -26,7 +28,7 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 	private final float OFFSET_Y;
 
 	private IEntityModifier enemyIn;
-	
+
 	public EnemySprite(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager vertexBufferObjectManager, Enemy enemy,
@@ -43,14 +45,30 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 		animate(new long[] { 200, 250 }, 0, 1, true, this);
 
 		oldPosition = enemy.getPosition();
-		
-		enemyIn = new MoveYModifier((float) (0.7f*(Math.random()/20f+1f)), -200, getY(), EaseBounceOut.getInstance());
+
+		enemyIn = new MoveYModifier(
+				(float) (0.7f * (Math.random() / 20f + 1f)), -200, getY(),
+				EaseBounceOut.getInstance());
 		this.registerEntityModifier(enemyIn);
-		
+
 	}
 
 	@Override
 	public void onStateChanged() {
+
+		if (Level.won) {
+			TextureManager.doublebark.stop();
+			animate(new long[] { 200, 250 }, 0, 1, true, this);
+			TextureManager.lose_whining.play();
+			return;
+		} else if (Level.lost) {
+			TextureManager.doublebark.stop();
+			TextureManager.win_bark.play();
+			animate(new long[] { 250, 100, 250, 100, 250, 100, 250, 800, 225,
+					250, 225, 250 }, new int[] { 4, 0, 4, 0, 4, 0, 4, 0, 4, 0,
+					4, 0 }, 1, this);
+			return;
+		}
 
 		this.setZIndex(2 * enemy.getPosition() + 4);
 		parent.sortChildren();
@@ -67,9 +85,11 @@ public class EnemySprite extends AnimatedSprite implements ChangeListener,
 		oldPosition = enemy.getPosition();
 
 		if (enemy.hasWon()) {
-			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
+			TextureManager.doublebark.play();
+			animate(new long[] { 250, 100 }, new int[] { 4, 0 }, 2, this);
 		} else if (enemy.hasLost()) {
-			animate(new long[] { 100, 250 }, new int[] { 0, 4 }, 3, this);
+			TextureManager.doublebark.play();
+			animate(new long[] { 250, 100 }, new int[] { 4, 0 }, 2, this);
 		}
 
 	}
