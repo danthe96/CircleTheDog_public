@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class RateAppManager {
-	public static final int numWonGamesTillPrompt = 6;
+	public static final int numWonGamesTillPrompt = 11;
 
 	public static boolean bRateNow(Context c) {
 		SharedPreferences prefs = c.getSharedPreferences("AppRater", 0);
@@ -21,7 +21,7 @@ public class RateAppManager {
 
 		// Wait at least n days before opening
 		if (wonGamesCount >= numWonGamesTillPrompt) {
-			editor.putLong("win_count", -1);
+			editor.putLong("win_count", 6);
 			editor.commit();
 
 			return true;
