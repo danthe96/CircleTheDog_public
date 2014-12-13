@@ -4,7 +4,11 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.util.debug.Debug;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -35,6 +39,8 @@ public class SceneManager implements KeyListener, SceneSetter {
 	private static final String TAG = "SCENE_MANAGER";
 
 	private static final Story DEFAULT_STORY = Story.THE_GARDEN;
+
+	private static final int GAMES_TILL_AD = 4;
 
 	private static SceneSetter sceneSetter;
 
@@ -172,10 +178,10 @@ public class SceneManager implements KeyListener, SceneSetter {
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+			stopSounds();
 			TextureManager.click.play();
 			if (currentScene == SceneType.MAINGAME
 					|| currentScene == SceneType.ENDSCENE) {
-				stopSounds();
 				this.setScene(SceneType.LEVELSELECTSCENE);
 			} else if (currentScene != SceneType.STORYSELECTSCENE) {
 				this.setScene(SceneType.STORYSELECTSCENE);
@@ -226,6 +232,17 @@ public class SceneManager implements KeyListener, SceneSetter {
 			break;
 		case ENDSCENE:
 			if (motherScene.getChildScene() == mainGameScene) {
+				SharedPreferences prefs = activity
+						.getPreferences(Context.MODE_PRIVATE);
+				int ad_counter = prefs.getInt("AD_COUNTER", 0) + 1;
+				Debug.d("ad counter " + ad_counter);
+				if (ad_counter >= GAMES_TILL_AD && activity.displayAd()) {
+					ad_counter = 0;
+				}
+				Editor editor = prefs.edit();
+				editor.putInt("AD_COUNTER", ad_counter);
+				editor.commit();
+
 				mainGameScene.attachChild(filterOverlaySprite);
 				mainGameScene.setChildScene(endScene);
 			}

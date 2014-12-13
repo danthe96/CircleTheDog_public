@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class RateAppManager {
-	public static final int numWonGamesTillPrompt = 4;
+	public static final int numWonGamesTillPrompt = 6;
 
 	public static boolean bRateNow(Context c) {
 		SharedPreferences prefs = c.getSharedPreferences("AppRater", 0);

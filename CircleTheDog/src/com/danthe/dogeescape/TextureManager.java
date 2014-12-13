@@ -299,6 +299,7 @@ public class TextureManager {
 			// Sounds
 			doublebark = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "sfx/doublebark.ogg");
+			doublebark.setVolume(0.6f);
 			place_stake = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "sfx/place_stake.ogg");
 		} catch (IOException e) {
@@ -355,6 +356,7 @@ public class TextureManager {
 			// Sounds
 			win_bark = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "sfx/win_bark.ogg");
+			win_bark.setVolume(0.6f);
 			lose_whining = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "sfx/lose_whining.ogg");
 		} catch (IOException e) {
