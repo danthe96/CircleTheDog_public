@@ -20,10 +20,15 @@ import com.danthe.dogeescape.interfaces.AssetManagerProvider;
 import com.danthe.dogeescape.interfaces.IResourceProvider;
 import com.danthe.dogeescape.interfaces.KeyListener;
 import com.danthe.dogeescape.model.level.LevelManager;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 public class GameActivity extends BaseGameActivity implements
 		AssetManagerProvider, IResourceProvider {
+
 	private static final String TAG = "GAME_ACTIVITY";
+	private static final String AD_UNIT_ID = "***REMOVED***";
+
 	private static final SceneType DEFAULT_SCENE = SceneType.STORYSELECTSCENE;
 
 	private SceneManager sceneManager;
@@ -34,12 +39,22 @@ public class GameActivity extends BaseGameActivity implements
 	public static int CAMERA_WIDTH = 1080;
 	public static int CAMERA_HEIGHT = 1920;
 
+	private InterstitialAd ad;
+	private boolean adShown = false;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Can be used as soon as there is another activity to start the game
 		// this.level = getIntent().getExtras().getInt("level", 0);
+
+		// AdMob
+		ad = new InterstitialAd(this.getApplicationContext());
+		ad.setAdUnitId(AD_UNIT_ID);
+
+		AdRequest adRequest = new AdRequest.Builder().build();
+		ad.loadAd(adRequest);
 
 		// Google Analytics
 		Tracker.init(this);
@@ -61,7 +76,7 @@ public class GameActivity extends BaseGameActivity implements
 		// Google Analytics
 		Tracker.getInstance().triggerOnStop();
 	}
-	
+
 	@Override
 	protected synchronized void onResume() {
 		mEngine.getSoundManager().onResume();
@@ -77,8 +92,9 @@ public class GameActivity extends BaseGameActivity implements
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
-		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED,
-				new FillResolutionPolicy(), camera);
+		EngineOptions engineOptions = new EngineOptions(true,
+				ScreenOrientation.PORTRAIT_FIXED, new FillResolutionPolicy(),
+				camera);
 		engineOptions.getAudioOptions().setNeedsSound(true);
 		engineOptions.getAudioOptions().setNeedsMusic(true);
 		return engineOptions;
@@ -136,4 +152,38 @@ public class GameActivity extends BaseGameActivity implements
 		return super.onKeyDown(keyCode, event);
 	}
 
+	public boolean displayAd() {
+		Runnable r = new Runnable() {
+			@Override
+			public void run() {
+				if (ad.isLoaded()) {
+					ad.show();
+					adShown = true;
+					synchronized (this) {
+						this.notify();
+					}
+				} else {
+					adShown = false;
+					synchronized (this) {
+						this.notify();
+					}
+					AdRequest adRequest = new AdRequest.Builder().build();
+					ad.loadAd(adRequest);
+				}
+			}
+		};
+		try {
+			synchronized (r) {
+				this.runOnUiThread(r);
+				r.wait();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		if (adShown)
+			return true;
+		else
+			return false;
+	}
 }

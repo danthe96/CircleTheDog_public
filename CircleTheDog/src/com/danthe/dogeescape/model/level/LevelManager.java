@@ -1,5 +1,9 @@
 package com.danthe.dogeescape.model.level;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,6 +19,8 @@ public class LevelManager {
 	private static final int numOpenLevelsPerStory = 3;
 	// private static final Status DEFAULT_STATUS = Status.LOCKED;
 	private Activity activity;
+
+	private int[][] levelRanking = new int[numLevels][2];
 
 	/**
 	 * Each story is 16 levels long and should introduce something new. Like
@@ -80,13 +86,31 @@ public class LevelManager {
 
 	private LevelManager(Activity activity) {
 		this.activity = activity;
-		
+
 		/**
 		 * TODO: load 3 star ranking
 		 */
-		
-		
-		
+
+		try {
+			BufferedReader bfr = new BufferedReader(new InputStreamReader(
+					activity.getAssets().open("rankings.txt")));
+
+			for (int i = 0; i < levelRanking.length; i++) {
+				String s;
+				if ((s = bfr.readLine()) == null)
+					break;
+				if (s.charAt(0) == '#') {
+					i--;
+					continue;
+				}
+
+				String[] rankings = s.replace(" ", "").split(",");
+				levelRanking[i][0] = Integer.parseInt(rankings[0]);
+				levelRanking[i][1] = Integer.parseInt(rankings[1]);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -158,14 +182,16 @@ public class LevelManager {
 	 */
 	public void setLevelSolved(int levelID, int turns) {
 		// open up the next level if current level hasn't been solved before
-		if (getStatus(levelID) == Status.PLAYABLE)
+		Status status = getStatus(levelID);
+		if (status == Status.PLAYABLE)
 			increaseNumSolvedLevels(getStoryForLevelID(levelID));
 
-		if (turns <= 5)
+		if (turns <= levelRanking[levelID][0])
 			setStatus(levelID, Status.SOLVED3STAR);
-		else if (turns <= 10)
+		else if (turns <= levelRanking[levelID][1]
+				&& status != Status.SOLVED3STAR)
 			setStatus(levelID, Status.SOLVED2STAR);
-		else
+		else if (status != Status.SOLVED3STAR && status != Status.SOLVED2STAR)
 			setStatus(levelID, Status.SOLVED1STAR);
 
 	}
