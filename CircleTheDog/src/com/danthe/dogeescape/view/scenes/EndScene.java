@@ -305,13 +305,13 @@ public class EndScene extends Scene {
 				RateAppManager.neverPromptAgain(activity);
 				return true;
 			case FEEDBACK_ID:
-				Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
-						Uri.fromParts("mailto", "ZoresTechnologies@gmail.com",
-								null));
-				activity.startActivityIfNeeded(Intent.createChooser(
-						emailIntent, "Send email using..."), 0);
+				// Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
+				// Uri.fromParts("mailto", "ZoresTechnologies@gmail.com",
+				// null));
+				// activity.startActivityIfNeeded(Intent.createChooser(
+				// emailIntent, "Send email using..."), 0);
 				instance.setChildScene(endResultScene);
-				RateAppManager.neverPromptAgain(activity);
+				// RateAppManager.neverPromptAgain(activity);
 				return true;
 			}
 			return false;

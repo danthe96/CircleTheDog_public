@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Circle the Dog</string>
+    <string name="play">JUGAR</string>
+    <string name="howto">COMO SE JUEGA</string>
+    <string name="scores">RESULTADOS</string>
+    <string name="back">MENÚ</string>
+    <string name="quit">ABANDONAR</string>
+    <string name="resume">CONTINUAR</string>
+    <string name="play_again">JUGAR OTRA VEZ</string>
+    <string name="next">SIGUIENTE</string>
+    <string name="story_select">Selecciona un cuento para empezar!</string>
+    <string name="story_0">El Jardín</string>
+    <string name="story_1">Problemas Multiplicandos</string>
+    <string name="level">Level %1$d</string>
+    <string name="victory">Has ganado!</string>
+    <string name="defeat_info">El perro se escapió después de\n%1$d turnos. Otra vez!</string>
+    <string name="victory_info">Necesitaste %1$d turnos.</string>
+    <string name="highscore_new">\nFelicidades, es tu\nresultado nuevo!</string>
+    <string name="highscore_old">\nTu resultado queda a %1$d.</string>
+    <string name="highscore">Tus resultados</string>
+    <string name="tutorial_1">El perro trata de\nescapar de la pantalla...</string>
+    <string name="tutorial_2">Bloquea los escaques en su camino...</string>
+    <string name="tutorial_3">... otra vez ...</string>
+    <string name="tutorial_4">...hasta atrapalo\ny gana.</string>
+    <string name="tutorial_5">Dos perros movean\nsimultáneamente. Debes atrapar\n ambos.</string>
+    <string name="tutorial_6">Ese es hielo. Va a\nderretir con el tiempo.</string>
+    <string name="doge">Doge</string>
+    <string name="dogecoin_url">http://dogecoin.com/getting-started/</string>
+    <string name="app_url">https://play.google.com/store/apps/details?id=com.danthe.dogeescape</string>
+    <string name="rate_top">¿Te gusta este juego?</string>
+    <string name="rate_info">Por favor apoye nuestro juego\npor reseñarlo. Nos ayuda\nMUCHO.</string>
+    <string name="rate_yes">Sí, deja me reseñarlo!</string>
+    <string name="rate_no">No, recuérdame más tarde.</string>
+
+</resources>

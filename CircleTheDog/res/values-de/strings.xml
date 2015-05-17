@@ -30,6 +30,6 @@
     <string name="rate_top">Gefällt dir das Spiel?</string>
     <string name="rate_info">Bitte unterstütze unser\nSpiel, indem du es\nbewertest. Das hilft uns\nWIRKLICH sehr.</string>
     <string name="rate_yes">Ja, lass sie mich raten!</string>
-    <string name="rate_no">Nein, ich will Feedback geben.</string>
+    <string name="rate_no">Nein, frag später nochmal.</string>
 
 </resources>
