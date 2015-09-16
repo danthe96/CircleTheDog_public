@@ -27,7 +27,7 @@ public class GameActivity extends BaseGameActivity implements
 		AssetManagerProvider, IResourceProvider {
 
 	private static final String TAG = "GAME_ACTIVITY";
-	private static final String AD_UNIT_ID = "***REMOVED***";
+	private static final String AD_UNIT_ID = "**REMOVED**";
 
 	private static final SceneType DEFAULT_SCENE = SceneType.STORYSELECTSCENE;
 
